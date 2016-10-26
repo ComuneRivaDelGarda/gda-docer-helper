@@ -1,25 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:ns1="http://org.apache.axis2/xsd"
-                  xmlns:ns="http://webservices.docer.kdm.it"
-                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-                  xmlns:ax23="http://classes.sdk.docer.kdm.it/xsd"
-                  xmlns:ax21="http://exceptions.sdk.docer.kdm.it/xsd"
-                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-                  targetNamespace="http://webservices.docer.kdm.it">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://webservices.docer.kdm.it" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax23="http://classes.sdk.docer.kdm.it/xsd" xmlns:ax21="http://exceptions.sdk.docer.kdm.it/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://webservices.docer.kdm.it">
    <wsdl:documentation>
 		Please Type your service description here
 	</wsdl:documentation>
    <wsdl:types>
-      <xs:schema xmlns:ax24="http://classes.sdk.docer.kdm.it/xsd"
-                 xmlns:ax22="http://exceptions.sdk.docer.kdm.it/xsd"
-                 attributeFormDefault="qualified"
-                 elementFormDefault="qualified"
-                 targetNamespace="http://webservices.docer.kdm.it">
+      <xs:schema xmlns:ax24="http://classes.sdk.docer.kdm.it/xsd" xmlns:ax22="http://exceptions.sdk.docer.kdm.it/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://webservices.docer.kdm.it">
          <xs:import namespace="http://exceptions.sdk.docer.kdm.it/xsd"/>
          <xs:import namespace="http://classes.sdk.docer.kdm.it/xsd"/>
          <xs:element name="DocerServicesDocerException">
@@ -40,8 +25,7 @@
          <xs:element name="getUserResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -49,10 +33,8 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooId" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -67,16 +49,14 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooId" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooId" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="getAOOResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -84,8 +64,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -100,10 +79,8 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -118,16 +95,14 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="getTitolarioResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -135,8 +110,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -151,10 +125,8 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -169,16 +141,14 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="getFascicoloResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -186,8 +156,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="customInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="customInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -202,10 +171,8 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="customId" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="customInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="customId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="customInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -220,16 +187,14 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="customId" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="customId" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="getAnagraficaCustomResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -238,19 +203,16 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true" type="ax23:KeyValuePair"/>
                   <xs:element minOccurs="0" name="maxRows" type="xs:int"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="orderby" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="orderby" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="searchAnagraficheEstesaResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:SearchItem"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -259,16 +221,14 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="searchAnagraficheResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:SearchItem"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -277,8 +237,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="userInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="userInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -293,16 +252,14 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="searchUsersResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:SearchItem"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -311,8 +268,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="groupId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groupInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groupInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -327,16 +283,14 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="searchGroupsResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:SearchItem"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -345,10 +299,8 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="groupId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="usersToAdd" nillable="true"
-                              type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="usersToRemove" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="usersToAdd" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="usersToRemove" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -364,8 +316,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="groupId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="users" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="users" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -387,8 +338,7 @@
          <xs:element name="getUsersOfGroupResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -397,10 +347,8 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groupsToAdd" nillable="true"
-                              type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groupsToRemove" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groupsToAdd" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groupsToRemove" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -416,8 +364,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groups" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groups" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -439,8 +386,7 @@
          <xs:element name="getGroupsOfUserResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -454,8 +400,7 @@
          <xs:element name="getDocumentTypesResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -463,10 +408,8 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -481,16 +424,14 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="getACLTitolarioResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -498,10 +439,8 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -516,16 +455,14 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="getACLFascicoloResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -533,8 +470,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
                   <xs:element minOccurs="0" name="file" nillable="true" type="xs:base64Binary"/>
                </xs:sequence>
             </xs:complexType>
@@ -557,8 +493,7 @@
          <xs:element name="loginSSOResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -595,20 +530,16 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="changeACLFascicoloResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -617,8 +548,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -640,8 +570,7 @@
          <xs:element name="getACLDocumentResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -650,8 +579,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -673,8 +601,7 @@
          <xs:element name="getProfileDocumentResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -689,8 +616,7 @@
          <xs:element name="getVersionsResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -789,18 +715,15 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="folderId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="changeACLFolderResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -809,18 +732,15 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docnum" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="changeACLDocumentoResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -828,20 +748,16 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="changeACLTitolarioResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -882,8 +798,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="related" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="related" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -899,8 +814,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="related" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="related" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -922,8 +836,7 @@
          <xs:element name="getRelatedDocumentsResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -969,8 +882,7 @@
          <xs:element name="getHistoryResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:HistoryItem"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:HistoryItem"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -978,8 +890,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
                   <xs:element minOccurs="0" name="maxRows" type="xs:int"/>
                </xs:sequence>
             </xs:complexType>
@@ -987,8 +898,7 @@
          <xs:element name="searchDocumentiFascicoloResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:SearchItem"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -996,21 +906,17 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true"
-                              type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="maxRows" type="xs:int"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="orderby" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="orderby" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="searchDocumentsResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:SearchItem"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1018,8 +924,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="enteInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="enteInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1035,8 +940,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="codiceEnte" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="enteInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="enteInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1058,8 +962,7 @@
          <xs:element name="getEnteResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1067,8 +970,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1090,8 +992,7 @@
          <xs:element name="getVersionEstesaResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:Version"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:Version"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1099,8 +1000,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="folderInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="folderInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1116,8 +1016,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="folderId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="folderInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="folderInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1148,8 +1047,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="folderId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1171,8 +1069,7 @@
          <xs:element name="getACLFolderResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1187,8 +1084,7 @@
          <xs:element name="getFolderDocumentsResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1197,8 +1093,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="folderId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="document" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="document" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1214,8 +1109,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="folderId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="document" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="document" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1230,19 +1124,16 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true" type="ax23:KeyValuePair"/>
                   <xs:element minOccurs="0" name="maxRows" type="xs:int"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="orderby" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="orderby" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
          <xs:element name="searchFoldersResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:SearchItem"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1257,8 +1148,7 @@
          <xs:element name="getRiferimentiDocumentsResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1267,8 +1157,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="riferimenti" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="riferimenti" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1284,8 +1173,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="riferimenti" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="riferimenti" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1301,8 +1189,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1318,8 +1205,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1335,8 +1221,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1352,8 +1237,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1369,8 +1253,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1386,8 +1269,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1403,8 +1285,7 @@
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
                   <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="id" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="id" nillable="true" type="ax23:KeyValuePair"/>
                   <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
@@ -1444,8 +1325,7 @@
          <xs:element name="getDocumentTypesByAOOResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1493,8 +1373,7 @@
          <xs:element name="getAdvancedVersionsResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1502,8 +1381,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groupInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="groupInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1525,8 +1403,7 @@
          <xs:element name="getGroupResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1564,8 +1441,7 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="userInfo" nillable="true"
-                              type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="userInfo" nillable="true" type="ax23:KeyValuePair"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1577,8 +1453,7 @@
             </xs:complexType>
          </xs:element>
       </xs:schema>
-      <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified"
-                 targetNamespace="http://exceptions.sdk.docer.kdm.it/xsd">
+      <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exceptions.sdk.docer.kdm.it/xsd">
          <xs:complexType name="DocerException">
             <xs:sequence>
                <xs:element minOccurs="0" name="errDescription" nillable="true" type="xs:string"/>
@@ -1586,8 +1461,7 @@
             </xs:sequence>
          </xs:complexType>
       </xs:schema>
-      <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified"
-                 targetNamespace="http://classes.sdk.docer.kdm.it/xsd">
+      <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://classes.sdk.docer.kdm.it/xsd">
          <xs:complexType name="KeyValuePair">
             <xs:sequence>
                <xs:element minOccurs="0" name="key" nillable="true" type="xs:string"/>
@@ -1596,8 +1470,7 @@
          </xs:complexType>
          <xs:complexType name="SearchItem">
             <xs:sequence>
-               <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                           type="ax23:KeyValuePair"/>
+               <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
             </xs:sequence>
          </xs:complexType>
          <xs:complexType name="LockStatus">
@@ -1622,8 +1495,7 @@
          </xs:complexType>
          <xs:complexType name="Version">
             <xs:sequence>
-               <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true"
-                           type="ax23:KeyValuePair"/>
+               <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
             </xs:sequence>
          </xs:complexType>
       </xs:schema>
@@ -2185,261 +2057,199 @@
    </wsdl:message>
    <wsdl:portType name="DocerServicesPortType">
       <wsdl:operation name="updateAnagraficaCustom">
-         <wsdl:input message="ns:updateAnagraficaCustomRequest"
-                     wsaw:Action="urn:updateAnagraficaCustom"/>
-         <wsdl:output message="ns:updateAnagraficaCustomResponse"
-                      wsaw:Action="urn:updateAnagraficaCustomResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateAnagraficaCustomDocerServicesDocerException"/>
+         <wsdl:input message="ns:updateAnagraficaCustomRequest" wsaw:Action="urn:updateAnagraficaCustom"/>
+         <wsdl:output message="ns:updateAnagraficaCustomResponse" wsaw:Action="urn:updateAnagraficaCustomResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateAnagraficaCustomDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getACLDocument">
          <wsdl:input message="ns:getACLDocumentRequest" wsaw:Action="urn:getACLDocument"/>
          <wsdl:output message="ns:getACLDocumentResponse" wsaw:Action="urn:getACLDocumentResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getACLDocumentDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getACLDocumentDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="logout">
          <wsdl:input message="ns:logoutRequest" wsaw:Action="urn:logout"/>
          <wsdl:output message="ns:logoutResponse" wsaw:Action="urn:logoutResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:logoutDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:logoutDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getACLTitolario">
          <wsdl:input message="ns:getACLTitolarioRequest" wsaw:Action="urn:getACLTitolario"/>
          <wsdl:output message="ns:getACLTitolarioResponse" wsaw:Action="urn:getACLTitolarioResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getACLTitolarioDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getACLTitolarioDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="createGroup">
          <wsdl:input message="ns:createGroupRequest" wsaw:Action="urn:createGroup"/>
          <wsdl:output message="ns:createGroupResponse" wsaw:Action="urn:createGroupResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:createGroupDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createGroupDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="downloadDocument">
          <wsdl:input message="ns:downloadDocumentRequest" wsaw:Action="urn:downloadDocument"/>
-         <wsdl:output message="ns:downloadDocumentResponse"
-                      wsaw:Action="urn:downloadDocumentResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:downloadDocumentDocerServicesDocerException"/>
+         <wsdl:output message="ns:downloadDocumentResponse" wsaw:Action="urn:downloadDocumentResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:downloadDocumentDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="searchFolders">
          <wsdl:input message="ns:searchFoldersRequest" wsaw:Action="urn:searchFolders"/>
          <wsdl:output message="ns:searchFoldersResponse" wsaw:Action="urn:searchFoldersResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:searchFoldersDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:searchFoldersDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="setUsersOfGroup">
          <wsdl:input message="ns:setUsersOfGroupRequest" wsaw:Action="urn:setUsersOfGroup"/>
          <wsdl:output message="ns:setUsersOfGroupResponse" wsaw:Action="urn:setUsersOfGroupResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:setUsersOfGroupDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:setUsersOfGroupDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="createFascicolo">
          <wsdl:input message="ns:createFascicoloRequest" wsaw:Action="urn:createFascicolo"/>
          <wsdl:output message="ns:createFascicoloResponse" wsaw:Action="urn:createFascicoloResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:createFascicoloDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createFascicoloDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateTitolario">
          <wsdl:input message="ns:updateTitolarioRequest" wsaw:Action="urn:updateTitolario"/>
          <wsdl:output message="ns:updateTitolarioResponse" wsaw:Action="urn:updateTitolarioResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateTitolarioDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateTitolarioDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="removeFromFolderDocuments">
-         <wsdl:input message="ns:removeFromFolderDocumentsRequest"
-                     wsaw:Action="urn:removeFromFolderDocuments"/>
-         <wsdl:output message="ns:removeFromFolderDocumentsResponse"
-                      wsaw:Action="urn:removeFromFolderDocumentsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:removeFromFolderDocumentsDocerServicesDocerException"/>
+         <wsdl:input message="ns:removeFromFolderDocumentsRequest" wsaw:Action="urn:removeFromFolderDocuments"/>
+         <wsdl:output message="ns:removeFromFolderDocumentsResponse" wsaw:Action="urn:removeFromFolderDocumentsResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:removeFromFolderDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateUsersOfGroup">
          <wsdl:input message="ns:updateUsersOfGroupRequest" wsaw:Action="urn:updateUsersOfGroup"/>
-         <wsdl:output message="ns:updateUsersOfGroupResponse"
-                      wsaw:Action="urn:updateUsersOfGroupResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateUsersOfGroupDocerServicesDocerException"/>
+         <wsdl:output message="ns:updateUsersOfGroupResponse" wsaw:Action="urn:updateUsersOfGroupResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateUsersOfGroupDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="addOldAdvancedVersion">
-         <wsdl:input message="ns:addOldAdvancedVersionRequest"
-                     wsaw:Action="urn:addOldAdvancedVersion"/>
-         <wsdl:output message="ns:addOldAdvancedVersionResponse"
-                      wsaw:Action="urn:addOldAdvancedVersionResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:addOldAdvancedVersionDocerServicesDocerException"/>
+         <wsdl:input message="ns:addOldAdvancedVersionRequest" wsaw:Action="urn:addOldAdvancedVersion"/>
+         <wsdl:output message="ns:addOldAdvancedVersionResponse" wsaw:Action="urn:addOldAdvancedVersionResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:addOldAdvancedVersionDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="setACLFascicolo">
          <wsdl:input message="ns:setACLFascicoloRequest" wsaw:Action="urn:setACLFascicolo"/>
          <wsdl:output message="ns:setACLFascicoloResponse" wsaw:Action="urn:setACLFascicoloResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:setACLFascicoloDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:setACLFascicoloDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getUserRights">
          <wsdl:input message="ns:getUserRightsRequest" wsaw:Action="urn:getUserRights"/>
          <wsdl:output message="ns:getUserRightsResponse" wsaw:Action="urn:getUserRightsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getUserRightsDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getUserRightsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="setACLDocument">
          <wsdl:input message="ns:setACLDocumentRequest" wsaw:Action="urn:setACLDocument"/>
          <wsdl:output message="ns:setACLDocumentResponse" wsaw:Action="urn:setACLDocumentResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:setACLDocumentDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:setACLDocumentDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="classificaDocumento">
          <wsdl:input message="ns:classificaDocumentoRequest" wsaw:Action="urn:classificaDocumento"/>
-         <wsdl:output message="ns:classificaDocumentoResponse"
-                      wsaw:Action="urn:classificaDocumentoResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:classificaDocumentoDocerServicesDocerException"/>
+         <wsdl:output message="ns:classificaDocumentoResponse" wsaw:Action="urn:classificaDocumentoResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:classificaDocumentoDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateEnte">
          <wsdl:input message="ns:updateEnteRequest" wsaw:Action="urn:updateEnte"/>
          <wsdl:output message="ns:updateEnteResponse" wsaw:Action="urn:updateEnteResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateEnteDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateEnteDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getDocumentTypesByAOO">
-         <wsdl:input message="ns:getDocumentTypesByAOORequest"
-                     wsaw:Action="urn:getDocumentTypesByAOO"/>
-         <wsdl:output message="ns:getDocumentTypesByAOOResponse"
-                      wsaw:Action="urn:getDocumentTypesByAOOResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getDocumentTypesByAOODocerServicesDocerException"/>
+         <wsdl:input message="ns:getDocumentTypesByAOORequest" wsaw:Action="urn:getDocumentTypesByAOO"/>
+         <wsdl:output message="ns:getDocumentTypesByAOOResponse" wsaw:Action="urn:getDocumentTypesByAOOResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getDocumentTypesByAOODocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="unlockDocument">
          <wsdl:input message="ns:unlockDocumentRequest" wsaw:Action="urn:unlockDocument"/>
          <wsdl:output message="ns:unlockDocumentResponse" wsaw:Action="urn:unlockDocumentResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:unlockDocumentDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:unlockDocumentDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="changeACLDocumento">
          <wsdl:input message="ns:changeACLDocumentoRequest" wsaw:Action="urn:changeACLDocumento"/>
-         <wsdl:output message="ns:changeACLDocumentoResponse"
-                      wsaw:Action="urn:changeACLDocumentoResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:changeACLDocumentoDocerServicesDocerException"/>
+         <wsdl:output message="ns:changeACLDocumentoResponse" wsaw:Action="urn:changeACLDocumentoResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:changeACLDocumentoDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="changeACLTitolario">
          <wsdl:input message="ns:changeACLTitolarioRequest" wsaw:Action="urn:changeACLTitolario"/>
-         <wsdl:output message="ns:changeACLTitolarioResponse"
-                      wsaw:Action="urn:changeACLTitolarioResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:changeACLTitolarioDocerServicesDocerException"/>
+         <wsdl:output message="ns:changeACLTitolarioResponse" wsaw:Action="urn:changeACLTitolarioResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:changeACLTitolarioDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateFolder">
          <wsdl:input message="ns:updateFolderRequest" wsaw:Action="urn:updateFolder"/>
          <wsdl:output message="ns:updateFolderResponse" wsaw:Action="urn:updateFolderResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateFolderDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateFolderDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getFascicolo">
          <wsdl:input message="ns:getFascicoloRequest" wsaw:Action="urn:getFascicolo"/>
          <wsdl:output message="ns:getFascicoloResponse" wsaw:Action="urn:getFascicoloResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getFascicoloDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getFascicoloDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="deleteDocument">
          <wsdl:input message="ns:deleteDocumentRequest" wsaw:Action="urn:deleteDocument"/>
          <wsdl:output message="ns:deleteDocumentResponse" wsaw:Action="urn:deleteDocumentResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:deleteDocumentDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:deleteDocumentDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="changeACLFolder">
          <wsdl:input message="ns:changeACLFolderRequest" wsaw:Action="urn:changeACLFolder"/>
          <wsdl:output message="ns:changeACLFolderResponse" wsaw:Action="urn:changeACLFolderResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:changeACLFolderDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:changeACLFolderDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="addNewVersion">
          <wsdl:input message="ns:addNewVersionRequest" wsaw:Action="urn:addNewVersion"/>
          <wsdl:output message="ns:addNewVersionResponse" wsaw:Action="urn:addNewVersionResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:addNewVersionDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:addNewVersionDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="searchDocumentiFascicolo">
-         <wsdl:input message="ns:searchDocumentiFascicoloRequest"
-                     wsaw:Action="urn:searchDocumentiFascicolo"/>
-         <wsdl:output message="ns:searchDocumentiFascicoloResponse"
-                      wsaw:Action="urn:searchDocumentiFascicoloResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:searchDocumentiFascicoloDocerServicesDocerException"/>
+         <wsdl:input message="ns:searchDocumentiFascicoloRequest" wsaw:Action="urn:searchDocumentiFascicolo"/>
+         <wsdl:output message="ns:searchDocumentiFascicoloResponse" wsaw:Action="urn:searchDocumentiFascicoloResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:searchDocumentiFascicoloDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="createUser">
          <wsdl:input message="ns:createUserRequest" wsaw:Action="urn:createUser"/>
          <wsdl:output message="ns:createUserResponse" wsaw:Action="urn:createUserResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:createUserDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createUserDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="createAnagraficaCustom">
-         <wsdl:input message="ns:createAnagraficaCustomRequest"
-                     wsaw:Action="urn:createAnagraficaCustom"/>
-         <wsdl:output message="ns:createAnagraficaCustomResponse"
-                      wsaw:Action="urn:createAnagraficaCustomResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:createAnagraficaCustomDocerServicesDocerException"/>
+         <wsdl:input message="ns:createAnagraficaCustomRequest" wsaw:Action="urn:createAnagraficaCustom"/>
+         <wsdl:output message="ns:createAnagraficaCustomResponse" wsaw:Action="urn:createAnagraficaCustomResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createAnagraficaCustomDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getRiferimentiDocuments">
-         <wsdl:input message="ns:getRiferimentiDocumentsRequest"
-                     wsaw:Action="urn:getRiferimentiDocuments"/>
-         <wsdl:output message="ns:getRiferimentiDocumentsResponse"
-                      wsaw:Action="urn:getRiferimentiDocumentsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getRiferimentiDocumentsDocerServicesDocerException"/>
+         <wsdl:input message="ns:getRiferimentiDocumentsRequest" wsaw:Action="urn:getRiferimentiDocuments"/>
+         <wsdl:output message="ns:getRiferimentiDocumentsResponse" wsaw:Action="urn:getRiferimentiDocumentsResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getRiferimentiDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="writeConfig">
          <wsdl:input message="ns:writeConfigRequest" wsaw:Action="urn:writeConfig"/>
          <wsdl:output message="ns:writeConfigResponse" wsaw:Action="urn:writeConfigResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:writeConfigDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:writeConfigDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="removeRiferimentiDocuments">
-         <wsdl:input message="ns:removeRiferimentiDocumentsRequest"
-                     wsaw:Action="urn:removeRiferimentiDocuments"/>
-         <wsdl:output message="ns:removeRiferimentiDocumentsResponse"
-                      wsaw:Action="urn:removeRiferimentiDocumentsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:removeRiferimentiDocumentsDocerServicesDocerException"/>
+         <wsdl:input message="ns:removeRiferimentiDocumentsRequest" wsaw:Action="urn:removeRiferimentiDocuments"/>
+         <wsdl:output message="ns:removeRiferimentiDocumentsResponse" wsaw:Action="urn:removeRiferimentiDocumentsResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:removeRiferimentiDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="addRiferimentiDocuments">
-         <wsdl:input message="ns:addRiferimentiDocumentsRequest"
-                     wsaw:Action="urn:addRiferimentiDocuments"/>
-         <wsdl:output message="ns:addRiferimentiDocumentsResponse"
-                      wsaw:Action="urn:addRiferimentiDocumentsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:addRiferimentiDocumentsDocerServicesDocerException"/>
+         <wsdl:input message="ns:addRiferimentiDocumentsRequest" wsaw:Action="urn:addRiferimentiDocuments"/>
+         <wsdl:output message="ns:addRiferimentiDocumentsResponse" wsaw:Action="urn:addRiferimentiDocumentsResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:addRiferimentiDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="createEnte">
          <wsdl:input message="ns:createEnteRequest" wsaw:Action="urn:createEnte"/>
          <wsdl:output message="ns:createEnteResponse" wsaw:Action="urn:createEnteResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:createEnteDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createEnteDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getGroupsOfUser">
          <wsdl:input message="ns:getGroupsOfUserRequest" wsaw:Action="urn:getGroupsOfUser"/>
          <wsdl:output message="ns:getGroupsOfUserResponse" wsaw:Action="urn:getGroupsOfUserResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getGroupsOfUserDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getGroupsOfUserDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="setGroupsOfUser">
          <wsdl:input message="ns:setGroupsOfUserRequest" wsaw:Action="urn:setGroupsOfUser"/>
          <wsdl:output message="ns:setGroupsOfUserResponse" wsaw:Action="urn:setGroupsOfUserResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:setGroupsOfUserDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:setGroupsOfUserDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="searchGroups">
          <wsdl:input message="ns:searchGroupsRequest" wsaw:Action="urn:searchGroups"/>
          <wsdl:output message="ns:searchGroupsResponse" wsaw:Action="urn:searchGroupsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:searchGroupsDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:searchGroupsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="login">
          <wsdl:input message="ns:loginRequest" wsaw:Action="urn:login"/>
          <wsdl:output message="ns:loginResponse" wsaw:Action="urn:loginResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:loginDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:loginDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="verifyTicket">
          <wsdl:input message="ns:verifyTicketRequest" wsaw:Action="urn:verifyTicket"/>
@@ -2448,340 +2258,262 @@
       <wsdl:operation name="getLockStatus">
          <wsdl:input message="ns:getLockStatusRequest" wsaw:Action="urn:getLockStatus"/>
          <wsdl:output message="ns:getLockStatusResponse" wsaw:Action="urn:getLockStatusResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getLockStatusDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getLockStatusDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="createAOO">
          <wsdl:input message="ns:createAOORequest" wsaw:Action="urn:createAOO"/>
          <wsdl:output message="ns:createAOOResponse" wsaw:Action="urn:createAOOResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:createAOODocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createAOODocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="archiviaDocumento">
          <wsdl:input message="ns:archiviaDocumentoRequest" wsaw:Action="urn:archiviaDocumento"/>
-         <wsdl:output message="ns:archiviaDocumentoResponse"
-                      wsaw:Action="urn:archiviaDocumentoResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:archiviaDocumentoDocerServicesDocerException"/>
+         <wsdl:output message="ns:archiviaDocumentoResponse" wsaw:Action="urn:archiviaDocumentoResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:archiviaDocumentoDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="searchUsers">
          <wsdl:input message="ns:searchUsersRequest" wsaw:Action="urn:searchUsers"/>
          <wsdl:output message="ns:searchUsersResponse" wsaw:Action="urn:searchUsersResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:searchUsersDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:searchUsersDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="setACLFolder">
          <wsdl:input message="ns:setACLFolderRequest" wsaw:Action="urn:setACLFolder"/>
          <wsdl:output message="ns:setACLFolderResponse" wsaw:Action="urn:setACLFolderResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:setACLFolderDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:setACLFolderDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="lockDocument">
          <wsdl:input message="ns:lockDocumentRequest" wsaw:Action="urn:lockDocument"/>
          <wsdl:output message="ns:lockDocumentResponse" wsaw:Action="urn:lockDocumentResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:lockDocumentDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:lockDocumentDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getUserRightsFolder">
          <wsdl:input message="ns:getUserRightsFolderRequest" wsaw:Action="urn:getUserRightsFolder"/>
-         <wsdl:output message="ns:getUserRightsFolderResponse"
-                      wsaw:Action="urn:getUserRightsFolderResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getUserRightsFolderDocerServicesDocerException"/>
+         <wsdl:output message="ns:getUserRightsFolderResponse" wsaw:Action="urn:getUserRightsFolderResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getUserRightsFolderDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="addNewAdvancedVersion">
-         <wsdl:input message="ns:addNewAdvancedVersionRequest"
-                     wsaw:Action="urn:addNewAdvancedVersion"/>
-         <wsdl:output message="ns:addNewAdvancedVersionResponse"
-                      wsaw:Action="urn:addNewAdvancedVersionResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:addNewAdvancedVersionDocerServicesDocerException"/>
+         <wsdl:input message="ns:addNewAdvancedVersionRequest" wsaw:Action="urn:addNewAdvancedVersion"/>
+         <wsdl:output message="ns:addNewAdvancedVersionResponse" wsaw:Action="urn:addNewAdvancedVersionResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:addNewAdvancedVersionDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getUsersOfGroup">
          <wsdl:input message="ns:getUsersOfGroupRequest" wsaw:Action="urn:getUsersOfGroup"/>
          <wsdl:output message="ns:getUsersOfGroupResponse" wsaw:Action="urn:getUsersOfGroupResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getUsersOfGroupDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getUsersOfGroupDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="changeACLFascicolo">
          <wsdl:input message="ns:changeACLFascicoloRequest" wsaw:Action="urn:changeACLFascicolo"/>
-         <wsdl:output message="ns:changeACLFascicoloResponse"
-                      wsaw:Action="urn:changeACLFascicoloResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:changeACLFascicoloDocerServicesDocerException"/>
+         <wsdl:output message="ns:changeACLFascicoloResponse" wsaw:Action="urn:changeACLFascicoloResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:changeACLFascicoloDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="protocollaDocumento">
          <wsdl:input message="ns:protocollaDocumentoRequest" wsaw:Action="urn:protocollaDocumento"/>
-         <wsdl:output message="ns:protocollaDocumentoResponse"
-                      wsaw:Action="urn:protocollaDocumentoResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:protocollaDocumentoDocerServicesDocerException"/>
+         <wsdl:output message="ns:protocollaDocumentoResponse" wsaw:Action="urn:protocollaDocumentoResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:protocollaDocumentoDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="searchAnagrafiche">
          <wsdl:input message="ns:searchAnagraficheRequest" wsaw:Action="urn:searchAnagrafiche"/>
-         <wsdl:output message="ns:searchAnagraficheResponse"
-                      wsaw:Action="urn:searchAnagraficheResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:searchAnagraficheDocerServicesDocerException"/>
+         <wsdl:output message="ns:searchAnagraficheResponse" wsaw:Action="urn:searchAnagraficheResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:searchAnagraficheDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getUser">
          <wsdl:input message="ns:getUserRequest" wsaw:Action="urn:getUser"/>
          <wsdl:output message="ns:getUserResponse" wsaw:Action="urn:getUserResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getUserDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getUserDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getUserRightsAnagrafiche">
-         <wsdl:input message="ns:getUserRightsAnagraficheRequest"
-                     wsaw:Action="urn:getUserRightsAnagrafiche"/>
-         <wsdl:output message="ns:getUserRightsAnagraficheResponse"
-                      wsaw:Action="urn:getUserRightsAnagraficheResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getUserRightsAnagraficheDocerServicesDocerException"/>
+         <wsdl:input message="ns:getUserRightsAnagraficheRequest" wsaw:Action="urn:getUserRightsAnagrafiche"/>
+         <wsdl:output message="ns:getUserRightsAnagraficheResponse" wsaw:Action="urn:getUserRightsAnagraficheResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getUserRightsAnagraficheDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getEnte">
          <wsdl:input message="ns:getEnteRequest" wsaw:Action="urn:getEnte"/>
          <wsdl:output message="ns:getEnteResponse" wsaw:Action="urn:getEnteResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getEnteDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getEnteDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateGroup">
          <wsdl:input message="ns:updateGroupRequest" wsaw:Action="urn:updateGroup"/>
          <wsdl:output message="ns:updateGroupResponse" wsaw:Action="urn:updateGroupResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateGroupDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateGroupDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="fascicolaDocumento">
          <wsdl:input message="ns:fascicolaDocumentoRequest" wsaw:Action="urn:fascicolaDocumento"/>
-         <wsdl:output message="ns:fascicolaDocumentoResponse"
-                      wsaw:Action="urn:fascicolaDocumentoResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:fascicolaDocumentoDocerServicesDocerException"/>
+         <wsdl:output message="ns:fascicolaDocumentoResponse" wsaw:Action="urn:fascicolaDocumentoResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:fascicolaDocumentoDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="readConfig">
          <wsdl:input message="ns:readConfigRequest" wsaw:Action="urn:readConfig"/>
          <wsdl:output message="ns:readConfigResponse" wsaw:Action="urn:readConfigResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:readConfigDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:readConfigDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="createDocument">
          <wsdl:input message="ns:createDocumentRequest" wsaw:Action="urn:createDocument"/>
          <wsdl:output message="ns:createDocumentResponse" wsaw:Action="urn:createDocumentResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:createDocumentDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createDocumentDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getAOO">
          <wsdl:input message="ns:getAOORequest" wsaw:Action="urn:getAOO"/>
          <wsdl:output message="ns:getAOOResponse" wsaw:Action="urn:getAOOResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getAOODocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getAOODocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getProfileDocument">
          <wsdl:input message="ns:getProfileDocumentRequest" wsaw:Action="urn:getProfileDocument"/>
-         <wsdl:output message="ns:getProfileDocumentResponse"
-                      wsaw:Action="urn:getProfileDocumentResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getProfileDocumentDocerServicesDocerException"/>
+         <wsdl:output message="ns:getProfileDocumentResponse" wsaw:Action="urn:getProfileDocumentResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getProfileDocumentDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="searchAnagraficheEstesa">
-         <wsdl:input message="ns:searchAnagraficheEstesaRequest"
-                     wsaw:Action="urn:searchAnagraficheEstesa"/>
-         <wsdl:output message="ns:searchAnagraficheEstesaResponse"
-                      wsaw:Action="urn:searchAnagraficheEstesaResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:searchAnagraficheEstesaDocerServicesDocerException"/>
+         <wsdl:input message="ns:searchAnagraficheEstesaRequest" wsaw:Action="urn:searchAnagraficheEstesa"/>
+         <wsdl:output message="ns:searchAnagraficheEstesaResponse" wsaw:Action="urn:searchAnagraficheEstesaResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:searchAnagraficheEstesaDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getFolderDocuments">
          <wsdl:input message="ns:getFolderDocumentsRequest" wsaw:Action="urn:getFolderDocuments"/>
-         <wsdl:output message="ns:getFolderDocumentsResponse"
-                      wsaw:Action="urn:getFolderDocumentsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getFolderDocumentsDocerServicesDocerException"/>
+         <wsdl:output message="ns:getFolderDocumentsResponse" wsaw:Action="urn:getFolderDocumentsResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getFolderDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="replaceLastVersion">
          <wsdl:input message="ns:replaceLastVersionRequest" wsaw:Action="urn:replaceLastVersion"/>
-         <wsdl:output message="ns:replaceLastVersionResponse"
-                      wsaw:Action="urn:replaceLastVersionResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:replaceLastVersionDocerServicesDocerException"/>
+         <wsdl:output message="ns:replaceLastVersionResponse" wsaw:Action="urn:replaceLastVersionResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:replaceLastVersionDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="pubblicaDocumento">
          <wsdl:input message="ns:pubblicaDocumentoRequest" wsaw:Action="urn:pubblicaDocumento"/>
-         <wsdl:output message="ns:pubblicaDocumentoResponse"
-                      wsaw:Action="urn:pubblicaDocumentoResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:pubblicaDocumentoDocerServicesDocerException"/>
+         <wsdl:output message="ns:pubblicaDocumentoResponse" wsaw:Action="urn:pubblicaDocumentoResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:pubblicaDocumentoDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getACLFascicolo">
          <wsdl:input message="ns:getACLFascicoloRequest" wsaw:Action="urn:getACLFascicolo"/>
          <wsdl:output message="ns:getACLFascicoloResponse" wsaw:Action="urn:getACLFascicoloResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getACLFascicoloDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getACLFascicoloDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getAnagraficaCustom">
          <wsdl:input message="ns:getAnagraficaCustomRequest" wsaw:Action="urn:getAnagraficaCustom"/>
-         <wsdl:output message="ns:getAnagraficaCustomResponse"
-                      wsaw:Action="urn:getAnagraficaCustomResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getAnagraficaCustomDocerServicesDocerException"/>
+         <wsdl:output message="ns:getAnagraficaCustomResponse" wsaw:Action="urn:getAnagraficaCustomResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getAnagraficaCustomDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="addToFolderDocuments">
          <wsdl:input message="ns:addToFolderDocumentsRequest" wsaw:Action="urn:addToFolderDocuments"/>
-         <wsdl:output message="ns:addToFolderDocumentsResponse"
-                      wsaw:Action="urn:addToFolderDocumentsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:addToFolderDocumentsDocerServicesDocerException"/>
+         <wsdl:output message="ns:addToFolderDocumentsResponse" wsaw:Action="urn:addToFolderDocumentsResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:addToFolderDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getVersionEstesa">
          <wsdl:input message="ns:getVersionEstesaRequest" wsaw:Action="urn:getVersionEstesa"/>
-         <wsdl:output message="ns:getVersionEstesaResponse"
-                      wsaw:Action="urn:getVersionEstesaResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getVersionEstesaDocerServicesDocerException"/>
+         <wsdl:output message="ns:getVersionEstesaResponse" wsaw:Action="urn:getVersionEstesaResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getVersionEstesaDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getVersions">
          <wsdl:input message="ns:getVersionsRequest" wsaw:Action="urn:getVersions"/>
          <wsdl:output message="ns:getVersionsResponse" wsaw:Action="urn:getVersionsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getVersionsDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getVersionsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateGroupsOfUser">
          <wsdl:input message="ns:updateGroupsOfUserRequest" wsaw:Action="urn:updateGroupsOfUser"/>
-         <wsdl:output message="ns:updateGroupsOfUserResponse"
-                      wsaw:Action="urn:updateGroupsOfUserResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateGroupsOfUserDocerServicesDocerException"/>
+         <wsdl:output message="ns:updateGroupsOfUserResponse" wsaw:Action="urn:updateGroupsOfUserResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateGroupsOfUserDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="searchDocuments">
          <wsdl:input message="ns:searchDocumentsRequest" wsaw:Action="urn:searchDocuments"/>
          <wsdl:output message="ns:searchDocumentsResponse" wsaw:Action="urn:searchDocumentsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:searchDocumentsDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:searchDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getACLFolder">
          <wsdl:input message="ns:getACLFolderRequest" wsaw:Action="urn:getACLFolder"/>
          <wsdl:output message="ns:getACLFolderResponse" wsaw:Action="urn:getACLFolderResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getACLFolderDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getACLFolderDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="removeRelated">
          <wsdl:input message="ns:removeRelatedRequest" wsaw:Action="urn:removeRelated"/>
          <wsdl:output message="ns:removeRelatedResponse" wsaw:Action="urn:removeRelatedResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:removeRelatedDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:removeRelatedDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="setACLTitolario">
          <wsdl:input message="ns:setACLTitolarioRequest" wsaw:Action="urn:setACLTitolario"/>
          <wsdl:output message="ns:setACLTitolarioResponse" wsaw:Action="urn:setACLTitolarioResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:setACLTitolarioDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:setACLTitolarioDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateFascicolo">
          <wsdl:input message="ns:updateFascicoloRequest" wsaw:Action="urn:updateFascicolo"/>
          <wsdl:output message="ns:updateFascicoloResponse" wsaw:Action="urn:updateFascicoloResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateFascicoloDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateFascicoloDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateUser">
          <wsdl:input message="ns:updateUserRequest" wsaw:Action="urn:updateUser"/>
          <wsdl:output message="ns:updateUserResponse" wsaw:Action="urn:updateUserResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateUserDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateUserDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="addRelated">
          <wsdl:input message="ns:addRelatedRequest" wsaw:Action="urn:addRelated"/>
          <wsdl:output message="ns:addRelatedResponse" wsaw:Action="urn:addRelatedResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:addRelatedDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:addRelatedDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getTitolario">
          <wsdl:input message="ns:getTitolarioRequest" wsaw:Action="urn:getTitolario"/>
          <wsdl:output message="ns:getTitolarioResponse" wsaw:Action="urn:getTitolarioResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getTitolarioDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getTitolarioDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="loginSSO">
          <wsdl:input message="ns:loginSSORequest" wsaw:Action="urn:loginSSO"/>
          <wsdl:output message="ns:loginSSOResponse" wsaw:Action="urn:loginSSOResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:loginSSODocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:loginSSODocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getHistory">
          <wsdl:input message="ns:getHistoryRequest" wsaw:Action="urn:getHistory"/>
          <wsdl:output message="ns:getHistoryResponse" wsaw:Action="urn:getHistoryResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getHistoryDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getHistoryDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="downloadVersion">
          <wsdl:input message="ns:downloadVersionRequest" wsaw:Action="urn:downloadVersion"/>
          <wsdl:output message="ns:downloadVersionResponse" wsaw:Action="urn:downloadVersionResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:downloadVersionDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:downloadVersionDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getGroup">
          <wsdl:input message="ns:getGroupRequest" wsaw:Action="urn:getGroup"/>
          <wsdl:output message="ns:getGroupResponse" wsaw:Action="urn:getGroupResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getGroupDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getGroupDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getDocumentTypes">
          <wsdl:input message="ns:getDocumentTypesRequest" wsaw:Action="urn:getDocumentTypes"/>
-         <wsdl:output message="ns:getDocumentTypesResponse"
-                      wsaw:Action="urn:getDocumentTypesResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getDocumentTypesDocerServicesDocerException"/>
+         <wsdl:output message="ns:getDocumentTypesResponse" wsaw:Action="urn:getDocumentTypesResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getDocumentTypesDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getAdvancedVersions">
          <wsdl:input message="ns:getAdvancedVersionsRequest" wsaw:Action="urn:getAdvancedVersions"/>
-         <wsdl:output message="ns:getAdvancedVersionsResponse"
-                      wsaw:Action="urn:getAdvancedVersionsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getAdvancedVersionsDocerServicesDocerException"/>
+         <wsdl:output message="ns:getAdvancedVersionsResponse" wsaw:Action="urn:getAdvancedVersionsResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getAdvancedVersionsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getRelatedDocuments">
          <wsdl:input message="ns:getRelatedDocumentsRequest" wsaw:Action="urn:getRelatedDocuments"/>
-         <wsdl:output message="ns:getRelatedDocumentsResponse"
-                      wsaw:Action="urn:getRelatedDocumentsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:getRelatedDocumentsDocerServicesDocerException"/>
+         <wsdl:output message="ns:getRelatedDocumentsResponse" wsaw:Action="urn:getRelatedDocumentsResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getRelatedDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="createTitolario">
          <wsdl:input message="ns:createTitolarioRequest" wsaw:Action="urn:createTitolario"/>
          <wsdl:output message="ns:createTitolarioResponse" wsaw:Action="urn:createTitolarioResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:createTitolarioDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createTitolarioDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="registraDocumento">
          <wsdl:input message="ns:registraDocumentoRequest" wsaw:Action="urn:registraDocumento"/>
-         <wsdl:output message="ns:registraDocumentoResponse"
-                      wsaw:Action="urn:registraDocumentoResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:registraDocumentoDocerServicesDocerException"/>
+         <wsdl:output message="ns:registraDocumentoResponse" wsaw:Action="urn:registraDocumentoResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:registraDocumentoDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateProfileDocument">
-         <wsdl:input message="ns:updateProfileDocumentRequest"
-                     wsaw:Action="urn:updateProfileDocument"/>
-         <wsdl:output message="ns:updateProfileDocumentResponse"
-                      wsaw:Action="urn:updateProfileDocumentResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateProfileDocumentDocerServicesDocerException"/>
+         <wsdl:input message="ns:updateProfileDocumentRequest" wsaw:Action="urn:updateProfileDocument"/>
+         <wsdl:output message="ns:updateProfileDocumentResponse" wsaw:Action="urn:updateProfileDocumentResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateProfileDocumentDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="deleteFolder">
          <wsdl:input message="ns:deleteFolderRequest" wsaw:Action="urn:deleteFolder"/>
          <wsdl:output message="ns:deleteFolderResponse" wsaw:Action="urn:deleteFolderResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:deleteFolderDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:deleteFolderDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="updateAOO">
          <wsdl:input message="ns:updateAOORequest" wsaw:Action="urn:updateAOO"/>
          <wsdl:output message="ns:updateAOOResponse" wsaw:Action="urn:updateAOOResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:updateAOODocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:updateAOODocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="createFolder">
          <wsdl:input message="ns:createFolderRequest" wsaw:Action="urn:createFolder"/>
          <wsdl:output message="ns:createFolderResponse" wsaw:Action="urn:createFolderResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException"
-                     wsaw:Action="urn:createFolderDocerServicesDocerException"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createFolderDocerServicesDocerException"/>
       </wsdl:operation>
    </wsdl:portType>
    <wsdl:binding name="DocerServicesSoap11Binding" type="ns:DocerServicesPortType">

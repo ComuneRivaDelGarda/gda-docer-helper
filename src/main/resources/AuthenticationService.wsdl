@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:ns1="http://org.apache.axis2/xsd"
-                  xmlns:ns="http://authentication.core.docer.kdm.it"
-                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-                  xmlns:ax23="http://keyvalue.collections.commons.apache.org/xsd"
-                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-                  targetNamespace="http://authentication.core.docer.kdm.it">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://authentication.core.docer.kdm.it" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax23="http://keyvalue.collections.commons.apache.org/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://authentication.core.docer.kdm.it">
    <wsdl:documentation>
 		Please Type your service description here
 	</wsdl:documentation>
    <wsdl:types>
-      <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified"
-                 targetNamespace="http://keyvalue.collections.commons.apache.org/xsd">
+      <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://keyvalue.collections.commons.apache.org/xsd">
          <xs:complexType name="AbstractKeyValue">
             <xs:sequence>
                <xs:element minOccurs="0" name="key" nillable="true" type="xs:anyType"/>
@@ -30,16 +19,12 @@
             </xs:complexContent>
          </xs:complexType>
       </xs:schema>
-      <xs:schema xmlns:ax24="http://keyvalue.collections.commons.apache.org/xsd"
-                 attributeFormDefault="qualified"
-                 elementFormDefault="qualified"
-                 targetNamespace="http://authentication.core.docer.kdm.it">
+      <xs:schema xmlns:ax24="http://keyvalue.collections.commons.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://authentication.core.docer.kdm.it">
          <xs:import namespace="http://keyvalue.collections.commons.apache.org/xsd"/>
          <xs:element name="AuthenticationServiceException">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element minOccurs="0" name="AuthenticationServiceException" nillable="true"
-                              type="ns:Exception"/>
+                  <xs:element minOccurs="0" name="AuthenticationServiceException" nillable="true" type="ns:Exception"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -132,8 +117,7 @@
          <xs:element name="getUserInfoResponse">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true"
-                              type="ax23:DefaultKeyValue"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:DefaultKeyValue"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -225,63 +209,45 @@
       <wsdl:operation name="logout">
          <wsdl:input message="ns:logoutRequest" wsaw:Action="urn:logout"/>
          <wsdl:output message="ns:logoutResponse" wsaw:Action="urn:logoutResponse"/>
-         <wsdl:fault message="ns:AuthenticationServiceException"
-                     name="AuthenticationServiceException"
-                     wsaw:Action="urn:logoutAuthenticationServiceException"/>
+         <wsdl:fault message="ns:AuthenticationServiceException" name="AuthenticationServiceException" wsaw:Action="urn:logoutAuthenticationServiceException"/>
       </wsdl:operation>
       <wsdl:operation name="loginOnDemand">
          <wsdl:input message="ns:loginOnDemandRequest" wsaw:Action="urn:loginOnDemand"/>
          <wsdl:output message="ns:loginOnDemandResponse" wsaw:Action="urn:loginOnDemandResponse"/>
-         <wsdl:fault message="ns:AuthenticationServiceException"
-                     name="AuthenticationServiceException"
-                     wsaw:Action="urn:loginOnDemandAuthenticationServiceException"/>
+         <wsdl:fault message="ns:AuthenticationServiceException" name="AuthenticationServiceException" wsaw:Action="urn:loginOnDemandAuthenticationServiceException"/>
       </wsdl:operation>
       <wsdl:operation name="verifyToken">
          <wsdl:input message="ns:verifyTokenRequest" wsaw:Action="urn:verifyToken"/>
          <wsdl:output message="ns:verifyTokenResponse" wsaw:Action="urn:verifyTokenResponse"/>
-         <wsdl:fault message="ns:AuthenticationServiceException"
-                     name="AuthenticationServiceException"
-                     wsaw:Action="urn:verifyTokenAuthenticationServiceException"/>
+         <wsdl:fault message="ns:AuthenticationServiceException" name="AuthenticationServiceException" wsaw:Action="urn:verifyTokenAuthenticationServiceException"/>
       </wsdl:operation>
       <wsdl:operation name="login">
          <wsdl:input message="ns:loginRequest" wsaw:Action="urn:login"/>
          <wsdl:output message="ns:loginResponse" wsaw:Action="urn:loginResponse"/>
-         <wsdl:fault message="ns:AuthenticationServiceException"
-                     name="AuthenticationServiceException"
-                     wsaw:Action="urn:loginAuthenticationServiceException"/>
+         <wsdl:fault message="ns:AuthenticationServiceException" name="AuthenticationServiceException" wsaw:Action="urn:loginAuthenticationServiceException"/>
       </wsdl:operation>
       <wsdl:operation name="getEnteDescription">
          <wsdl:input message="ns:getEnteDescriptionRequest" wsaw:Action="urn:getEnteDescription"/>
-         <wsdl:output message="ns:getEnteDescriptionResponse"
-                      wsaw:Action="urn:getEnteDescriptionResponse"/>
-         <wsdl:fault message="ns:AuthenticationServiceException"
-                     name="AuthenticationServiceException"
-                     wsaw:Action="urn:getEnteDescriptionAuthenticationServiceException"/>
+         <wsdl:output message="ns:getEnteDescriptionResponse" wsaw:Action="urn:getEnteDescriptionResponse"/>
+         <wsdl:fault message="ns:AuthenticationServiceException" name="AuthenticationServiceException" wsaw:Action="urn:getEnteDescriptionAuthenticationServiceException"/>
       </wsdl:operation>
       <wsdl:operation name="getUserInfo">
          <wsdl:input message="ns:getUserInfoRequest" wsaw:Action="urn:getUserInfo"/>
          <wsdl:output message="ns:getUserInfoResponse" wsaw:Action="urn:getUserInfoResponse"/>
-         <wsdl:fault message="ns:AuthenticationServiceException"
-                     name="AuthenticationServiceException"
-                     wsaw:Action="urn:getUserInfoAuthenticationServiceException"/>
+         <wsdl:fault message="ns:AuthenticationServiceException" name="AuthenticationServiceException" wsaw:Action="urn:getUserInfoAuthenticationServiceException"/>
       </wsdl:operation>
       <wsdl:operation name="getRealUser">
          <wsdl:input message="ns:getRealUserRequest" wsaw:Action="urn:getRealUser"/>
          <wsdl:output message="ns:getRealUserResponse" wsaw:Action="urn:getRealUserResponse"/>
-         <wsdl:fault message="ns:AuthenticationServiceException"
-                     name="AuthenticationServiceException"
-                     wsaw:Action="urn:getRealUserAuthenticationServiceException"/>
+         <wsdl:fault message="ns:AuthenticationServiceException" name="AuthenticationServiceException" wsaw:Action="urn:getRealUserAuthenticationServiceException"/>
       </wsdl:operation>
       <wsdl:operation name="loginSSO">
          <wsdl:input message="ns:loginSSORequest" wsaw:Action="urn:loginSSO"/>
          <wsdl:output message="ns:loginSSOResponse" wsaw:Action="urn:loginSSOResponse"/>
-         <wsdl:fault message="ns:AuthenticationServiceException"
-                     name="AuthenticationServiceException"
-                     wsaw:Action="urn:loginSSOAuthenticationServiceException"/>
+         <wsdl:fault message="ns:AuthenticationServiceException" name="AuthenticationServiceException" wsaw:Action="urn:loginSSOAuthenticationServiceException"/>
       </wsdl:operation>
    </wsdl:portType>
-   <wsdl:binding name="AuthenticationServiceSoap11Binding"
-                 type="ns:AuthenticationServicePortType">
+   <wsdl:binding name="AuthenticationServiceSoap11Binding" type="ns:AuthenticationServicePortType">
       <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
       <wsdl:operation name="logout">
          <soap:operation soapAction="urn:logout" style="document"/>
@@ -380,8 +346,7 @@
          </wsdl:fault>
       </wsdl:operation>
    </wsdl:binding>
-   <wsdl:binding name="AuthenticationServiceSoap12Binding"
-                 type="ns:AuthenticationServicePortType">
+   <wsdl:binding name="AuthenticationServiceSoap12Binding" type="ns:AuthenticationServicePortType">
       <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
       <wsdl:operation name="logout">
          <soap12:operation soapAction="urn:logout" style="document"/>
@@ -556,16 +521,13 @@
       </wsdl:operation>
    </wsdl:binding>
    <wsdl:service name="AuthenticationService">
-      <wsdl:port name="AuthenticationServiceHttpSoap11Endpoint"
-                 binding="ns:AuthenticationServiceSoap11Binding">
+      <wsdl:port name="AuthenticationServiceHttpSoap11Endpoint" binding="ns:AuthenticationServiceSoap11Binding">
          <soap:address location="http://192.168.64.22:8080/docersystem/services/AuthenticationService.AuthenticationServiceHttpSoap11Endpoint/"/>
       </wsdl:port>
-      <wsdl:port name="AuthenticationServiceHttpSoap12Endpoint"
-                 binding="ns:AuthenticationServiceSoap12Binding">
+      <wsdl:port name="AuthenticationServiceHttpSoap12Endpoint" binding="ns:AuthenticationServiceSoap12Binding">
          <soap12:address location="http://192.168.64.22:8080/docersystem/services/AuthenticationService.AuthenticationServiceHttpSoap12Endpoint/"/>
       </wsdl:port>
-      <wsdl:port name="AuthenticationServiceHttpEndpoint"
-                 binding="ns:AuthenticationServiceHttpBinding">
+      <wsdl:port name="AuthenticationServiceHttpEndpoint" binding="ns:AuthenticationServiceHttpBinding">
          <http:address location="http://192.168.64.22:8080/docersystem/services/AuthenticationService.AuthenticationServiceHttpEndpoint/"/>
       </wsdl:port>
    </wsdl:service>

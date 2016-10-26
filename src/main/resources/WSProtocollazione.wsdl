@@ -1,35 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                  xmlns:ns1="http://org.apache.axis2/xsd"
-                  xmlns:ns="http://protocollazione.docer.kdm.it"
-                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
-                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-                  xmlns:ax21="http://protocollazione.docer.kdm.it/xsd"
-                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
-                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
-                  targetNamespace="http://protocollazione.docer.kdm.it">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://protocollazione.docer.kdm.it" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax21="http://protocollazione.docer.kdm.it/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://protocollazione.docer.kdm.it">
    <wsdl:documentation>
 		Servizio per la Protocollazione
 	</wsdl:documentation>
    <wsdl:types>
-      <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified"
-                 targetNamespace="http://protocollazione.docer.kdm.it/xsd">
+      <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://protocollazione.docer.kdm.it/xsd">
          <xs:complexType name="ProtocollazioneException">
             <xs:sequence/>
          </xs:complexType>
       </xs:schema>
-      <xs:schema xmlns:ax22="http://protocollazione.docer.kdm.it/xsd"
-                 attributeFormDefault="qualified"
-                 elementFormDefault="qualified"
-                 targetNamespace="http://protocollazione.docer.kdm.it">
+      <xs:schema xmlns:ax22="http://protocollazione.docer.kdm.it/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://protocollazione.docer.kdm.it">
          <xs:import namespace="http://protocollazione.docer.kdm.it/xsd"/>
          <xs:element name="WSProtocollazioneProtocollazioneException">
             <xs:complexType>
                <xs:sequence>
-                  <xs:element minOccurs="0" name="ProtocollazioneException" nillable="true"
-                              type="ax21:ProtocollazioneException"/>
+                  <xs:element minOccurs="0" name="ProtocollazioneException" nillable="true" type="ax21:ProtocollazioneException"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -168,44 +153,32 @@
       <wsdl:operation name="logout">
          <wsdl:input message="ns:logoutRequest" wsaw:Action="urn:logout"/>
          <wsdl:output message="ns:logoutResponse" wsaw:Action="urn:logoutResponse"/>
-         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException"
-                     name="WSProtocollazioneProtocollazioneException"
-                     wsaw:Action="urn:logoutWSProtocollazioneProtocollazioneException"/>
+         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException" name="WSProtocollazioneProtocollazioneException" wsaw:Action="urn:logoutWSProtocollazioneProtocollazioneException"/>
       </wsdl:operation>
       <wsdl:operation name="protocollaById">
          <wsdl:input message="ns:protocollaByIdRequest" wsaw:Action="urn:protocollaById"/>
          <wsdl:output message="ns:protocollaByIdResponse" wsaw:Action="urn:protocollaByIdResponse"/>
-         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException"
-                     name="WSProtocollazioneProtocollazioneException"
-                     wsaw:Action="urn:protocollaByIdWSProtocollazioneProtocollazioneException"/>
+         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException" name="WSProtocollazioneProtocollazioneException" wsaw:Action="urn:protocollaByIdWSProtocollazioneProtocollazioneException"/>
       </wsdl:operation>
       <wsdl:operation name="writeConfig">
          <wsdl:input message="ns:writeConfigRequest" wsaw:Action="urn:writeConfig"/>
          <wsdl:output message="ns:writeConfigResponse" wsaw:Action="urn:writeConfigResponse"/>
-         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException"
-                     name="WSProtocollazioneProtocollazioneException"
-                     wsaw:Action="urn:writeConfigWSProtocollazioneProtocollazioneException"/>
+         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException" name="WSProtocollazioneProtocollazioneException" wsaw:Action="urn:writeConfigWSProtocollazioneProtocollazioneException"/>
       </wsdl:operation>
       <wsdl:operation name="login">
          <wsdl:input message="ns:loginRequest" wsaw:Action="urn:login"/>
          <wsdl:output message="ns:loginResponse" wsaw:Action="urn:loginResponse"/>
-         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException"
-                     name="WSProtocollazioneProtocollazioneException"
-                     wsaw:Action="urn:loginWSProtocollazioneProtocollazioneException"/>
+         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException" name="WSProtocollazioneProtocollazioneException" wsaw:Action="urn:loginWSProtocollazioneProtocollazioneException"/>
       </wsdl:operation>
       <wsdl:operation name="readConfig">
          <wsdl:input message="ns:readConfigRequest" wsaw:Action="urn:readConfig"/>
          <wsdl:output message="ns:readConfigResponse" wsaw:Action="urn:readConfigResponse"/>
-         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException"
-                     name="WSProtocollazioneProtocollazioneException"
-                     wsaw:Action="urn:readConfigWSProtocollazioneProtocollazioneException"/>
+         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException" name="WSProtocollazioneProtocollazioneException" wsaw:Action="urn:readConfigWSProtocollazioneProtocollazioneException"/>
       </wsdl:operation>
       <wsdl:operation name="loginSSO">
          <wsdl:input message="ns:loginSSORequest" wsaw:Action="urn:loginSSO"/>
          <wsdl:output message="ns:loginSSOResponse" wsaw:Action="urn:loginSSOResponse"/>
-         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException"
-                     name="WSProtocollazioneProtocollazioneException"
-                     wsaw:Action="urn:loginSSOWSProtocollazioneProtocollazioneException"/>
+         <wsdl:fault message="ns:WSProtocollazioneProtocollazioneException" name="WSProtocollazioneProtocollazioneException" wsaw:Action="urn:loginSSOWSProtocollazioneProtocollazioneException"/>
       </wsdl:operation>
    </wsdl:portType>
    <wsdl:binding name="WSProtocollazioneSoap11Binding" type="ns:WSProtocollazionePortType">
@@ -416,12 +389,10 @@
       </wsdl:operation>
    </wsdl:binding>
    <wsdl:service name="WSProtocollazione">
-      <wsdl:port name="WSProtocollazioneHttpSoap11Endpoint"
-                 binding="ns:WSProtocollazioneSoap11Binding">
+      <wsdl:port name="WSProtocollazioneHttpSoap11Endpoint" binding="ns:WSProtocollazioneSoap11Binding">
          <soap:address location="http://192.168.64.22:8080/WSProtocollazione/services/WSProtocollazione.WSProtocollazioneHttpSoap11Endpoint/"/>
       </wsdl:port>
-      <wsdl:port name="WSProtocollazioneHttpSoap12Endpoint"
-                 binding="ns:WSProtocollazioneSoap12Binding">
+      <wsdl:port name="WSProtocollazioneHttpSoap12Endpoint" binding="ns:WSProtocollazioneSoap12Binding">
          <soap12:address location="http://192.168.64.22:8080/WSProtocollazione/services/WSProtocollazione.WSProtocollazioneHttpSoap12Endpoint/"/>
       </wsdl:port>
       <wsdl:port name="WSProtocollazioneHttpEndpoint" binding="ns:WSProtocollazioneHttpBinding">
