@@ -36,6 +36,8 @@ la pila Docer è installata e raggiungibile all' indirizzo :
 
 Le credenziali di accesso sono admin/admin
 
+http://192.168.64.22:8080/docersystem/services/listServices
+
 Per quanto riguarda i servizi soap questi sono gli indirizzi dei wsdl
 
 Autenticazione
