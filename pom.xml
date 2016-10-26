@@ -21,7 +21,8 @@
 		<!-- <finalName>ss730ws</finalName> -->
 
 		<plugins>	
-			<!-- esecuzione manuale -->		
+			<!-- esecuzione manuale -->
+
 			<plugin>
 				<groupId>org.apache.axis2</groupId>
 				<artifactId>axis2-wsdl2code-maven-plugin</artifactId>
@@ -32,9 +33,10 @@
 					<wsdlFile>${basedir}/src/main/resources/DocerServices.wsdl</wsdlFile>
 					<wsdlFile>${basedir}/src/main/resources/WSFascicolazione.wsdl</wsdlFile>
 					<wsdlFile>${basedir}/src/main/resources/WSProtocollazione.wsdl</wsdlFile>
+					<wsdlFile>${basedir}/src/main/resources/Version.wsdl</wsdlFile>
 				</configuration>
 			</plugin>	 
-			
+
 			<!-- esecuzione automatica -->
 			<!--
 			<plugin>
