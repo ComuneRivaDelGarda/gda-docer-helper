@@ -106,7 +106,7 @@
 			
 		</plugins>
 
-		<!-- Build with Java 1.5 -->
+		<!-- aggiunge al progetto eclipse la cartella con i sorgenti generati -->
 		
 		<pluginManagement>
 			<plugins>
