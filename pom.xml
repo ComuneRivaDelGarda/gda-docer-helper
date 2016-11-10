@@ -13,8 +13,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<cxf.version>3.1.4</cxf.version>
-		<withdependencyname>jar-with-dependencies</withdependencyname>
-		<mainclass>it.studio74.modello730.spesemediche.Main</mainclass>
+		<axis.version>1.7.4</axis.version>
+		<!-- <withdependencyname>jar-with-dependencies</withdependencyname> -->
+		<!-- <mainclass>it.studio74.modello730.spesemediche.Main</mainclass> -->
 	</properties>
 
 	<build>
@@ -22,11 +23,12 @@
 
 		<plugins>	
 			<!-- esecuzione manuale -->
-
+			<!-- mvn axis2-wsdl2code-maven-plugin:wsdl2code -->
+			<!-- 
 			<plugin>
 				<groupId>org.apache.axis2</groupId>
 				<artifactId>axis2-wsdl2code-maven-plugin</artifactId>
-				<version>1.6.3</version>
+				<version>${axis.version}</version>
  				<configuration>
 					<syncMode>sync</syncMode>
 					<wsdlFile>${basedir}/src/main/resources/AuthenticationService.wsdl</wsdlFile>
@@ -35,14 +37,16 @@
 					<wsdlFile>${basedir}/src/main/resources/WSProtocollazione.wsdl</wsdlFile>
 					<wsdlFile>${basedir}/src/main/resources/Version.wsdl</wsdlFile>
 				</configuration>
-			</plugin>	 
+			</plugin>
+			-->
+										
 
 			<!-- esecuzione automatica -->
-			<!--
+			<!-- mvn compile -->
 			<plugin>
 				<groupId>org.apache.axis2</groupId>
 				<artifactId>axis2-wsdl2code-maven-plugin</artifactId>
-				<version>1.6.3</version>
+				<version>${axis.version}</version>
 				<executions>
 					<execution>
 						<id>AuthenticationService</id>
@@ -51,8 +55,13 @@
                         </goals>
                         <phase>generate-sources</phase>	
 						<configuration>
+							<!-- <unpackClasses>true</unpackClasses> -->
+							<overWrite>true</overWrite>
+                  			<databindingName>adb</databindingName>
+                  			<!-- <packageName>it.tn.rivadelgarda.comune.gda.docer.soapclient</packageName> -->
 							<syncMode>sync</syncMode>
 							<wsdlFile>${basedir}/src/main/resources/AuthenticationService.wsdl</wsdlFile>
+							<!-- <outputDirectory>${basedir}/src/main/generated/</outputDirectory> -->
 						</configuration>
 					</execution>
 					<execution>
@@ -62,8 +71,13 @@
                         </goals>
                         <phase>generate-sources</phase>				
 						<configuration>
+							<!-- <unpackClasses>true</unpackClasses> -->
+							<overWrite>true</overWrite>
+                  			<databindingName>adb</databindingName>
+                  			<!-- <packageName>it.tn.rivadelgarda.comune.gda.docer.soapclient</packageName> -->
 							<syncMode>sync</syncMode>
 							<wsdlFile>${basedir}/src/main/resources/DocerServices.wsdl</wsdlFile>
+							<!-- <outputDirectory>${basedir}/src/main/generated/</outputDirectory> -->
 						</configuration>
 					</execution>
 					<execution>
@@ -73,8 +87,13 @@
                         </goals>
                         <phase>generate-sources</phase>					
 						<configuration>
+							<!-- <unpackClasses>true</unpackClasses> -->
+							<overWrite>true</overWrite>
+                  			<databindingName>adb</databindingName>
+                  			<!-- <packageName>it.tn.rivadelgarda.comune.gda.docer.soapclient</packageName> -->
 							<syncMode>sync</syncMode>
 							<wsdlFile>${basedir}/src/main/resources/WSFascicolazione.wsdl</wsdlFile>
+							<!-- <outputDirectory>${basedir}/src/main/generated/</outputDirectory> -->
 						</configuration>
 					</execution>
 					<execution>
@@ -84,16 +103,38 @@
                         </goals>
                         <phase>generate-sources</phase>					
 						<configuration>
+							<!-- <unpackClasses>true</unpackClasses> -->
+							<overWrite>true</overWrite>
+                  			<databindingName>adb</databindingName>
+                  			<!-- <packageName>it.tn.rivadelgarda.comune.gda.docer.soapclient</packageName> -->
 							<syncMode>sync</syncMode>
 							<wsdlFile>${basedir}/src/main/resources/WSProtocollazione.wsdl</wsdlFile>
+							<!-- <outputDirectory>${basedir}/src/main/generated/</outputDirectory> -->
 						</configuration>
-					</execution>					
+					</execution>
+					<execution>
+						<id>Version</id>
+						<goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <phase>generate-sources</phase>					
+						<configuration>
+							<!-- <unpackClasses>true</unpackClasses> -->
+<!-- 							<overWrite>true</overWrite> -->
+                  			<databindingName>adb</databindingName>
+                  			<!-- <packageName>it.tn.rivadelgarda.comune.gda.docer.soapclient</packageName> -->
+							<syncMode>sync</syncMode>
+							<wsdlFile>${basedir}/src/main/resources/Version.wsdl</wsdlFile>
+							<!-- <outputDirectory>${basedir}/src/main/generated/</outputDirectory> -->
+						</configuration>
+					</execution>									
 				</executions>
 			</plugin>
-			-->
+			
 		</plugins>
 
 		<!-- Build with Java 1.5 -->
+		<!--
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -107,7 +148,7 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-
+		-->
 	</build>
 
 	<dependencies>
@@ -134,32 +175,32 @@
 			<version>1.9</version>
 		</dependency>
 
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2</artifactId>
-			<version>1.6.3</version>
-		</dependency>
+			<version>${axis.version}</version>
+		</dependency> -->
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-adb</artifactId>
-			<version>1.6.3</version>
+			<version>${axis.version}</version>
 		</dependency>
 		<!-- <dependency> <groupId>org.apache.axis2</groupId> <artifactId>axis2-xmlbeans</artifactId> 
-			<version>1.6.3</version> </dependency> -->
+			<version>${axis.version}</version> </dependency> -->
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-kernel</artifactId>
-			<version>1.6.3</version>
+			<version>${axis.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-transport-local</artifactId>
-			<version>1.6.3</version>
+			<version>${axis.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-transport-http</artifactId>
-			<version>1.6.3</version>
+			<version>${axis.version}</version>
 		</dependency>
 
 		<!-- <dependency> <groupId>org.apache.ws.commons.axiom</groupId> <artifactId>axiom-api</artifactId> 

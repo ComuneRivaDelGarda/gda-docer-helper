@@ -11,6 +11,7 @@
 
 ### axis2 generazione codice da wsdl (non piu necessario perche' ora configurato in automatico)
 	mvn axis2-wsdl2code:wsdl2code
+	mvn clean axis2-wsdl2code:wsdl2code compile
 
 mvn clean validate axis2-wsdl2code:wsdl2code compile assembly:single launch4j:launch4j
 
