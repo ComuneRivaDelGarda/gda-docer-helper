@@ -61,11 +61,11 @@ public class TestDocerHelper {
 	
 	@Test
 	public void test3() throws Exception {
-//		init();
-//		token = helper.login();
-//		String versione = helper.createFolder("test1");
-//		Assert.assertNotNull(versione);
-//		logger.info(versione);
+		init();
+		token = helper.login();
+		String folderId = helper.createFolder("test1");
+		Assert.assertNotNull(folderId);
+		logger.info(folderId);
 	}
 	
 	@Test
