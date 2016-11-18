@@ -30,6 +30,23 @@
                </xs:sequence>
             </xs:complexType>
          </xs:element>
+         <xs:element name="changeACLFascicolo">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="changeACLFascicoloResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
          <xs:element name="loginSSO">
             <xs:complexType>
                <xs:sequence>
@@ -54,23 +71,6 @@
             </xs:complexType>
          </xs:element>
          <xs:element name="writeConfigResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLFascicolo">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLFascicoloResponse">
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="return" type="xs:boolean"/>
@@ -123,6 +123,28 @@
                </xs:sequence>
             </xs:complexType>
          </xs:element>
+         <xs:element name="changeFascicoliById">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docNum" type="xs:long"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoliToRemove" nillable="true" type="ns:ArrayOfKeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoliToAdd" nillable="true" type="ns:ArrayOfKeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:complexType name="ArrayOfKeyValuePair">
+            <xs:sequence>
+               <xs:element maxOccurs="unbounded" minOccurs="0" name="array" nillable="true" type="ax23:KeyValuePair"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:element name="changeFascicoliByIdResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
          <xs:element name="creaFascicolo">
             <xs:complexType>
                <xs:sequence>
@@ -150,28 +172,6 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeFascicoliById">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docNum" type="xs:long"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoliToRemove" nillable="true" type="ns:ArrayOfKeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoliToAdd" nillable="true" type="ns:ArrayOfKeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:complexType name="ArrayOfKeyValuePair">
-            <xs:sequence>
-               <xs:element maxOccurs="unbounded" minOccurs="0" name="array" nillable="true" type="ax23:KeyValuePair"/>
-            </xs:sequence>
-         </xs:complexType>
-         <xs:element name="changeFascicoliByIdResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>

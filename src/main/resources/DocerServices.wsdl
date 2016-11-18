@@ -14,21 +14,6 @@
                </xs:sequence>
             </xs:complexType>
          </xs:element>
-         <xs:element name="getUser">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getUserResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
          <xs:element name="updateAOO">
             <xs:complexType>
                <xs:sequence>
@@ -294,6 +279,274 @@
                </xs:sequence>
             </xs:complexType>
          </xs:element>
+         <xs:element name="changeACLDocumento">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docnum" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="changeACLDocumentoResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="changeACLTitolario">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="changeACLTitolarioResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="changeACLFascicolo">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="changeACLFascicoloResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="setACLDocument">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="setACLDocumentResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="addOldAdvancedVersion">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docIdLastVersion" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docIdNewVersion" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="version" type="xs:double"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="addOldAdvancedVersionResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getAdvancedVersions">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getAdvancedVersionsResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getACLDocument">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getACLDocumentResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="updateProfileDocument">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="updateProfileDocumentResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getProfileDocument">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getProfileDocumentResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getVersions">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getVersionsResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="addNewVersion">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="file" nillable="true" type="xs:base64Binary"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="addNewVersionResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="replaceLastVersion">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="file" nillable="true" type="xs:base64Binary"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="replaceLastVersionResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="lockDocument">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="lockDocumentResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="unlockDocument">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="unlockDocumentResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getLockStatus">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getLockStatusResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" nillable="true" type="ax23:LockStatus"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="downloadDocument">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="downloadDocumentResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" nillable="true" type="ax23:StreamDescriptor"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="downloadVersion">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="versionNumber" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="downloadVersionResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" nillable="true" type="ax23:StreamDescriptor"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
          <xs:element name="updateUsersOfGroup">
             <xs:complexType>
                <xs:sequence>
@@ -463,536 +716,6 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="createDocument">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element minOccurs="0" name="file" nillable="true" type="xs:base64Binary"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="createDocumentResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="loginSSO">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="saml" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="codiceEnte" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="loginSSOResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="verifyTicket">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="verifyTicketResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="writeConfig">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="xmlConfig" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="writeConfigResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLFascicolo">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLFascicoloResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="setACLDocument">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="acls" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="setACLDocumentResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getACLDocument">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getACLDocumentResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="updateProfileDocument">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="updateProfileDocumentResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getProfileDocument">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getProfileDocumentResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getVersions">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getVersionsResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="replaceLastVersion">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="file" nillable="true" type="xs:base64Binary"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="replaceLastVersionResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="lockDocument">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="lockDocumentResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="unlockDocument">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="unlockDocumentResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getLockStatus">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getLockStatusResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" nillable="true" type="ax23:LockStatus"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="downloadDocument">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="downloadDocumentResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" nillable="true" type="ax23:StreamDescriptor"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="readConfig">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="readConfigResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLFolder">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="folderId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLFolderResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLDocumento">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docnum" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLDocumentoResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLTitolario">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="titolarioId" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="changeACLTitolarioResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="addNewVersion">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="file" nillable="true" type="xs:base64Binary"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="addNewVersionResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="downloadVersion">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="versionNumber" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="downloadVersionResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" nillable="true" type="ax23:StreamDescriptor"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="addRelated">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="related" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="addRelatedResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="removeRelated">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="related" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="removeRelatedResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getRelatedDocuments">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getRelatedDocumentsResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="deleteDocument">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="deleteDocumentResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getUserRights">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getUserRightsResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:int"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getHistory">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getHistoryResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:HistoryItem"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="searchDocumentiFascicolo">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element minOccurs="0" name="maxRows" type="xs:int"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="searchDocumentiFascicoloResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="searchDocuments">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true" type="ax23:KeyValuePair"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="maxRows" type="xs:int"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="orderby" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="searchDocumentsResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="createEnte">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="enteInfo" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="createEnteResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="updateEnte">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="codiceEnte" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="enteInfo" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="updateEnteResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getEnte">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="codiceEnte" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getEnteResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="createAOO">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooInfo" nillable="true" type="ax23:KeyValuePair"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="createAOOResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getVersionEstesa">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getVersionEstesaResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:Version"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1345,24 +1068,145 @@
                </xs:sequence>
             </xs:complexType>
          </xs:element>
-         <xs:element name="addOldAdvancedVersion">
+         <xs:element name="changeACLFolder">
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docIdLastVersion" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="docIdNewVersion" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="version" type="xs:double"/>
+                  <xs:element minOccurs="0" name="folderId" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToAdd" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aclToRemove" nillable="true" type="xs:string"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
-         <xs:element name="addOldAdvancedVersionResponse">
+         <xs:element name="changeACLFolderResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getUser">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getUserResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="createDocument">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="metadata" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element minOccurs="0" name="file" nillable="true" type="xs:base64Binary"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="createDocumentResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="loginSSO">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="saml" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="codiceEnte" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="loginSSOResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="verifyTicket">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="verifyTicketResponse">
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="return" type="xs:boolean"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
-         <xs:element name="getAdvancedVersions">
+         <xs:element name="writeConfig">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="xmlConfig" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="writeConfigResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="readConfig">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="readConfigResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="addRelated">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="related" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="addRelatedResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="removeRelated">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="related" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="removeRelatedResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getRelatedDocuments">
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
@@ -1370,10 +1214,166 @@
                </xs:sequence>
             </xs:complexType>
          </xs:element>
-         <xs:element name="getAdvancedVersionsResponse">
+         <xs:element name="getRelatedDocumentsResponse">
             <xs:complexType>
                <xs:sequence>
                   <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="deleteDocument">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="deleteDocumentResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getUserRights">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getUserRightsResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:int"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getHistory">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getHistoryResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:HistoryItem"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="searchDocumentiFascicolo">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="fascicoloId" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element minOccurs="0" name="maxRows" type="xs:int"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="searchDocumentiFascicoloResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="searchDocuments">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="searchCriteria" nillable="true" type="ax23:KeyValuePair"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="keywords" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="maxRows" type="xs:int"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="orderby" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="searchDocumentsResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:SearchItem"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="createEnte">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="enteInfo" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="createEnteResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="updateEnte">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="codiceEnte" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="enteInfo" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="updateEnteResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getEnte">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="codiceEnte" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getEnteResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="createAOO">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="aooInfo" nillable="true" type="ax23:KeyValuePair"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="createAOOResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getVersionEstesa">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="docId" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getVersionEstesaResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:Version"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
@@ -1701,17 +1701,17 @@
    <wsdl:message name="removeRiferimentiDocumentsResponse">
       <wsdl:part name="parameters" element="ns:removeRiferimentiDocumentsResponse"/>
    </wsdl:message>
-   <wsdl:message name="addRiferimentiDocumentsRequest">
-      <wsdl:part name="parameters" element="ns:addRiferimentiDocuments"/>
-   </wsdl:message>
-   <wsdl:message name="addRiferimentiDocumentsResponse">
-      <wsdl:part name="parameters" element="ns:addRiferimentiDocumentsResponse"/>
-   </wsdl:message>
    <wsdl:message name="createEnteRequest">
       <wsdl:part name="parameters" element="ns:createEnte"/>
    </wsdl:message>
    <wsdl:message name="createEnteResponse">
       <wsdl:part name="parameters" element="ns:createEnteResponse"/>
+   </wsdl:message>
+   <wsdl:message name="addRiferimentiDocumentsRequest">
+      <wsdl:part name="parameters" element="ns:addRiferimentiDocuments"/>
+   </wsdl:message>
+   <wsdl:message name="addRiferimentiDocumentsResponse">
+      <wsdl:part name="parameters" element="ns:addRiferimentiDocumentsResponse"/>
    </wsdl:message>
    <wsdl:message name="getGroupsOfUserRequest">
       <wsdl:part name="parameters" element="ns:getGroupsOfUser"/>
@@ -1803,6 +1803,12 @@
    <wsdl:message name="changeACLFascicoloResponse">
       <wsdl:part name="parameters" element="ns:changeACLFascicoloResponse"/>
    </wsdl:message>
+   <wsdl:message name="getUserRequest">
+      <wsdl:part name="parameters" element="ns:getUser"/>
+   </wsdl:message>
+   <wsdl:message name="getUserResponse">
+      <wsdl:part name="parameters" element="ns:getUserResponse"/>
+   </wsdl:message>
    <wsdl:message name="protocollaDocumentoRequest">
       <wsdl:part name="parameters" element="ns:protocollaDocumento"/>
    </wsdl:message>
@@ -1814,12 +1820,6 @@
    </wsdl:message>
    <wsdl:message name="searchAnagraficheResponse">
       <wsdl:part name="parameters" element="ns:searchAnagraficheResponse"/>
-   </wsdl:message>
-   <wsdl:message name="getUserRequest">
-      <wsdl:part name="parameters" element="ns:getUser"/>
-   </wsdl:message>
-   <wsdl:message name="getUserResponse">
-      <wsdl:part name="parameters" element="ns:getUserResponse"/>
    </wsdl:message>
    <wsdl:message name="getUserRightsAnagraficheRequest">
       <wsdl:part name="parameters" element="ns:getUserRightsAnagrafiche"/>
@@ -2221,15 +2221,15 @@
          <wsdl:output message="ns:removeRiferimentiDocumentsResponse" wsaw:Action="urn:removeRiferimentiDocumentsResponse"/>
          <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:removeRiferimentiDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
-      <wsdl:operation name="addRiferimentiDocuments">
-         <wsdl:input message="ns:addRiferimentiDocumentsRequest" wsaw:Action="urn:addRiferimentiDocuments"/>
-         <wsdl:output message="ns:addRiferimentiDocumentsResponse" wsaw:Action="urn:addRiferimentiDocumentsResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:addRiferimentiDocumentsDocerServicesDocerException"/>
-      </wsdl:operation>
       <wsdl:operation name="createEnte">
          <wsdl:input message="ns:createEnteRequest" wsaw:Action="urn:createEnte"/>
          <wsdl:output message="ns:createEnteResponse" wsaw:Action="urn:createEnteResponse"/>
          <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:createEnteDocerServicesDocerException"/>
+      </wsdl:operation>
+      <wsdl:operation name="addRiferimentiDocuments">
+         <wsdl:input message="ns:addRiferimentiDocumentsRequest" wsaw:Action="urn:addRiferimentiDocuments"/>
+         <wsdl:output message="ns:addRiferimentiDocumentsResponse" wsaw:Action="urn:addRiferimentiDocumentsResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:addRiferimentiDocumentsDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getGroupsOfUser">
          <wsdl:input message="ns:getGroupsOfUserRequest" wsaw:Action="urn:getGroupsOfUser"/>
@@ -2305,6 +2305,11 @@
          <wsdl:output message="ns:changeACLFascicoloResponse" wsaw:Action="urn:changeACLFascicoloResponse"/>
          <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:changeACLFascicoloDocerServicesDocerException"/>
       </wsdl:operation>
+      <wsdl:operation name="getUser">
+         <wsdl:input message="ns:getUserRequest" wsaw:Action="urn:getUser"/>
+         <wsdl:output message="ns:getUserResponse" wsaw:Action="urn:getUserResponse"/>
+         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getUserDocerServicesDocerException"/>
+      </wsdl:operation>
       <wsdl:operation name="protocollaDocumento">
          <wsdl:input message="ns:protocollaDocumentoRequest" wsaw:Action="urn:protocollaDocumento"/>
          <wsdl:output message="ns:protocollaDocumentoResponse" wsaw:Action="urn:protocollaDocumentoResponse"/>
@@ -2314,11 +2319,6 @@
          <wsdl:input message="ns:searchAnagraficheRequest" wsaw:Action="urn:searchAnagrafiche"/>
          <wsdl:output message="ns:searchAnagraficheResponse" wsaw:Action="urn:searchAnagraficheResponse"/>
          <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:searchAnagraficheDocerServicesDocerException"/>
-      </wsdl:operation>
-      <wsdl:operation name="getUser">
-         <wsdl:input message="ns:getUserRequest" wsaw:Action="urn:getUser"/>
-         <wsdl:output message="ns:getUserResponse" wsaw:Action="urn:getUserResponse"/>
-         <wsdl:fault message="ns:DocerServicesDocerException" name="DocerServicesDocerException" wsaw:Action="urn:getUserDocerServicesDocerException"/>
       </wsdl:operation>
       <wsdl:operation name="getUserRightsAnagrafiche">
          <wsdl:input message="ns:getUserRightsAnagraficheRequest" wsaw:Action="urn:getUserRightsAnagrafiche"/>
@@ -2914,8 +2914,8 @@
             <soap:fault use="literal" name="DocerServicesDocerException"/>
          </wsdl:fault>
       </wsdl:operation>
-      <wsdl:operation name="createEnte">
-         <soap:operation soapAction="urn:createEnte" style="document"/>
+      <wsdl:operation name="addRiferimentiDocuments">
+         <soap:operation soapAction="urn:addRiferimentiDocuments" style="document"/>
          <wsdl:input>
             <soap:body use="literal"/>
          </wsdl:input>
@@ -2926,8 +2926,8 @@
             <soap:fault use="literal" name="DocerServicesDocerException"/>
          </wsdl:fault>
       </wsdl:operation>
-      <wsdl:operation name="addRiferimentiDocuments">
-         <soap:operation soapAction="urn:addRiferimentiDocuments" style="document"/>
+      <wsdl:operation name="createEnte">
+         <soap:operation soapAction="urn:createEnte" style="document"/>
          <wsdl:input>
             <soap:body use="literal"/>
          </wsdl:input>
@@ -3115,18 +3115,6 @@
             <soap:fault use="literal" name="DocerServicesDocerException"/>
          </wsdl:fault>
       </wsdl:operation>
-      <wsdl:operation name="getUser">
-         <soap:operation soapAction="urn:getUser" style="document"/>
-         <wsdl:input>
-            <soap:body use="literal"/>
-         </wsdl:input>
-         <wsdl:output>
-            <soap:body use="literal"/>
-         </wsdl:output>
-         <wsdl:fault name="DocerServicesDocerException">
-            <soap:fault use="literal" name="DocerServicesDocerException"/>
-         </wsdl:fault>
-      </wsdl:operation>
       <wsdl:operation name="searchAnagrafiche">
          <soap:operation soapAction="urn:searchAnagrafiche" style="document"/>
          <wsdl:input>
@@ -3141,6 +3129,18 @@
       </wsdl:operation>
       <wsdl:operation name="protocollaDocumento">
          <soap:operation soapAction="urn:protocollaDocumento" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+         <wsdl:fault name="DocerServicesDocerException">
+            <soap:fault use="literal" name="DocerServicesDocerException"/>
+         </wsdl:fault>
+      </wsdl:operation>
+      <wsdl:operation name="getUser">
+         <soap:operation soapAction="urn:getUser" style="document"/>
          <wsdl:input>
             <soap:body use="literal"/>
          </wsdl:input>
@@ -4018,8 +4018,8 @@
             <soap12:fault use="literal" name="DocerServicesDocerException"/>
          </wsdl:fault>
       </wsdl:operation>
-      <wsdl:operation name="createEnte">
-         <soap12:operation soapAction="urn:createEnte" style="document"/>
+      <wsdl:operation name="addRiferimentiDocuments">
+         <soap12:operation soapAction="urn:addRiferimentiDocuments" style="document"/>
          <wsdl:input>
             <soap12:body use="literal"/>
          </wsdl:input>
@@ -4030,8 +4030,8 @@
             <soap12:fault use="literal" name="DocerServicesDocerException"/>
          </wsdl:fault>
       </wsdl:operation>
-      <wsdl:operation name="addRiferimentiDocuments">
-         <soap12:operation soapAction="urn:addRiferimentiDocuments" style="document"/>
+      <wsdl:operation name="createEnte">
+         <soap12:operation soapAction="urn:createEnte" style="document"/>
          <wsdl:input>
             <soap12:body use="literal"/>
          </wsdl:input>
@@ -4219,18 +4219,6 @@
             <soap12:fault use="literal" name="DocerServicesDocerException"/>
          </wsdl:fault>
       </wsdl:operation>
-      <wsdl:operation name="getUser">
-         <soap12:operation soapAction="urn:getUser" style="document"/>
-         <wsdl:input>
-            <soap12:body use="literal"/>
-         </wsdl:input>
-         <wsdl:output>
-            <soap12:body use="literal"/>
-         </wsdl:output>
-         <wsdl:fault name="DocerServicesDocerException">
-            <soap12:fault use="literal" name="DocerServicesDocerException"/>
-         </wsdl:fault>
-      </wsdl:operation>
       <wsdl:operation name="searchAnagrafiche">
          <soap12:operation soapAction="urn:searchAnagrafiche" style="document"/>
          <wsdl:input>
@@ -4245,6 +4233,18 @@
       </wsdl:operation>
       <wsdl:operation name="protocollaDocumento">
          <soap12:operation soapAction="urn:protocollaDocumento" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+         <wsdl:fault name="DocerServicesDocerException">
+            <soap12:fault use="literal" name="DocerServicesDocerException"/>
+         </wsdl:fault>
+      </wsdl:operation>
+      <wsdl:operation name="getUser">
+         <soap12:operation soapAction="urn:getUser" style="document"/>
          <wsdl:input>
             <soap12:body use="literal"/>
          </wsdl:input>
@@ -5023,8 +5023,8 @@
             <mime:content type="application/xml" part="parameters"/>
          </wsdl:output>
       </wsdl:operation>
-      <wsdl:operation name="createEnte">
-         <http:operation location="createEnte"/>
+      <wsdl:operation name="addRiferimentiDocuments">
+         <http:operation location="addRiferimentiDocuments"/>
          <wsdl:input>
             <mime:content type="application/xml" part="parameters"/>
          </wsdl:input>
@@ -5032,8 +5032,8 @@
             <mime:content type="application/xml" part="parameters"/>
          </wsdl:output>
       </wsdl:operation>
-      <wsdl:operation name="addRiferimentiDocuments">
-         <http:operation location="addRiferimentiDocuments"/>
+      <wsdl:operation name="createEnte">
+         <http:operation location="createEnte"/>
          <wsdl:input>
             <mime:content type="application/xml" part="parameters"/>
          </wsdl:input>
@@ -5176,15 +5176,6 @@
             <mime:content type="application/xml" part="parameters"/>
          </wsdl:output>
       </wsdl:operation>
-      <wsdl:operation name="getUser">
-         <http:operation location="getUser"/>
-         <wsdl:input>
-            <mime:content type="application/xml" part="parameters"/>
-         </wsdl:input>
-         <wsdl:output>
-            <mime:content type="application/xml" part="parameters"/>
-         </wsdl:output>
-      </wsdl:operation>
       <wsdl:operation name="searchAnagrafiche">
          <http:operation location="searchAnagrafiche"/>
          <wsdl:input>
@@ -5196,6 +5187,15 @@
       </wsdl:operation>
       <wsdl:operation name="protocollaDocumento">
          <http:operation location="protocollaDocumento"/>
+         <wsdl:input>
+            <mime:content type="application/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="application/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getUser">
+         <http:operation location="getUser"/>
          <wsdl:input>
             <mime:content type="application/xml" part="parameters"/>
          </wsdl:input>
