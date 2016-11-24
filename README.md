@@ -38,9 +38,10 @@ i file generati con axis2 wsdl2code sono inclusi nei sorgenti
 	mvn clean package
 
 ### axis2 generazione codice da wsdl
-vedi riferimenti su pom.xml (decommentare plugin configurato)
+vedi riferimenti su pom.xml (decommentare plugin opportunamente configurato)
 
 1. esecuzione manuale
+va eseguita per ogni wsdl
 
 	mvn axis2-wsdl2code:wsdl2code
 	
