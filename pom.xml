@@ -43,7 +43,7 @@
 			
 			<!-- esecuzione automatica -->
 			<!-- mvn clean compile -->
-			
+			<!--
 			<plugin>
 				<groupId>org.apache.axis2</groupId>
 				<artifactId>axis2-wsdl2code-maven-plugin</artifactId>
@@ -105,8 +105,8 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-			
+			-->
+						
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -127,7 +127,7 @@
 					<configuration>
 						<source>${java.version}</source>
 						<target>${java.version}</target>
-						<generatedSourcesDirectory>target/generated-sources/axis2/wsdl2code/src</generatedSourcesDirectory>
+						<!-- <generatedSourcesDirectory>target/generated-sources/axis2/wsdl2code/src</generatedSourcesDirectory> -->
 					</configuration>
 				</plugin>
 			</plugins>
