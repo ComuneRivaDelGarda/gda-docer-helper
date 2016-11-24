@@ -1,5 +1,13 @@
 # gda-docer-helper
 
+## USO
+
+config.properties richiesto nel classpath con configurazione connessione a DOCER
+
+	url=http://192.168.64.22:8080/
+	username=admin
+	password=admin
+
 ## DOCER
 ﻿
 la pila Docer è installata e raggiungibile all' indirizzo :
@@ -28,7 +36,7 @@ Possono iniziare anche senza una base dati , ho preconfigurato ENTE/AOO
 tramite i codici IPA , quindi è possibile inserire documenti , creare
 titolari / fascicoli .. insomma tutto il necessario
 
-## PROGETTO
+## COMPILAZIONE/AGGIORNAMENTI PROGETTO
 
 i file generati con axis2 wsdl2code sono inclusi nei sorgenti
 
