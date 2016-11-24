@@ -1,6 +1,8 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import it.kdm.docer.webservices.DocerServicesStub;
+import it.kdm.docer.webservices.DocerServicesStub.ArchiviaDocumento;
+import it.kdm.docer.webservices.DocerServicesStub.ArchiviaDocumentoResponse;
 import it.kdm.docer.webservices.DocerServicesStub.ClassificaDocumento;
 import it.kdm.docer.webservices.DocerServicesStub.ClassificaDocumentoResponse;
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
@@ -67,4 +69,29 @@ public class DocerProtocollazioneHelper extends AbstractDocerHelper {
 		return esito;
 	}
 
+	/**
+	 * Questo metodo permette l’archiviazione (in archivio di deposito) di un
+	 * Documento e di tutti i suoi related nel DMS.
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @param metadata
+	 *            L’oggetto metadata[] è una collezione di nodi metadata. Ogni
+	 *            nodo metadata contiene una KeyValuePair ovvero due nodi, key e
+	 *            value, di tipo string dove i valori ammessi per i nodi key
+	 *            sono i nomi dei metadati del profilo relativi all’archivio di
+	 *            deposito (si veda paragrafo 4.4. Profilo di un documento).
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean archiviaDocumento(String documentId, KeyValuePair[] metadata) throws Exception {
+		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		ArchiviaDocumento request = new ArchiviaDocumento();
+		request.setToken(getLoginTicket());
+		request.setDocId(documentId);
+		request.setMetadata(metadata);
+		ArchiviaDocumentoResponse response = service.archiviaDocumento(request);
+		boolean esito = response.get_return();
+		return esito;
+	}
 }
