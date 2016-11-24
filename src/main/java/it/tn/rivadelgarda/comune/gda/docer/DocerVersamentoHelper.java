@@ -39,7 +39,6 @@ import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
 import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeyValuePairEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairEnum;
-import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairFactory;
 
 public class DocerVersamentoHelper extends AbstractDocerHelper {
 

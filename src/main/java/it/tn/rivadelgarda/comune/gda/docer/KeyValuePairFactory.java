@@ -1,9 +1,11 @@
-package it.tn.rivadelgarda.comune.gda.docer.keys;
+package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairEnum;
 
 public class KeyValuePairFactory {
 
