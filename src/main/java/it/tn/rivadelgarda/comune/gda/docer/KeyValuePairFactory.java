@@ -1,6 +1,5 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
-import java.awt.image.Raster;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,25 +17,50 @@ public class KeyValuePairFactory {
 		return res;
 	}
 
+	public static KeyValuePair createKeyOrderByAsc(String key) {
+		KeyValuePair res = new KeyValuePair();
+		res.setKey(key);
+		res.setValue(KeyValuePairFactory.ASC);
+		return res;
+	}
+
+	public static KeyValuePair createKeyOrderByDesc(String key) {
+		KeyValuePair res = new KeyValuePair();
+		res.setKey(key);
+		res.setValue(KeyValuePairFactory.DESC);
+		return res;
+	}
+
 	private List<KeyValuePair> list = new ArrayList<>();
 
-	public static KeyValuePairFactory create(KeyValuePairEnum key, String value) {
+	public static KeyValuePairFactory build(KeyValuePairEnum key, String value) {
 		KeyValuePairFactory res = new KeyValuePairFactory();
 		res.add(key, value);
 		return res;
 	}
 
+	public static KeyValuePairFactory build(String key, String value) {
+		KeyValuePairFactory res = new KeyValuePairFactory();
+		res.add(key, value);
+		return res;
+	}
+	
 	public KeyValuePairFactory add(KeyValuePairEnum key, String value) {
 		this.list.add(createKey(key.getKey(), value));
 		return this;
 	}
 
-	public KeyValuePair[] asArray() {
+	public KeyValuePairFactory add(String key, String value) {
+		this.list.add(createKey(key, value));
+		return this;
+	}
+	
+	public KeyValuePair[] get() {
 		return this.list.toArray(new KeyValuePair[list.size()]);
 	}
 
 	public static KeyValuePairFactory createDocumentKeys(String typeId, String docName, String codEnte, String codAoo) {
-		return create(DocumentKeyValuePairEnum.TYPE_ID, typeId).add(DocumentKeyValuePairEnum.DOCNAME, docName)
+		return build(DocumentKeyValuePairEnum.TYPE_ID, typeId).add(DocumentKeyValuePairEnum.DOCNAME, docName)
 				.add(DocumentKeyValuePairEnum.COD_ENTE, codEnte).add(DocumentKeyValuePairEnum.COD_AOO, codAoo);
 	}
 
