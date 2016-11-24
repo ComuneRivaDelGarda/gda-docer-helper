@@ -24,6 +24,7 @@
 		<plugins>	
 			<!-- esecuzione manuale -->
 			<!-- mvn axis2-wsdl2code-maven-plugin:wsdl2code -->
+			<!-- mvn org.apache.axis2:axis2-wsdl2code-maven-plugin:wsdl2code -->
 			<!-- 
 			<plugin>
 				<groupId>org.apache.axis2</groupId>
@@ -42,6 +43,7 @@
 			
 			<!-- esecuzione automatica -->
 			<!-- mvn clean compile -->
+			
 			<plugin>
 				<groupId>org.apache.axis2</groupId>
 				<artifactId>axis2-wsdl2code-maven-plugin</artifactId>
@@ -104,6 +106,15 @@
 				</executions>
 			</plugin>
 			
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<configuration>
+				</configuration>
+			</plugin>
+    			
 		</plugins>
 
 		<!-- aggiunge al progetto eclipse la cartella con i sorgenti generati -->
