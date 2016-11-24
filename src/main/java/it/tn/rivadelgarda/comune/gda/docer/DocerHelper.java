@@ -45,29 +45,29 @@ import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
 import it.tn.rivadelgarda.comune.gda.docer.keys.ACLValuesEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
 import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeyValuePairEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairFactory;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
 import sample.axisversion.VersionStub;
 import sample.axisversion.VersionStub.GetVersion;
 import sample.axisversion.VersionStub.GetVersionResponse;
 
 public class DocerHelper implements Closeable {
 
-	private final static String AuthenticationService = "docersystem/services/AuthenticationService";
-	private final static String DocerServices = "WSDocer/services/DocerServices";
-	private final static String WSProtocollazione = "WSProtocollazione/services/WSProtocollazione";
-	private final static String WSFascicolazione = "WSFascicolazione/services/WSFascicolazione";
-	private final static String VersionService = "docersystem/services/Version";
+	protected final static String AuthenticationService = "docersystem/services/AuthenticationService";
+	protected final static String DocerServices = "WSDocer/services/DocerServices";
+	protected final static String WSProtocollazione = "WSProtocollazione/services/WSProtocollazione";
+	protected final static String WSFascicolazione = "WSFascicolazione/services/WSFascicolazione";
+	protected final static String VersionService = "docersystem/services/Version";
 
-	private String docerSerivcesUrl;
-	private String docerUsername;
-	private String docerPassword;
+	protected String docerSerivcesUrl;
+	protected String docerUsername;
+	protected String docerPassword;
 
-	private final String docerCodiceENTE = "C_H330";
-	private final String docerCodiceAOO = "RSERVIZI";
-	private final String docerApplication = "GDA";
+	protected final String docerCodiceENTE = "C_H330";
+	protected final String docerCodiceAOO = "RSERVIZI";
+	protected final String docerApplication = "GDA";
 
 	private String loginResponse;
 	private String tockenSessione;

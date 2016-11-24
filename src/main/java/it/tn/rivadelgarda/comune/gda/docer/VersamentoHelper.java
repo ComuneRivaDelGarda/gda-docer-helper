@@ -1,13 +1,9 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
@@ -15,11 +11,6 @@ import javax.activation.FileDataSource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import it.kdm.docer.core.authentication.AuthenticationServiceStub;
-import it.kdm.docer.core.authentication.AuthenticationServiceStub.Login;
-import it.kdm.docer.core.authentication.AuthenticationServiceStub.LoginResponse;
-import it.kdm.docer.core.authentication.AuthenticationServiceStub.Logout;
-import it.kdm.docer.core.authentication.AuthenticationServiceStub.LogoutResponse;
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddRelated;
 import it.kdm.docer.webservices.DocerServicesStub.AddRelatedResponse;
@@ -45,123 +36,15 @@ import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
 import it.tn.rivadelgarda.comune.gda.docer.keys.ACLValuesEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
 import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeyValuePairEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairFactory;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
-import sample.axisversion.VersionStub;
-import sample.axisversion.VersionStub.GetVersion;
-import sample.axisversion.VersionStub.GetVersionResponse;
 
-public class VersamentoHelper implements Closeable {
+public class VersamentoHelper extends DocerHelper {
 
-	private final static String AuthenticationService = "docersystem/services/AuthenticationService";
-	private final static String DocerServices = "WSDocer/services/DocerServices";
-	private final static String WSProtocollazione = "WSProtocollazione/services/WSProtocollazione";
-	private final static String WSFascicolazione = "WSFascicolazione/services/WSFascicolazione";
-	private final static String VersionService = "docersystem/services/Version";
-
-	private String docerSerivcesUrl;
-	private String docerUsername;
-	private String docerPassword;
-
-	private final String docerCodiceENTE = "C_H330";
-	private final String docerCodiceAOO = "RSERVIZI";
-	private final String docerApplication = "GDA";
-
-	private String loginResponse;
-	private String tockenSessione;
-
-	@Override
-	public void close() throws IOException {
-		if (isLoggedIn()) {
-			try {
-				logout();
-			} catch (Exception ex) {
-				throw new IOException("Impossibile eseguire Logout", ex);
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @param docerSerivcesUrl
-	 * @param docerUsername
-	 * @param docerPassword
-	 */
 	public VersamentoHelper(String docerSerivcesUrl, String docerUsername, String docerPassword) {
-		super();
-		if (!docerSerivcesUrl.endsWith("/")) {
-			docerSerivcesUrl = docerSerivcesUrl + "/";
-		}
-		this.docerSerivcesUrl = docerSerivcesUrl;
-		this.docerUsername = docerUsername;
-		this.docerPassword = docerPassword;
-	}
-
-	private Map<String, String> parse(String inString) {
-		Map<String, String> res = new HashMap<String, String>();
-		// res = Splitter.on("\\|").withKeyValueSeparator(":").split(inString);
-		if (StringUtils.isNotBlank(inString)) {
-			String[] pairs = inString.split("\\|");
-			for (int i = 0; i < pairs.length; i++) {
-				String pair = pairs[i];
-				String[] keyValue = pair.split(":");
-				if (keyValue.length == 2)
-					res.put(keyValue[0], keyValue[1]);
-				else
-					res.put(keyValue[0], null);
-			}
-		}
-		return res;
-	}
-
-	/**
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public String login() throws Exception {
-		AuthenticationServiceStub service = new AuthenticationServiceStub(docerSerivcesUrl + AuthenticationService);
-		Login login = new Login();
-		login.setUsername(docerUsername);
-		login.setPassword(docerPassword);
-		login.setCodiceEnte(docerCodiceENTE);
-		login.setApplication(docerApplication);
-		LoginResponse response = service.login(login);
-		loginResponse = response.get_return();
-		tockenSessione = loginResponse; // parse(loginResponse).get("ticketDocerServices");
-		return tockenSessione;
-	}
-
-	/**
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public boolean logout() throws Exception {
-		AuthenticationServiceStub service = new AuthenticationServiceStub(docerSerivcesUrl + AuthenticationService);
-		Logout request = new Logout();
-		request.setToken(getLoginTicket());
-		LogoutResponse response = service.logout(request);
-		boolean res = response.get_return();
-		return res;
-	}
-
-	public String getVersion() throws Exception {
-		VersionStub service = new VersionStub(docerSerivcesUrl + VersionService);
-		GetVersion getversion = new GetVersion();
-		GetVersionResponse response = service.getVersion(getversion);
-		return response.get_return();
-
-	}
-
-	public String getLoginTicket() {
-		return tockenSessione;
-	}
-
-	private boolean isLoggedIn() {
-		return StringUtils.isNotBlank(tockenSessione);
+		super(docerSerivcesUrl, docerUsername, docerPassword);
 	}
 
 	/**

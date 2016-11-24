@@ -1,6 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer.keys;
 
-interface KeyValuePairEnum {
+public interface KeyValuePairEnum {
 
 	public final static String FOLDER_NAME = "FOLDER_NAME";
 	public final static String FOLDER_OWNER = "FOLDER_OWNER";
