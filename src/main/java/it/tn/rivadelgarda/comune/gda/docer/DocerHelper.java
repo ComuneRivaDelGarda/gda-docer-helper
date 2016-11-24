@@ -43,7 +43,7 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchFoldersResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
-import it.tn.rivadelgarda.comune.gda.docer.DocumentKeyValuePairEnum.TipoComponenteEnum;
+import it.tn.rivadelgarda.comune.gda.docer.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
 import sample.axisversion.VersionStub;
 import sample.axisversion.VersionStub.GetVersion;
 import sample.axisversion.VersionStub.GetVersionResponse;
@@ -230,7 +230,7 @@ public class DocerHelper implements Closeable {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String typeId, String documentName, File file, TipoComponenteEnum tipoComponente)
+	public String createDocument(String typeId, String documentName, File file, TIPO_COMPONENTE tipoComponente)
 			throws Exception {
 		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(typeId, documentName, docerCodiceENTE,
 				docerCodiceAOO);
