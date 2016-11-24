@@ -5,11 +5,16 @@ import java.io.File;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 
+import org.apache.commons.io.FileUtils;
+
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersion;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersionResponse;
+import it.kdm.docer.webservices.DocerServicesStub.DownloadVersion;
+import it.kdm.docer.webservices.DocerServicesStub.DownloadVersionResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersions;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersionsResponse;
+import it.kdm.docer.webservices.DocerServicesStub.StreamDescriptor;
 
 public class DocerVersionamentoHelper extends AbstractDocerHelper {
 
@@ -63,4 +68,42 @@ public class DocerVersionamentoHelper extends AbstractDocerHelper {
 		return versions;
 	}
 
+	/**
+	 * Questo metodo permette di recuperare una specifica versione del file (o
+	 * documento elettronico) di un Documento nel DMS.
+	 * 
+	 * @param documentsId
+	 *            id del Documento
+	 * @param versionNumber
+	 *            Version number del file
+	 * @return L’oggetto StreamDescriptor contiene una variabile “byteSize” di
+	 *         tipo Long che rappresenta la dimensione del file e una variabile
+	 *         “handler” che rappresenta il file o documento elettronico
+	 *         relativo alla versione richiesta
+	 * @throws Exception
+	 */
+	public StreamDescriptor downloadVersion(String documentsId, String versionNumber) throws Exception {
+		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DownloadVersion request = new DownloadVersion();
+		request.setToken(getLoginTicket());
+		request.setDocId(documentsId);
+		request.setVersionNumber(versionNumber);
+		DownloadVersionResponse response = service.downloadVersion(request);
+		StreamDescriptor res = response.get_return();
+		return res;
+	}
+
+	/**
+	 * 
+	 * @param documentsId
+	 * @param versionNumber
+	 * @param file
+	 * @throws Exception
+	 */
+	public void downloadVersionTo(String documentsId, String versionNumber, File file) throws Exception {
+		StreamDescriptor data = downloadVersion(documentsId, versionNumber);
+		long size = data.getByteSize();
+		DataHandler dh = data.getHandler();
+		FileUtils.copyInputStreamToFile(dh.getInputStream(), file);
+	}
 }
