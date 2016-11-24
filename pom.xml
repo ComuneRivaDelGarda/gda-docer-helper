@@ -14,12 +14,10 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<cxf.version>3.1.4</cxf.version>
 		<axis.version>1.7.4</axis.version>
-		<!-- <withdependencyname>jar-with-dependencies</withdependencyname> -->
-		<!-- <mainclass>it.studio74.modello730.spesemediche.Main</mainclass> -->
 	</properties>
 
 	<build>
-		<!-- <finalName>ss730ws</finalName> -->
+		<finalName>gda-docer-helper</finalName>
 				
 		<plugins>	
 			<!-- esecuzione manuale -->
