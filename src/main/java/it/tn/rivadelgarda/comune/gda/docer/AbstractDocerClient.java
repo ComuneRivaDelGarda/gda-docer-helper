@@ -16,7 +16,7 @@ import sample.axisversion.VersionStub;
 import sample.axisversion.VersionStub.GetVersion;
 import sample.axisversion.VersionStub.GetVersionResponse;
 
-public abstract class AbstractDocerHelper implements Closeable {
+public abstract class AbstractDocerClient implements Closeable {
 
 	protected final static String AuthenticationService = "docersystem/services/AuthenticationService";
 	protected final static String DocerServices = "WSDocer/services/DocerServices";
@@ -52,7 +52,7 @@ public abstract class AbstractDocerHelper implements Closeable {
 	 * @param docerUsername
 	 * @param docerPassword
 	 */
-	public AbstractDocerHelper(String docerSerivcesUrl, String docerUsername, String docerPassword) {
+	public AbstractDocerClient(String docerSerivcesUrl, String docerUsername, String docerPassword) {
 		super();
 		if (!docerSerivcesUrl.endsWith("/")) {
 			docerSerivcesUrl = docerSerivcesUrl + "/";

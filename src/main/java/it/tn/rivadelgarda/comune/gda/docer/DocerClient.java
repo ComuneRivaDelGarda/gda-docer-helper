@@ -54,9 +54,9 @@ import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeysEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum.TIPO_COMPONENTE;
 import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 
-public class DocerHelper extends AbstractDocerHelper {
+public class DocerClient extends AbstractDocerClient {
 
-	public DocerHelper(String docerSerivcesUrl, String docerUsername, String docerPassword) {
+	public DocerClient(String docerSerivcesUrl, String docerUsername, String docerPassword) {
 		super(docerSerivcesUrl, docerUsername, docerPassword);
 	}
 
