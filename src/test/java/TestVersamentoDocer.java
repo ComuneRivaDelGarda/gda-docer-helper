@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
-import it.tn.rivadelgarda.comune.gda.docer.DocerVersamentoHelper;
+import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 
 public class TestVersamentoDocer {
 
@@ -16,7 +16,7 @@ public class TestVersamentoDocer {
 	private String username;
 	private String password;
 
-	DocerVersamentoHelper helper;
+	DocerHelper helper;
 	private String token;
 
 	private void init() throws Exception {
@@ -30,7 +30,7 @@ public class TestVersamentoDocer {
 		username = p.getProperty("username");
 		password = p.getProperty("password");
 
-		helper = new DocerVersamentoHelper(url, username, password);
+		helper = new DocerHelper(url, username, password);
 	}
 
 	@Test
