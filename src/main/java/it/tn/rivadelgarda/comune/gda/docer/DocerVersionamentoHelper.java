@@ -8,6 +8,8 @@ import javax.activation.FileDataSource;
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersion;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersionResponse;
+import it.kdm.docer.webservices.DocerServicesStub.GetVersions;
+import it.kdm.docer.webservices.DocerServicesStub.GetVersionsResponse;
 
 public class DocerVersionamentoHelper extends AbstractDocerHelper {
 
@@ -39,6 +41,26 @@ public class DocerVersionamentoHelper extends AbstractDocerHelper {
 		AddNewVersionResponse response = service.addNewVersion(request);
 		String version = response.get_return();
 		return version;
+	}
+
+	/**
+	 * Questo metodo permette di recuperare la lista dei version number ovvero
+	 * delle versioni dei file di un Documento del DMS. Il metodo è applicabile
+	 * per la sola gestione del versioning standard.
+	 * 
+	 * @param documentsId
+	 *            id del Documento di riferimento
+	 * @return collezione dei version number
+	 * @throws Exception
+	 */
+	public String[] getVersions(String documentsId) throws Exception {
+		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		GetVersions request = new GetVersions();
+		request.setToken(getLoginTicket());
+		request.setDocId(documentsId);
+		GetVersionsResponse response = service.getVersions(request);
+		String[] versions = response.get_return();
+		return versions;
 	}
 
 }
