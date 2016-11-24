@@ -95,11 +95,11 @@ public enum DocumentKeyValuePairEnum implements KeyValuePairEnum {
 		return this.getKey();
 	}
 
-	public enum TipoComponenteEnum {
+	public enum TIPO_COMPONENTE {
 		PRINCIPALE("PRINCIPALE"), ALLEGATO("ALLEGATO"), ANNESSO("ANNESSO"), ANNOTAZIONE("ANNOTAZIONE");
 		private String value;
 
-		private TipoComponenteEnum(String value) {
+		private TIPO_COMPONENTE(String value) {
 			this.value = value;
 		}
 		
