@@ -96,8 +96,11 @@ public class DocerVersionamentoHelper extends AbstractDocerHelper {
 	/**
 	 * 
 	 * @param documentsId
+	 *            documentsId id del Documento
 	 * @param versionNumber
+	 *            Version number del file
 	 * @param file
+	 *            file di destinazione
 	 * @throws Exception
 	 */
 	public void downloadVersionTo(String documentsId, String versionNumber, File file) throws Exception {
