@@ -41,9 +41,9 @@ import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeyValuePairEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairEnum;
 import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairFactory;
 
-public class VersamentoHelper extends DocerHelper {
+public class DocerVersamentoHelper extends AbstractDocerHelper {
 
-	public VersamentoHelper(String docerSerivcesUrl, String docerUsername, String docerPassword) {
+	public DocerVersamentoHelper(String docerSerivcesUrl, String docerUsername, String docerPassword) {
 		super(docerSerivcesUrl, docerUsername, docerPassword);
 	}
 
