@@ -10,9 +10,9 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
 
-public class TestDocerHelper {
+public class TestVersamentoDocer {
 
-	final static Logger logger = LoggerFactory.getLogger(TestDocerHelper.class);
+	final static Logger logger = LoggerFactory.getLogger(TestVersamentoDocer.class);
 
 	private String url;
 	private String username;
