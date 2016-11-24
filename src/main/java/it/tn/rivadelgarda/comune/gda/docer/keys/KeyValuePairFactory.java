@@ -1,4 +1,4 @@
-package it.tn.rivadelgarda.comune.gda.docer;
+package it.tn.rivadelgarda.comune.gda.docer.keys;
 
 import java.util.ArrayList;
 import java.util.List;

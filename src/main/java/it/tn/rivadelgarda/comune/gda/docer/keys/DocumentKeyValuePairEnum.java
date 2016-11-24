@@ -1,4 +1,4 @@
-package it.tn.rivadelgarda.comune.gda.docer;
+package it.tn.rivadelgarda.comune.gda.docer.keys;
 
 public enum DocumentKeyValuePairEnum implements KeyValuePairEnum {
 
