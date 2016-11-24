@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum;
-import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocerCostant;
 
 public class KeyValuePairFactory {
 
@@ -35,7 +35,7 @@ public class KeyValuePairFactory {
 
 	private List<KeyValuePair> list = new ArrayList<>();
 
-	public static KeyValuePairFactory build(KeyValuePairEnum key, String value) {
+	public static KeyValuePairFactory build(DocerCostant key, String value) {
 		KeyValuePairFactory res = new KeyValuePairFactory();
 		res.add(key, value);
 		return res;
@@ -47,8 +47,8 @@ public class KeyValuePairFactory {
 		return res;
 	}
 	
-	public KeyValuePairFactory add(KeyValuePairEnum key, String value) {
-		this.list.add(createKey(key.getKey(), value));
+	public KeyValuePairFactory add(DocerCostant key, String value) {
+		this.list.add(createKey(key.getValue(), value));
 		return this;
 	}
 
@@ -62,8 +62,8 @@ public class KeyValuePairFactory {
 	}
 
 	public static KeyValuePairFactory createDocumentKeys(String typeId, String docName, String codEnte, String codAoo) {
-		return build(DocumentKeyValuePairEnum.TYPE_ID, typeId).add(DocumentKeyValuePairEnum.DOCNAME, docName)
-				.add(DocumentKeyValuePairEnum.COD_ENTE, codEnte).add(DocumentKeyValuePairEnum.COD_AOO, codAoo);
+		return build(DocumentKeysEnum.TYPE_ID, typeId).add(DocumentKeysEnum.DOCNAME, docName)
+				.add(DocumentKeysEnum.COD_ENTE, codEnte).add(DocumentKeysEnum.COD_AOO, codAoo);
 	}
 
 }

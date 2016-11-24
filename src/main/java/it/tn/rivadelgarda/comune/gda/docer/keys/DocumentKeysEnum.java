@@ -1,6 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer.keys;
 
-public enum DocumentKeyValuePairEnum implements KeyValuePairEnum {
+public enum DocumentKeysEnum implements DocerCostant {
 
 	/**
 	 * obbligatorio, il document-type del documento. è il tipo di documento,
@@ -81,18 +81,18 @@ public enum DocumentKeyValuePairEnum implements KeyValuePairEnum {
 
 	private String key;
 
-	private DocumentKeyValuePairEnum(final String key) {
+	private DocumentKeysEnum(final String key) {
 		this.key = key;
 	}
 
 	@Override
-	public String getKey() {
+	public String getValue() {
 		return key;
 	}
 
 	@Override
 	public String toString() {
-		return this.getKey();
+		return this.getValue();
 	}
 
 	public enum TIPO_COMPONENTE {

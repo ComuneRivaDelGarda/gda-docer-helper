@@ -34,11 +34,11 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchFoldersResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
-import it.tn.rivadelgarda.comune.gda.docer.keys.ACLValuesEnum;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
-import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeyValuePairEnum;
-import it.tn.rivadelgarda.comune.gda.docer.keys.KeyValuePairEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum.TIPO_COMPONENTE;
+import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeysEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocerCostant;
 
 public class DocerVersamentoHelper extends AbstractDocerHelper {
 
@@ -63,9 +63,9 @@ public class DocerVersamentoHelper extends AbstractDocerHelper {
 		 * KeyValuePairFactory.createKey(GenericKeyValuePair.COD_AOO,
 		 * docerCodiceAOO);
 		 */
-		KeyValuePair[] folderinfo = KeyValuePairFactory.build(FolderKeyValuePairEnum.FOLDER_NAME, folderName)
-				.add(FolderKeyValuePairEnum.COD_ENTE, docerCodiceENTE)
-				.add(FolderKeyValuePairEnum.COD_AOO, docerCodiceAOO).get();
+		KeyValuePair[] folderinfo = KeyValuePairFactory.build(FolderKeysEnum.FOLDER_NAME, folderName)
+				.add(FolderKeysEnum.COD_ENTE, docerCodiceENTE)
+				.add(FolderKeysEnum.COD_AOO, docerCodiceAOO).get();
 
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		CreateFolder request = new CreateFolder();
@@ -86,14 +86,14 @@ public class DocerVersamentoHelper extends AbstractDocerHelper {
 	public SearchItem[] searchFolders(String folderName) throws Exception {
 		KeyValuePair[] param = new KeyValuePair[3];
 		if (StringUtils.isNoneEmpty(folderName))
-			param[0] = KeyValuePairFactory.createKey(KeyValuePairEnum.FOLDER_NAME, folderName);
+			param[0] = KeyValuePairFactory.createKey(DocerCostant.FOLDER_NAME, folderName);
 		else
-			param[0] = KeyValuePairFactory.createKey(KeyValuePairEnum.FOLDER_NAME, "*");
-		param[1] = KeyValuePairFactory.createKey(KeyValuePairEnum.COD_ENTE, docerCodiceENTE);
-		param[2] = KeyValuePairFactory.createKey(KeyValuePairEnum.COD_AOO, docerCodiceAOO);
+			param[0] = KeyValuePairFactory.createKey(DocerCostant.FOLDER_NAME, "*");
+		param[1] = KeyValuePairFactory.createKey(DocerCostant.COD_ENTE, docerCodiceENTE);
+		param[2] = KeyValuePairFactory.createKey(DocerCostant.COD_AOO, docerCodiceAOO);
 
 		KeyValuePair[] search = new KeyValuePair[1];
-		search[0] = KeyValuePairFactory.createKeyOrderByAsc(KeyValuePairEnum.FOLDER_NAME);
+		search[0] = KeyValuePairFactory.createKeyOrderByAsc(DocerCostant.FOLDER_NAME);
 
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		SearchFolders request = new SearchFolders();
@@ -125,10 +125,10 @@ public class DocerVersamentoHelper extends AbstractDocerHelper {
 		FileDataSource fileDataSource = new FileDataSource(file);
 		DataHandler dataHandler = new DataHandler(fileDataSource);
 
-		params.add(DocumentKeyValuePairEnum.APP_VERSANTE, docerApplication);
+		params.add(DocumentKeysEnum.APP_VERSANTE, docerApplication);
 		String md5 = DigestUtils.md5Hex(new FileInputStream(file));
-		params.add(DocumentKeyValuePairEnum.DOC_HASH, md5);
-		params.add(DocumentKeyValuePairEnum.TIPO_COMPONENTE, tipoComponente.getValue());
+		params.add(DocumentKeysEnum.DOC_HASH, md5);
+		params.add(DocumentKeysEnum.TIPO_COMPONENTE, tipoComponente.getValue());
 
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		CreateDocument request = new CreateDocument();
@@ -299,7 +299,7 @@ public class DocerVersamentoHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACLValuesEnum acl) throws Exception {
-		return setACLDocument(documentId, KeyValuePairFactory.build(GROUP_USER_ID, acl.getKey()).get());
+		return setACLDocument(documentId, KeyValuePairFactory.build(GROUP_USER_ID, acl.getValue()).get());
 	}
 
 	/**

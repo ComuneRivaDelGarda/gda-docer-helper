@@ -1,6 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer.keys;
 
-public enum FolderKeyValuePairEnum implements KeyValuePairEnum {
+public enum FolderKeysEnum implements DocerCostant {
 
 	/**
 	 * identificativo univoco del folder assegnato automaticamente dal sistema,
@@ -30,17 +30,17 @@ public enum FolderKeyValuePairEnum implements KeyValuePairEnum {
 
 	private String key;
 
-	private FolderKeyValuePairEnum(final String key) {
+	private FolderKeysEnum(final String key) {
 		this.key = key;
 	}
 
 	@Override
-	public String getKey() {
+	public String getValue() {
 		return key;
 	}
 
 	@Override
 	public String toString() {
-		return this.getKey();
+		return this.getValue();
 	}
 }
