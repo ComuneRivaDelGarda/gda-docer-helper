@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.Login;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.LoginResponse;
+import it.kdm.docer.core.authentication.AuthenticationServiceStub.Logout;
+import it.kdm.docer.core.authentication.AuthenticationServiceStub.LogoutResponse;
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddToFolderDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.AddToFolderDocumentsResponse;
@@ -28,13 +31,17 @@ import it.kdm.docer.webservices.DocerServicesStub.DeleteDocument;
 import it.kdm.docer.webservices.DocerServicesStub.DeleteDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.GetACLDocumentResponse;
+import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocuments;
+import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
 import it.kdm.docer.webservices.DocerServicesStub.RemoveFromFolderDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.RemoveFromFolderDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFolders;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFoldersResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
-import it.tn.rivadelgarda.comune.gda.docer.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
+import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
+import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
+import it.tn.rivadelgarda.comune.gda.docer.DocumentKeyValuePairEnum.TipoComponenteEnum;
 import sample.axisversion.VersionStub;
 import sample.axisversion.VersionStub.GetVersion;
 import sample.axisversion.VersionStub.GetVersionResponse;
@@ -57,6 +64,17 @@ public class DocerHelper implements Closeable {
 
 	private String loginResponse;
 	private String tockenSessione;
+
+	@Override
+	public void close() throws IOException {
+		if (isLoggedIn()) {
+			try {
+				logout();
+			} catch (Exception ex) {
+				throw new IOException("Impossibile eseguire Logout", ex);
+			}
+		}
+	}
 
 	/**
 	 * 
@@ -94,30 +112,36 @@ public class DocerHelper implements Closeable {
 	/**
 	 * 
 	 * @return
-	 * @throws DocerHelperException
+	 * @throws Exception
 	 */
 	public String login() throws Exception {
-		// try {
 		AuthenticationServiceStub service = new AuthenticationServiceStub(docerSerivcesUrl + AuthenticationService);
 		Login login = new Login();
 		login.setUsername(docerUsername);
 		login.setPassword(docerPassword);
 		login.setCodiceEnte(docerCodiceENTE);
 		login.setApplication(docerApplication);
-
 		LoginResponse response = service.login(login);
-
 		loginResponse = response.get_return();
 		tockenSessione = loginResponse; // parse(loginResponse).get("ticketDocerServices");
-
 		return tockenSessione;
-		// } catch (Exception ex) {
-		// throw new DocerHelperException(ex);
-		// }
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean logout() throws Exception {
+		AuthenticationServiceStub service = new AuthenticationServiceStub(docerSerivcesUrl + AuthenticationService);
+		Logout request = new Logout();
+		request.setToken(getLoginTicket());
+		LogoutResponse response = service.logout(request);
+		boolean res = response.get_return();
+		return res;
 	}
 
 	public String getVersion() throws Exception {
-
 		VersionStub service = new VersionStub(docerSerivcesUrl + VersionService);
 		GetVersion getversion = new GetVersion();
 		GetVersionResponse response = service.getVersion(getversion);
@@ -150,9 +174,9 @@ public class DocerHelper implements Closeable {
 		 * KeyValuePairFactory.createKey(GenericKeyValuePair.COD_AOO,
 		 * docerCodiceAOO);
 		 */
-		KeyValuePair[] folderinfo = KeyValuePairFactory.create(FolderKeyValuePairEnum.FOLDER_NAME, folderName)
+		KeyValuePair[] folderinfo = KeyValuePairFactory.build(FolderKeyValuePairEnum.FOLDER_NAME, folderName)
 				.add(FolderKeyValuePairEnum.COD_ENTE, docerCodiceENTE)
-				.add(FolderKeyValuePairEnum.COD_AOO, docerCodiceAOO).asArray();
+				.add(FolderKeyValuePairEnum.COD_AOO, docerCodiceAOO).get();
 
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		CreateFolder request = new CreateFolder();
@@ -161,7 +185,6 @@ public class DocerHelper implements Closeable {
 		CreateFolderResponse response = service.createFolder(request);
 		String folderId = response.get_return();
 		return folderId;
-
 	}
 
 	/**
@@ -171,15 +194,17 @@ public class DocerHelper implements Closeable {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object searchFolders(String folderName) throws Exception {
-
+	public SearchItem[] searchFolders(String folderName) throws Exception {
 		KeyValuePair[] param = new KeyValuePair[3];
-		param[0] = KeyValuePairFactory.createKey(KeyValuePairEnum.FOLDER_NAME, "*");
+		if (StringUtils.isNoneEmpty(folderName))
+			param[0] = KeyValuePairFactory.createKey(KeyValuePairEnum.FOLDER_NAME, folderName);
+		else
+			param[0] = KeyValuePairFactory.createKey(KeyValuePairEnum.FOLDER_NAME, "*");
 		param[1] = KeyValuePairFactory.createKey(KeyValuePairEnum.COD_ENTE, docerCodiceENTE);
 		param[2] = KeyValuePairFactory.createKey(KeyValuePairEnum.COD_AOO, docerCodiceAOO);
 
 		KeyValuePair[] search = new KeyValuePair[1];
-		param[0] = KeyValuePairFactory.createKey(KeyValuePairEnum.FOLDER_NAME, KeyValuePairFactory.ASC);
+		search[0] = KeyValuePairFactory.createKeyOrderByAsc(KeyValuePairEnum.FOLDER_NAME);
 
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		SearchFolders request = new SearchFolders();
@@ -190,9 +215,7 @@ public class DocerHelper implements Closeable {
 
 		SearchFoldersResponse response = service.searchFolders(request);
 		SearchItem[] folders = response.get_return();
-
 		return folders;
-
 	}
 
 	/**
@@ -205,7 +228,7 @@ public class DocerHelper implements Closeable {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String typeId, String documentName, File file, TIPO_COMPONENTE tipoComponente)
+	public String createDocument(String typeId, String documentName, File file, TipoComponenteEnum tipoComponente)
 			throws Exception {
 		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(typeId, documentName, docerCodiceENTE,
 				docerCodiceAOO);
@@ -221,11 +244,10 @@ public class DocerHelper implements Closeable {
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		CreateDocument request = new CreateDocument();
 		request.setToken(getLoginTicket());
-		request.setMetadata(params.asArray());
+		request.setMetadata(params.get());
 		request.setFile(dataHandler);
 		CreateDocumentResponse response = service.createDocument(request);
 		String documentId = response.get_return();
-
 		return documentId;
 	}
 
@@ -238,7 +260,6 @@ public class DocerHelper implements Closeable {
 	 * @throws Exception
 	 */
 	public boolean addToFolderDocuments(String folderId, List<String> documentsIds) throws Exception {
-
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		AddToFolderDocuments request = new AddToFolderDocuments();
 		request.setToken(getLoginTicket());
@@ -246,8 +267,19 @@ public class DocerHelper implements Closeable {
 		request.setDocument(documentsIds.toArray(new String[documentsIds.size()]));
 		AddToFolderDocumentsResponse response = service.addToFolderDocuments(request);
 		boolean esito = response.get_return();
-
 		return esito;
+	}
+
+	/**
+	 * Questo metodo permette di aggiungere Documenti ad una Folder del DMS.
+	 * 
+	 * @param folderId
+	 * @param documentsIds
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean addToFolderDocuments(String folderId, String documentsIds) throws Exception {
+		return addToFolderDocuments(folderId, Arrays.asList(documentsIds));
 	}
 
 	/**
@@ -260,7 +292,6 @@ public class DocerHelper implements Closeable {
 	 * @throws Exception
 	 */
 	public boolean removeFromFolderDocuments(String folderId, List<String> documentsIds) throws Exception {
-
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		RemoveFromFolderDocuments request = new RemoveFromFolderDocuments();
 		request.setToken(getLoginTicket());
@@ -268,8 +299,20 @@ public class DocerHelper implements Closeable {
 		request.setDocument(documentsIds.toArray(new String[documentsIds.size()]));
 		RemoveFromFolderDocumentsResponse response = service.removeFromFolderDocuments(request);
 		boolean esito = response.get_return();
-
 		return esito;
+	}
+
+	/**
+	 * Questo metodo permette di togliere da una Folder uno o più Documenti del
+	 * DMS.
+	 * 
+	 * @param folderId
+	 * @param documentsIds
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean removeFromFolderDocuments(String folderId, String documentsIds) throws Exception {
+		return removeFromFolderDocuments(folderId, Arrays.asList(documentsIds));
 	}
 
 	/**
@@ -283,15 +326,31 @@ public class DocerHelper implements Closeable {
 	 * @throws Exception
 	 */
 	public boolean deleteDocument(String documentId) throws Exception {
-
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		DeleteDocument request = new DeleteDocument();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
 		DeleteDocumentResponse response = service.deleteDocument(request);
 		boolean esito = response.get_return();
-
 		return esito;
+	}
+
+	/**
+	 * Questo metodo permette di recuperare la lista dei Documenti contenuti in
+	 * una Folder del DMS.
+	 * 
+	 * @param documentId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<String> getFolderDocuments(String folderId) throws Exception {
+		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		GetFolderDocuments request = new GetFolderDocuments();
+		request.setToken(getLoginTicket());
+		request.setFolderId(folderId);
+		GetFolderDocumentsResponse response = service.getFolderDocuments(request);
+		List<String> res = Arrays.asList(response.get_return());
+		return res;
 	}
 
 	/**
@@ -302,14 +361,12 @@ public class DocerHelper implements Closeable {
 	 * @throws Exception
 	 */
 	public KeyValuePair[] getACLDocument(String documentId) throws Exception {
-
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
 		GetACLDocument request = new GetACLDocument();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
 		GetACLDocumentResponse response = service.getACLDocument(request);
 		KeyValuePair[] esito = response.get_return();
-
 		return esito;
 	}
 
@@ -319,25 +376,57 @@ public class DocerHelper implements Closeable {
 	 * quelli precedenti.
 	 * 
 	 * @param documentId
+	 * @param acls
+	 *            L’oggetto acls[] è una collezione di nodi acls. Ogni nodo acls
+	 *            contiene una KeyValuePair ovvero due nodi, key e value, di
+	 *            tipo string dove un nodo key contiene un GROUP_ID di un Gruppo
+	 *            o la USER_ID di un Utente del DMS ed il relativo value
+	 *            contiene il diritto da assegnare al Documento. Per i diritti è
+	 *            assunta la seguente convenzione (si veda il paragrafo 4.6
+	 *            Livelli di Accesso ai documenti e anagrafiche): • 2 se si
+	 *            vuole assegnare “Read Only Access” • 1 se si vuole assegnare
+	 *            “Normal Access” • 0 se si vuole assegnare “Full Access”
 	 * @return
 	 * @throws Exception
 	 */
-	public KeyValuePair[] setACLDocument(String documentId) throws Exception {
-
+	public boolean setACLDocument(String documentId, KeyValuePair[] acls) throws Exception {
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
-		GetACLDocument request = new GetACLDocument();
+		SetACLDocument request = new SetACLDocument();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
-		GetACLDocumentResponse response = service.getACLDocument(request);
-		KeyValuePair[] esito = response.get_return();
-
+		request.setAcls(acls);
+		SetACLDocumentResponse response = service.setACLDocument(request);
+		boolean esito = response.get_return();
 		return esito;
 	}
 
-	@Override
-	public void close() throws IOException {
-		if (isLoggedIn()) {
-
-		}
+	/**
+	 * 
+	 * @param documentId
+	 * @param GROUP_USER_ID groupId or userId
+	 * @param acl
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACLValuesEnum acl) throws Exception {
+		return setACLDocument(documentId, KeyValuePairFactory.build(GROUP_USER_ID, acl.getKey()).get());
 	}
+	
+	/**
+	 * Questo metodo permette di correlare un Documento ad uno o più Documenti nel DMS.
+	 * @param documentId
+	 * @param acls
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean addRelated(String documentId, KeyValuePair[] acls) throws Exception {
+		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		SetACLDocument request = new SetACLDocument();
+		request.setToken(getLoginTicket());
+		request.setDocId(documentId);
+		request.setAcls(acls);
+		SetACLDocumentResponse response = service.setACLDocument(request);
+		boolean esito = response.get_return();
+		return esito;
+	}	
 }
