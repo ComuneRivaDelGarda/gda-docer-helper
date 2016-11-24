@@ -1,15 +1,20 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 
+import org.apache.axiom.attachments.ByteArrayDataSource;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import it.kdm.docer.webservices.DocerServicesStub;
@@ -35,6 +40,8 @@ import it.kdm.docer.webservices.DocerServicesStub.GetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.GetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocumentsResponse;
+import it.kdm.docer.webservices.DocerServicesStub.GetProfileDocument;
+import it.kdm.docer.webservices.DocerServicesStub.GetProfileDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersions;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersionsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
@@ -48,10 +55,11 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.StreamDescriptor;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocerCostant;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocerKey;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum;
-import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeysEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum.ARCHIVE_TYPE;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum.TIPO_COMPONENTE;
+import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeysEnum;
 import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 
 public class DocerHelper extends AbstractDocerHelper {
@@ -82,7 +90,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		KeyValuePair[] folderinfo = KeyValuePairFactory.build(FolderKeysEnum.FOLDER_NAME, folderName)
 				.add(FolderKeysEnum.COD_ENTE, docerCodiceENTE).add(FolderKeysEnum.COD_AOO, docerCodiceAOO).get();
 
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		CreateFolder request = new CreateFolder();
 		request.setToken(getLoginTicket());
 		request.setFolderInfo(folderinfo);
@@ -101,16 +109,16 @@ public class DocerHelper extends AbstractDocerHelper {
 	public SearchItem[] searchFolders(String folderName) throws Exception {
 		KeyValuePair[] param = new KeyValuePair[3];
 		if (StringUtils.isNoneEmpty(folderName))
-			param[0] = KeyValuePairFactory.createKey(DocerCostant.FOLDER_NAME, folderName);
+			param[0] = KeyValuePairFactory.createKey(DocerKey.FOLDER_NAME, folderName);
 		else
-			param[0] = KeyValuePairFactory.createKey(DocerCostant.FOLDER_NAME, "*");
-		param[1] = KeyValuePairFactory.createKey(DocerCostant.COD_ENTE, docerCodiceENTE);
-		param[2] = KeyValuePairFactory.createKey(DocerCostant.COD_AOO, docerCodiceAOO);
+			param[0] = KeyValuePairFactory.createKey(DocerKey.FOLDER_NAME, "*");
+		param[1] = KeyValuePairFactory.createKey(DocerKey.COD_ENTE, docerCodiceENTE);
+		param[2] = KeyValuePairFactory.createKey(DocerKey.COD_AOO, docerCodiceAOO);
 
 		KeyValuePair[] search = new KeyValuePair[1];
-		search[0] = KeyValuePairFactory.createKeyOrderByAsc(DocerCostant.FOLDER_NAME);
+		search[0] = KeyValuePairFactory.createKeyOrderByAsc(DocerKey.FOLDER_NAME);
 
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		SearchFolders request = new SearchFolders();
 		request.setToken(getLoginTicket());
 		request.setSearchCriteria(param);
@@ -129,23 +137,25 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentName
 	 * @param file
 	 * @param tipoComponente
+	 *            uno dei TIPO_COMPONENTE validi
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String typeId, String documentName, File file, TIPO_COMPONENTE tipoComponente)
-			throws Exception {
+	public String createDocument(String typeId, String documentName, DataSource dataSource,
+			TIPO_COMPONENTE tipoComponente, String description) throws Exception {
 		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(typeId, documentName, docerCodiceENTE,
 				docerCodiceAOO);
 
-		FileDataSource fileDataSource = new FileDataSource(file);
-		DataHandler dataHandler = new DataHandler(fileDataSource);
+		DataHandler dataHandler = new DataHandler(dataSource);
 
 		params.add(DocumentKeysEnum.APP_VERSANTE, docerApplication);
-		String md5 = DigestUtils.md5Hex(new FileInputStream(file));
+		String md5 = DigestUtils.md5Hex(dataSource.getInputStream());
 		params.add(DocumentKeysEnum.DOC_HASH, md5);
 		params.add(DocumentKeysEnum.TIPO_COMPONENTE, tipoComponente.getValue());
+		params.add(DocumentKeysEnum.ABSTRACT, description);
+		params.add(DocumentKeysEnum.ARCHIVE_TYPE, ARCHIVE_TYPE.ARCHIVE);
 
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		CreateDocument request = new CreateDocument();
 		request.setToken(getLoginTicket());
 		request.setMetadata(params.get());
@@ -153,6 +163,18 @@ public class DocerHelper extends AbstractDocerHelper {
 		CreateDocumentResponse response = service.createDocument(request);
 		String documentId = response.get_return();
 		return documentId;
+	}
+
+	public String createDocument(String typeId, String documentName, File file, TIPO_COMPONENTE tipoComponente,
+			String description) throws Exception {
+		FileDataSource fileDataSource = new FileDataSource(file);
+		return createDocument(typeId, documentName, fileDataSource, tipoComponente, description);
+	}
+
+	public String createDocument(String typeId, String documentName, byte[] bytes, TIPO_COMPONENTE tipoComponente,
+			String description) throws Exception {
+		ByteArrayDataSource rawData = new ByteArrayDataSource(bytes);
+		return createDocument(typeId, documentName, rawData, tipoComponente, description);
 	}
 
 	/**
@@ -164,7 +186,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean addToFolderDocuments(String folderId, List<String> documentsIds) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		AddToFolderDocuments request = new AddToFolderDocuments();
 		request.setToken(getLoginTicket());
 		request.setFolderId(folderId);
@@ -196,7 +218,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean removeFromFolderDocuments(String folderId, List<String> documentsIds) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		RemoveFromFolderDocuments request = new RemoveFromFolderDocuments();
 		request.setToken(getLoginTicket());
 		request.setFolderId(folderId);
@@ -225,12 +247,13 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * Document).
 	 * 
 	 * @param folderId
-	 * @param documentsIds
+	 * @param documentId
+	 *            id del Documento
 	 * @return
 	 * @throws Exception
 	 */
 	public boolean deleteDocument(String documentId) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		DeleteDocument request = new DeleteDocument();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
@@ -243,17 +266,38 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * Questo metodo permette di recuperare la lista dei Documenti contenuti in
 	 * una Folder del DMS.
 	 * 
-	 * @param documentId
+	 * @param folderId
+	 *            id della
 	 * @return
 	 * @throws Exception
 	 */
 	public List<String> getFolderDocuments(String folderId) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		List<String> res = new ArrayList<>();
+		DocerServicesStub service = getDocerService();
 		GetFolderDocuments request = new GetFolderDocuments();
 		request.setToken(getLoginTicket());
 		request.setFolderId(folderId);
 		GetFolderDocumentsResponse response = service.getFolderDocuments(request);
-		List<String> res = Arrays.asList(response.get_return());
+		if (response.get_return() != null) {
+			res = Arrays.asList(response.get_return());
+		}
+		return res;
+	}
+
+	/**
+	 * Questo metodo permette di recuperare il profilo di un Documento del DMS.
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @return Profilo del Documento
+	 */
+	public KeyValuePair[] getProfileDocument(String documentId) throws Exception {
+		DocerServicesStub service = getDocerService();
+		GetProfileDocument request = new GetProfileDocument();
+		request.setToken(getLoginTicket());
+		request.setDocId(documentId);
+		GetProfileDocumentResponse response = service.getProfileDocument(request);
+		KeyValuePair[] res = response.get_return();
 		return res;
 	}
 
@@ -261,17 +305,18 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * Questo metodo permette di recuperare i diritti di un Documento del DMS.
 	 * 
 	 * @param documentId
+	 *            id del Documento
 	 * @return
 	 * @throws Exception
 	 */
 	public KeyValuePair[] getACLDocument(String documentId) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		GetACLDocument request = new GetACLDocument();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
 		GetACLDocumentResponse response = service.getACLDocument(request);
-		KeyValuePair[] esito = response.get_return();
-		return esito;
+		KeyValuePair[] res = response.get_return();
+		return res;
 	}
 
 	/**
@@ -280,6 +325,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * quelli precedenti.
 	 * 
 	 * @param documentId
+	 *            id del Documento
 	 * @param acls
 	 *            L’oggetto acls[] è una collezione di nodi acls. Ogni nodo acls
 	 *            contiene una KeyValuePair ovvero due nodi, key e value, di
@@ -294,7 +340,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean setACLDocument(String documentId, KeyValuePair[] acls) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		SetACLDocument request = new SetACLDocument();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
@@ -307,6 +353,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	/**
 	 * 
 	 * @param documentId
+	 *            id del Documento
 	 * @param GROUP_USER_ID
 	 *            groupId or userId
 	 * @param acl
@@ -322,6 +369,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * nel DMS.
 	 * 
 	 * @param documentId
+	 *            id del Documento
 	 * @param related
 	 *            La variabile related[] è una collezione di nodi related. Ogni
 	 *            nodo related contiene un id di un Documento del DMS da
@@ -332,7 +380,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean addRelated(String documentId, String[] related) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		AddRelated request = new AddRelated();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
@@ -349,21 +397,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * elettronico) di un Documento nel DMS. Il metodo è applicabile per la sola
 	 * gestione del versioning standard.
 	 * 
-	 * @param documentsId
+	 * @param documentId
 	 *            id del Documento
 	 * @param file
 	 *            La nuova versione del file o documento elettronico
 	 * @return Il version number della versione creata
 	 * @throws Exception
 	 */
-	public String addNewVersion(String documentsId, File file) throws Exception {
-		FileDataSource fileDataSource = new FileDataSource(file);
-		DataHandler dataHandler = new DataHandler(fileDataSource);
+	public String addNewVersion(String documentId, DataSource dataSource) throws Exception {
+		// FileDataSource fileDataSource = new FileDataSource(file);
+		DataHandler dataHandler = new DataHandler(dataSource);
 
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		AddNewVersion request = new AddNewVersion();
 		request.setToken(getLoginTicket());
-		request.setDocId(documentsId);
+		request.setDocId(documentId);
 		request.setFile(dataHandler);
 		AddNewVersionResponse response = service.addNewVersion(request);
 		String version = response.get_return();
@@ -375,18 +423,20 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * delle versioni dei file di un Documento del DMS. Il metodo è applicabile
 	 * per la sola gestione del versioning standard.
 	 * 
-	 * @param documentsId
+	 * @param documentId
 	 *            id del Documento di riferimento
 	 * @return collezione dei version number
 	 * @throws Exception
 	 */
-	public String[] getVersions(String documentsId) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+	public List<String> getVersions(String documentId) throws Exception {
+		List<String> versions = new ArrayList<>();
+		DocerServicesStub service = getDocerService();
 		GetVersions request = new GetVersions();
 		request.setToken(getLoginTicket());
-		request.setDocId(documentsId);
+		request.setDocId(documentId);
 		GetVersionsResponse response = service.getVersions(request);
-		String[] versions = response.get_return();
+		if (response.get_return() != null)
+			versions = Arrays.asList(response.get_return());
 		return versions;
 	}
 
@@ -394,7 +444,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * Questo metodo permette di recuperare una specifica versione del file (o
 	 * documento elettronico) di un Documento nel DMS.
 	 * 
-	 * @param documentsId
+	 * @param documentId
 	 *            id del Documento
 	 * @param versionNumber
 	 *            Version number del file
@@ -404,11 +454,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *         relativo alla versione richiesta
 	 * @throws Exception
 	 */
-	public StreamDescriptor downloadVersion(String documentsId, String versionNumber) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+	public StreamDescriptor downloadVersion(String documentId, String versionNumber) throws Exception {
+		DocerServicesStub service = getDocerService();
 		DownloadVersion request = new DownloadVersion();
 		request.setToken(getLoginTicket());
-		request.setDocId(documentsId);
+		request.setDocId(documentId);
 		request.setVersionNumber(versionNumber);
 		DownloadVersionResponse response = service.downloadVersion(request);
 		StreamDescriptor res = response.get_return();
@@ -417,7 +467,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 	/**
 	 * 
-	 * @param documentsId
+	 * @param documentId
 	 *            documentsId id del Documento
 	 * @param versionNumber
 	 *            Version number del file
@@ -425,8 +475,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            file di destinazione
 	 * @throws Exception
 	 */
-	public void downloadVersionTo(String documentsId, String versionNumber, File file) throws Exception {
-		StreamDescriptor data = downloadVersion(documentsId, versionNumber);
+	public void downloadVersionTo(String documentId, String versionNumber, File file) throws Exception {
+		StreamDescriptor data = downloadVersion(documentId, versionNumber);
 		long size = data.getByteSize();
 		DataHandler dh = data.getHandler();
 		FileUtils.copyInputStreamToFile(dh.getInputStream(), file);
@@ -451,7 +501,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean protocollaDocumento(String documentId, KeyValuePair[] metadata) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		ProtocollaDocumento request = new ProtocollaDocumento();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
@@ -478,7 +528,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean classificaDocumento(String documentId, KeyValuePair[] metadata) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		ClassificaDocumento request = new ClassificaDocumento();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
@@ -504,7 +554,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean archiviaDocumento(String documentId, KeyValuePair[] metadata) throws Exception {
-		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		DocerServicesStub service = getDocerService();
 		ArchiviaDocumento request = new ArchiviaDocumento();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
@@ -513,4 +563,91 @@ public class DocerHelper extends AbstractDocerHelper {
 		boolean esito = response.get_return();
 		return esito;
 	}
+
+	/** HELPER */
+
+	/**
+	 * restituisce una lista di mappe con le coppie chiave/valore di tutti i
+	 * metadati disponibili nel profilo documento dei documenti contenuti nella
+	 * cartella
+	 * 
+	 * @param folderId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<KeyValuePair> chilren(String folderId) throws Exception {
+		List<KeyValuePair> res = new ArrayList<>();
+		List<String> folderDocuments = getFolderDocuments(folderId);
+		for (String documentId : folderDocuments) {
+			KeyValuePair[] profiloDocumento = getProfileDocument(documentId);
+			if (profiloDocumento != null)
+				res.addAll(Arrays.asList(profiloDocumento));
+		}
+		return res;
+	}
+
+	/**
+	 * restituisce il numero di documenti contenuti in una cartella
+	 * 
+	 * @param folderId
+	 * @return
+	 */
+	public int numberOfDocument(String folderId) throws Exception {
+		List<String> folderDocuments = getFolderDocuments(folderId);
+		return folderDocuments.size();
+	}
+
+	/**
+	 * crea un nuovo documento nella cartella
+	 * 
+	 * @param folderId
+	 * @param name
+	 * @param content
+	 * @param title
+	 * @param description
+	 * @return
+	 */
+	public String createDocument(String folderId, String name, byte[] content, String title, String description) {
+		return createDocument(folderId, name, content, title, description);
+	}
+
+	/**
+	 * crea una nuova versione per il documento
+	 * 
+	 * @param documentId
+	 * @param content
+	 * @return
+	 * @throws Exception
+	 */
+	public String createVersion(String documentId, byte[] content) throws Exception {
+		ByteArrayDataSource rawData = new ByteArrayDataSource(content);
+		return addNewVersion(documentId, rawData);
+	}
+
+	/**
+	 * 
+	 * @param documentId
+	 * @param versionNumber
+	 * @return
+	 * @throws Exception
+	 */
+	public InputStream getDocumentStream(String documentId, String versionNumber) throws Exception {
+		StreamDescriptor data = downloadVersion(documentId, versionNumber);
+		long size = data.getByteSize();
+		DataHandler dh = data.getHandler();
+		return dh.getInputStream();
+	}
+
+	/**
+	 * restituisce il file del documento come binario;
+	 * 
+	 * @param documentId
+	 * @param versionNumber
+	 * @return
+	 * @throws Exception 
+	 */
+	public byte[] getDocument(String documentId, String versionNumber) throws Exception {
+		return IOUtils.toByteArray(getDocumentStream(documentId, versionNumber));
+	}
+
 }

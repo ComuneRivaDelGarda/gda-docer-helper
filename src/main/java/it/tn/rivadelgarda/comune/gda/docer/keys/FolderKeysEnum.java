@@ -1,6 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer.keys;
 
-public enum FolderKeysEnum implements DocerCostant {
+public enum FolderKeysEnum implements DocerKey {
 
 	/**
 	 * identificativo univoco del folder assegnato automaticamente dal sistema,

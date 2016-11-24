@@ -12,6 +12,7 @@ import it.kdm.docer.core.authentication.AuthenticationServiceStub.Login;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.LoginResponse;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.Logout;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.LogoutResponse;
+import it.kdm.docer.webservices.DocerServicesStub;
 import sample.axisversion.VersionStub;
 import sample.axisversion.VersionStub.GetVersion;
 import sample.axisversion.VersionStub.GetVersionResponse;
@@ -34,6 +35,8 @@ public abstract class AbstractDocerHelper implements Closeable {
 
 	private String loginResponse;
 	private String tockenSessione;
+
+	DocerServicesStub docerService;
 
 	@Override
 	public void close() throws IOException {
@@ -125,6 +128,12 @@ public abstract class AbstractDocerHelper implements Closeable {
 
 	private boolean isLoggedIn() {
 		return StringUtils.isNotBlank(tockenSessione);
+	}
+
+	protected DocerServicesStub getDocerService() throws Exception {
+		if (docerService == null)
+			docerService = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+		return docerService;
 	}
 
 }

@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocerKey;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocerValue;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocerCostant;
 
 public class KeyValuePairFactory {
 
@@ -35,7 +36,7 @@ public class KeyValuePairFactory {
 
 	private List<KeyValuePair> list = new ArrayList<>();
 
-	public static KeyValuePairFactory build(DocerCostant key, String value) {
+	public static KeyValuePairFactory build(DocerKey key, String value) {
 		KeyValuePairFactory res = new KeyValuePairFactory();
 		res.add(key, value);
 		return res;
@@ -46,8 +47,13 @@ public class KeyValuePairFactory {
 		res.add(key, value);
 		return res;
 	}
-	
-	public KeyValuePairFactory add(DocerCostant key, String value) {
+
+	public KeyValuePairFactory add(DocerKey key, DocerValue value) {
+		this.list.add(createKey(key.getValue(), value.getValue()));
+		return this;
+	}
+
+	public KeyValuePairFactory add(DocerKey key, String value) {
 		this.list.add(createKey(key.getValue(), value));
 		return this;
 	}
@@ -56,7 +62,7 @@ public class KeyValuePairFactory {
 		this.list.add(createKey(key, value));
 		return this;
 	}
-	
+
 	public KeyValuePair[] get() {
 		return this.list.toArray(new KeyValuePair[list.size()]);
 	}

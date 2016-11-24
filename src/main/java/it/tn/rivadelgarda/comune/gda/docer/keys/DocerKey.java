@@ -1,6 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer.keys;
 
-public interface DocerCostant {
+public interface DocerKey {
 
 	public final static String FOLDER_NAME = "FOLDER_NAME";
 	public final static String FOLDER_OWNER = "FOLDER_OWNER";

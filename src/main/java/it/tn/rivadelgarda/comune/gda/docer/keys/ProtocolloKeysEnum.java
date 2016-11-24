@@ -1,6 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer.keys;
 
-public enum ProtocolloKeysEnum implements DocerCostant {
+public enum ProtocolloKeysEnum implements DocerKey {
 
 	/**
 	 * codice dell’Ente assegnato al documento

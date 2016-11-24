@@ -1,6 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer.keys;
 
-public enum DocumentKeysEnum implements DocerCostant {
+public enum DocumentKeysEnum implements DocerKey {
 
 	/**
 	 * obbligatorio, il document-type del documento. è il tipo di documento,
@@ -95,14 +95,27 @@ public enum DocumentKeysEnum implements DocerCostant {
 		return this.getValue();
 	}
 
-	public enum TIPO_COMPONENTE {
+	public enum TIPO_COMPONENTE implements DocerValue {
 		PRINCIPALE("PRINCIPALE"), ALLEGATO("ALLEGATO"), ANNESSO("ANNESSO"), ANNOTAZIONE("ANNOTAZIONE");
 		private String value;
 
 		private TIPO_COMPONENTE(String value) {
 			this.value = value;
 		}
-		
+
+		public String getValue() {
+			return value;
+		}
+	}
+
+	public enum ARCHIVE_TYPE implements DocerValue {
+		ARCHIVE("ARCHIVE"), URL("URL");
+		private String value;
+
+		private ARCHIVE_TYPE(String value) {
+			this.value = value;
+		}
+
 		public String getValue() {
 			return value;
 		}
