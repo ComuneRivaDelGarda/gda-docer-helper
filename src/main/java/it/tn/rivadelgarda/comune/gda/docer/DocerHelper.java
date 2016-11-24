@@ -21,6 +21,8 @@ import it.kdm.docer.core.authentication.AuthenticationServiceStub.LoginResponse;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.Logout;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.LogoutResponse;
 import it.kdm.docer.webservices.DocerServicesStub;
+import it.kdm.docer.webservices.DocerServicesStub.AddRelated;
+import it.kdm.docer.webservices.DocerServicesStub.AddRelatedResponse;
 import it.kdm.docer.webservices.DocerServicesStub.AddToFolderDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.AddToFolderDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.CreateDocument;
@@ -403,7 +405,8 @@ public class DocerHelper implements Closeable {
 	/**
 	 * 
 	 * @param documentId
-	 * @param GROUP_USER_ID groupId or userId
+	 * @param GROUP_USER_ID
+	 *            groupId or userId
 	 * @param acl
 	 * @return
 	 * @throws Exception
@@ -411,22 +414,29 @@ public class DocerHelper implements Closeable {
 	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACLValuesEnum acl) throws Exception {
 		return setACLDocument(documentId, KeyValuePairFactory.build(GROUP_USER_ID, acl.getKey()).get());
 	}
-	
+
 	/**
-	 * Questo metodo permette di correlare un Documento ad uno o più Documenti nel DMS.
+	 * Questo metodo permette di correlare un Documento ad uno o più Documenti
+	 * nel DMS.
+	 * 
 	 * @param documentId
-	 * @param acls
+	 * @param related
+	 *            La variabile related[] è una collezione di nodi related. Ogni
+	 *            nodo related contiene un id di un Documento del DMS da
+	 *            correlare al documento di riferimento. Per il concetto di
+	 *            “correlazione” si veda il paragrafo 4.6 Gestione della
+	 *            correlazione tra documenti.
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean addRelated(String documentId, KeyValuePair[] acls) throws Exception {
+	public boolean addRelated(String documentId, String[] related) throws Exception {
 		DocerServicesStub service = new DocerServicesStub(docerSerivcesUrl + DocerServices);
-		SetACLDocument request = new SetACLDocument();
+		AddRelated request = new AddRelated();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
-		request.setAcls(acls);
-		SetACLDocumentResponse response = service.setACLDocument(request);
+		request.setRelated(related);
+		AddRelatedResponse response = service.addRelated(request);
 		boolean esito = response.get_return();
 		return esito;
-	}	
+	}
 }
