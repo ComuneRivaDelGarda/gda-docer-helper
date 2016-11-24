@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.Properties;
 
 import org.junit.Assert;
@@ -5,7 +6,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
+import it.tn.rivadelgarda.comune.gda.docer.DocumentKeyValuePairEnum.TIPO_COMPONENTE;
 
 public class TestDocerHelper {
 
@@ -61,21 +64,57 @@ public class TestDocerHelper {
 	
 	@Test
 	public void test3() throws Exception {
-		init();
-		token = helper.login();
-		String folderId = helper.createFolder("test1");
-		// 885154
-		Assert.assertNotNull(folderId);
-		logger.info(folderId);
+//		init();
+//		token = helper.login();
+//		String folderId = helper.createFolder("test1");
+//		// 885154
+//		Assert.assertNotNull(folderId);
+//		logger.info(folderId);
 	}
 	
 	@Test
 	public void test4() throws Exception {
 		init();
 		token = helper.login();
-		Object res = helper.searchFolders("test1");
+		SearchItem[] res = helper.searchFolders("test1");
 		Assert.assertNotNull(res);
 		logger.info(res.toString());
 	}
+	
+	@Test
+	public void test5() throws Exception {
+		init();
+		token = helper.login();
+		SearchItem[] res = helper.searchFolders(null);
+		Assert.assertNotNull(res);
+		logger.info("{}", res);
+	}	
 
+	@Test
+	public void test6() throws Exception {
+//		init();
+//		token = helper.login();
+//		Object res = helper.createDocument("DOCUMENTO", "test.pdf", new File("stuff/Integrazione DOCER 1.1.pdf"), TipoComponenteEnum.PRINCIPALE);
+//		Assert.assertNotNull(res);
+//		logger.info("{}", res);
+//		// documento 885159
+	}
+	
+	@Test
+	public void test7() throws Exception {
+//		init();
+//		token = helper.login();
+//		Object res = helper.addToFolderDocuments("885160", "885159");
+//		Assert.assertNotNull(res);
+//		logger.info("{}", res);
+	}
+	
+	@Test
+	public void test8() throws Exception {
+		init();
+		token = helper.login();
+		Object res = helper.getFolderDocuments("885160");
+		Assert.assertNotNull(res);
+		logger.info("{}", res);
+	}	
 }
