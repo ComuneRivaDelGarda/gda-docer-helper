@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 
-public class TestVersamentoDocer {
+public class TestDocerHelper {
 
-	final static Logger logger = LoggerFactory.getLogger(TestVersamentoDocer.class);
+	final static Logger logger = LoggerFactory.getLogger(TestDocerHelper.class);
 
 	private String url;
 	private String username;
