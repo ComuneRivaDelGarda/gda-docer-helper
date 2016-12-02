@@ -18,7 +18,25 @@
 	<build>
 		<finalName>gda-docer-helper</finalName>
 				
-		<plugins>	
+		<plugins>
+			<!-- Make this jar executable -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<includeScope>runtime</includeScope>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+					
 			<!-- esecuzione manuale -->
 			<!-- mvn axis2-wsdl2code-maven-plugin:wsdl2code -->
 			<!-- mvn org.apache.axis2:axis2-wsdl2code-maven-plugin:wsdl2code -->

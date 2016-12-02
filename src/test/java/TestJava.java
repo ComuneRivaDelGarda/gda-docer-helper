@@ -8,8 +8,8 @@ public class TestJava {
 
 	@Test
 	public void test() {
-		List<String> res = Arrays.asList(null);
-		Assert.assertNull(res);
+//		List<String> res = Arrays.asList(null);
+//		Assert.assertNull(res);
 	}
 
 }
