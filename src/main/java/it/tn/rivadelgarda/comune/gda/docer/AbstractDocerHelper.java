@@ -19,18 +19,42 @@ import sample.axisversion.VersionStub.GetVersionResponse;
 
 public abstract class AbstractDocerHelper implements Closeable {
 
+	/**
+	 * Indirizzo predefinito WS di Autenticazione
+	 */
 	protected final static String AuthenticationService = "docersystem/services/AuthenticationService";
+	/**
+	 * Indirizzo predefinito WS DocerServices
+	 */
 	protected final static String DocerServices = "WSDocer/services/DocerServices";
+	/**
+	 * Indirizzo predefinito WS Protocollazione
+	 */
 	protected final static String WSProtocollazione = "WSProtocollazione/services/WSProtocollazione";
+	/**
+	 * Indirizzo predefinito WS Fascicolazione
+	 */
 	protected final static String WSFascicolazione = "WSFascicolazione/services/WSFascicolazione";
+	/**
+	 * Indirizzo predefinito WS Version
+	 */
 	protected final static String VersionService = "docersystem/services/Version";
 
 	protected String docerSerivcesUrl;
 	protected String docerUsername;
 	protected String docerPassword;
 
+	/**
+	 * Codice Ente predefinito
+	 */
 	protected final String docerCodiceENTE = "C_H330";
+	/**
+	 * Codice AOO predefinito
+	 */
 	protected final String docerCodiceAOO = "RSERVIZI";
+	/**
+	 * Nome Applicazione predefinito
+	 */
 	protected final String docerApplication = "GDA";
 
 	private String loginResponse;
@@ -83,8 +107,8 @@ public abstract class AbstractDocerHelper implements Closeable {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Effettua il login a Docer per ottenere il token di sessione (da utilizzare nelle chiamate ai web services)
+	 * @return tocken di sessione
 	 * @throws Exception
 	 */
 	public String login() throws Exception {
@@ -101,7 +125,7 @@ public abstract class AbstractDocerHelper implements Closeable {
 	}
 
 	/**
-	 * 
+	 * Effettua il logout da Docer
 	 * @return
 	 * @throws Exception
 	 */
@@ -122,7 +146,12 @@ public abstract class AbstractDocerHelper implements Closeable {
 
 	}
 
-	public String getLoginTicket() {
+	/**
+	 * ritorna il tocken di sessione corrente, oppure effettua login se non presente
+	 */
+	public String getLoginTicket() throws Exception {
+		if (!isLoggedIn())
+			login();
 		return tockenSessione;
 	}
 

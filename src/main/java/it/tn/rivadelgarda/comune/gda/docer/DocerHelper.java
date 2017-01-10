@@ -64,6 +64,17 @@ import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 
 public class DocerHelper extends AbstractDocerHelper {
 
+	/**
+	 * Crea l'istanza di helper (chiamata a {@link #login()} effettuata automaticamente alla chiamata di uno dei metodi)
+	* <pre>
+	* {@code
+	* DocerHelper helper = new DocerHelper(url, username, password);
+	* }
+	* </pre>
+	 * @param docerSerivcesUrl indirizzo http:// del server Docer al quale connettersi (esempio: http://192.168.1.1:8080/)
+	 * @param docerUsername Docer username per autenticazione
+	 * @param docerPassword Docer password per autenticazione
+	 */
 	public DocerHelper(String docerSerivcesUrl, String docerUsername, String docerPassword) {
 		super(docerSerivcesUrl, docerUsername, docerPassword);
 	}
