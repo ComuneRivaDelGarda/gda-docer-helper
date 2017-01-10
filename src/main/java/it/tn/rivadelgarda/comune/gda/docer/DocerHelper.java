@@ -65,7 +65,7 @@ import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 public class DocerHelper extends AbstractDocerHelper {
 
 	/**
-	 * Crea l'istanza di helper (ricoardare chiamata a {@link #login()}
+	 * Crea l'istanza di helper (chiamata a {@link #login()} effettuata automaticamente alla chiamata di uno dei metodi)
 	* <pre>
 	* {@code
 	* DocerHelper helper = new DocerHelper(url, username, password);
