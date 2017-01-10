@@ -146,6 +146,9 @@ public abstract class AbstractDocerHelper implements Closeable {
 
 	}
 
+	/**
+	 * ritorna il tocken di sessione corrente, oppure effettua login se non presente
+	 */
 	public String getLoginTicket() throws Exception {
 		if (!isLoggedIn())
 			login();
