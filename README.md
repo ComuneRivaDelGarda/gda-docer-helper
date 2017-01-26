@@ -57,4 +57,11 @@ va eseguita per ogni wsdl
 
 	mvn clean compile
 
+### documentazione (per pubblicazione su repository)
 
+- https://comunerivadelgarda.github.io/gda-docer-helper/
+- https://comunerivadelgarda.github.io/gda-docer-helper/apidocs/
+
+	mvn site
+	mvn javadoc:javadoc
+	rsync -avz --delete target/site/ docs/
