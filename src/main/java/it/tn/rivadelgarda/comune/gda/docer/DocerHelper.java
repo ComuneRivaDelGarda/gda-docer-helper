@@ -175,7 +175,8 @@ public class DocerHelper extends AbstractDocerHelper {
 		String md5 = DigestUtils.md5Hex(dataSource.getInputStream());
 		params.add(DocumentKeysEnum.DOC_HASH, md5);
 		params.add(DocumentKeysEnum.TIPO_COMPONENTE, tipoComponente.getValue());
-		params.add(DocumentKeysEnum.ABSTRACT, description);
+		if (StringUtils.isNotBlank(description))
+			params.add(DocumentKeysEnum.ABSTRACT, description);
 		params.add(DocumentKeysEnum.ARCHIVE_TYPE, ARCHIVE_TYPE.ARCHIVE);
 
 		DocerServicesStub service = getDocerService();
@@ -191,6 +192,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	public String createDocument(String typeId, String documentName, File file, TIPO_COMPONENTE tipoComponente, String description) throws Exception {
 		FileDataSource fileDataSource = new FileDataSource(file);
 		return createDocument(typeId, documentName, fileDataSource, tipoComponente, description);
+	}
+	
+	public String createDocument(String documentName, File file, TIPO_COMPONENTE tipoComponente, String description) throws Exception {
+		return createDocument("DOCUMENT", documentName, file, tipoComponente, description);
 	}
 
 	public String createDocument(String typeId, String documentName, byte[] bytes, TIPO_COMPONENTE tipoComponente, String description) throws Exception {
