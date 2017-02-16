@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -16,6 +18,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMap;
 
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersion;
@@ -65,15 +72,23 @@ import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 public class DocerHelper extends AbstractDocerHelper {
 
 	/**
-	 * Crea l'istanza di helper (chiamata a {@link #login()} effettuata automaticamente alla chiamata di uno dei metodi)
-	* <pre>
-	* {@code
-	* DocerHelper helper = new DocerHelper(url, username, password);
-	* }
-	* </pre>
-	 * @param docerSerivcesUrl indirizzo http:// del server Docer al quale connettersi (esempio: http://192.168.1.1:8080/)
-	 * @param docerUsername Docer username per autenticazione
-	 * @param docerPassword Docer password per autenticazione
+	 * Crea l'istanza di helper (chiamata a {@link #login()} effettuata
+	 * automaticamente alla chiamata di uno dei metodi)
+	 * 
+	 * <pre>
+	 * {
+	 * 	&#64;code
+	 * 	DocerHelper helper = new DocerHelper(url, username, password);
+	 * }
+	 * </pre>
+	 * 
+	 * @param docerSerivcesUrl
+	 *            indirizzo http:// del server Docer al quale connettersi
+	 *            (esempio: http://192.168.1.1:8080/)
+	 * @param docerUsername
+	 *            Docer username per autenticazione
+	 * @param docerPassword
+	 *            Docer password per autenticazione
 	 */
 	public DocerHelper(String docerSerivcesUrl, String docerUsername, String docerPassword) {
 		super(docerSerivcesUrl, docerUsername, docerPassword);
@@ -98,8 +113,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		 * KeyValuePairFactory.createKey(GenericKeyValuePair.COD_AOO,
 		 * docerCodiceAOO);
 		 */
-		KeyValuePair[] folderinfo = KeyValuePairFactory.build(FolderKeysEnum.FOLDER_NAME, folderName)
-				.add(FolderKeysEnum.COD_ENTE, docerCodiceENTE).add(FolderKeysEnum.COD_AOO, docerCodiceAOO).get();
+		KeyValuePair[] folderinfo = KeyValuePairFactory.build(FolderKeysEnum.FOLDER_NAME, folderName).add(FolderKeysEnum.COD_ENTE, docerCodiceENTE).add(FolderKeysEnum.COD_AOO, docerCodiceAOO).get();
 
 		DocerServicesStub service = getDocerService();
 		CreateFolder request = new CreateFolder();
@@ -152,10 +166,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String typeId, String documentName, DataSource dataSource,
-			TIPO_COMPONENTE tipoComponente, String description) throws Exception {
-		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(typeId, documentName, docerCodiceENTE,
-				docerCodiceAOO);
+	public String createDocument(String typeId, String documentName, DataSource dataSource, TIPO_COMPONENTE tipoComponente, String description) throws Exception {
+		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(typeId, documentName, docerCodiceENTE, docerCodiceAOO);
 
 		DataHandler dataHandler = new DataHandler(dataSource);
 
@@ -176,14 +188,12 @@ public class DocerHelper extends AbstractDocerHelper {
 		return documentId;
 	}
 
-	public String createDocument(String typeId, String documentName, File file, TIPO_COMPONENTE tipoComponente,
-			String description) throws Exception {
+	public String createDocument(String typeId, String documentName, File file, TIPO_COMPONENTE tipoComponente, String description) throws Exception {
 		FileDataSource fileDataSource = new FileDataSource(file);
 		return createDocument(typeId, documentName, fileDataSource, tipoComponente, description);
 	}
 
-	public String createDocument(String typeId, String documentName, byte[] bytes, TIPO_COMPONENTE tipoComponente,
-			String description) throws Exception {
+	public String createDocument(String typeId, String documentName, byte[] bytes, TIPO_COMPONENTE tipoComponente, String description) throws Exception {
 		ByteArrayDataSource rawData = new ByteArrayDataSource(bytes);
 		return createDocument(typeId, documentName, rawData, tipoComponente, description);
 	}
@@ -294,7 +304,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		}
 		return res;
 	}
-
+	
 	/**
 	 * Questo metodo permette di recuperare il profilo di un Documento del DMS.
 	 * 
@@ -309,6 +319,23 @@ public class DocerHelper extends AbstractDocerHelper {
 		request.setDocId(documentId);
 		GetProfileDocumentResponse response = service.getProfileDocument(request);
 		KeyValuePair[] res = response.get_return();
+		return res;
+	}
+
+	public Map<String, String> getProfileDocumentMap(String documentId) throws Exception {
+		KeyValuePair[] data = getProfileDocument(documentId);
+		Map<String, String> res = new HashMap<>();
+		for (KeyValuePair kv : data) {
+			res.put(kv.getKey(), kv.getValue());
+		}
+
+//		Map<String, String> test = HashMultimap.create(FluentIterable.from(data).transform(new Function<KeyValuePair, Map<String, String>>() {
+//			@Override
+//			public Map<String, String> apply(KeyValuePair input) {
+//				return 
+//			}
+//		}));
+
 		return res;
 	}
 
@@ -655,7 +682,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId
 	 * @param versionNumber
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public byte[] getDocument(String documentId, String versionNumber) throws Exception {
 		return IOUtils.toByteArray(getDocumentStream(documentId, versionNumber));
