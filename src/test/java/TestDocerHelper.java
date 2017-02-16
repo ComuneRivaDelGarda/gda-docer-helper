@@ -113,20 +113,20 @@ public class TestDocerHelper {
 
 	@Test
 	public void test8() throws Exception {
-		 init();
-		 token = helper.login();
-		 Object res = helper.getFolderDocuments("885160");
-		 Assert.assertNotNull(res);
-		 logger.info("{}", new Gson().toJson(res));
+//		 init();
+//		 token = helper.login();
+//		 Object res = helper.getFolderDocuments("885160");
+//		 Assert.assertNotNull(res);
+//		 logger.info("{}", new Gson().toJson(res));
 	}
 
 	@Test
 	public void test9() throws Exception {
-		init();
-		token = helper.login();
-		KeyValuePair[] res = helper.getProfileDocument("885159");
-		Assert.assertNotNull(res);
-		logger.info("{}", new Gson().toJson(res));
+//		init();
+//		token = helper.login();
+//		KeyValuePair[] res = helper.getProfileDocument("885159");
+//		Assert.assertNotNull(res);
+//		logger.info("{}", new Gson().toJson(res));
 	}
 	
 }
