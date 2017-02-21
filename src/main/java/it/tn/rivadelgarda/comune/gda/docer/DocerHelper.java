@@ -1,7 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,11 +17,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableMap;
 
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersion;
@@ -155,6 +149,50 @@ public class DocerHelper extends AbstractDocerHelper {
 		return folders;
 	}
 
+	public SearchItem[] searchFoldersByParent(String PARENT_FOLDER_ID) throws Exception {
+		KeyValuePair[] param = new KeyValuePair[4];
+		param[0] = KeyValuePairFactory.createKey(DocerKey.FOLDER_NAME, "*");
+		param[1] = KeyValuePairFactory.createKey(DocerKey.COD_ENTE, docerCodiceENTE);
+		param[2] = KeyValuePairFactory.createKey(DocerKey.COD_AOO, docerCodiceAOO);
+		param[3] = KeyValuePairFactory.createKey(DocerKey.PARENT_FOLDER_ID, PARENT_FOLDER_ID);
+
+		KeyValuePair[] search = new KeyValuePair[1];
+		search[0] = KeyValuePairFactory.createKeyOrderByAsc(DocerKey.FOLDER_NAME);
+
+		DocerServicesStub service = getDocerService();
+		SearchFolders request = new SearchFolders();
+		request.setToken(getLoginTicket());
+		request.setSearchCriteria(param);
+		request.setMaxRows(-1);
+		request.setOrderby(search);
+
+		SearchFoldersResponse response = service.searchFolders(request);
+		SearchItem[] folders = response.get_return();
+		return folders;
+	}
+	
+	/**
+	 * 
+	 * @param PARENT_FOLDER_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchFoldersByParentMap(String PARENT_FOLDER_ID) throws Exception {
+		SearchItem[] data = searchFoldersByParent(PARENT_FOLDER_ID);
+		List<Map<String, String>> result = new ArrayList<>();
+		if (data != null) {
+			for (SearchItem searchItem : data) {
+				Map<String, String> res = new HashMap<>();
+				KeyValuePair[] profilo = searchItem.getMetadata();
+				for (KeyValuePair kv : profilo) {
+					res.put(kv.getKey(), kv.getValue());
+				}
+				result.add(res);
+			}
+		}
+		return result;
+	}
+	
 	/**
 	 * Questo metodo permette la creazione di un Documento nel DMS.
 	 * 
@@ -333,14 +371,12 @@ public class DocerHelper extends AbstractDocerHelper {
 		for (KeyValuePair kv : data) {
 			res.put(kv.getKey(), kv.getValue());
 		}
-
 //		Map<String, String> test = HashMultimap.create(FluentIterable.from(data).transform(new Function<KeyValuePair, Map<String, String>>() {
 //			@Override
 //			public Map<String, String> apply(KeyValuePair input) {
 //				return 
 //			}
 //		}));
-
 		return res;
 	}
 
@@ -693,4 +729,22 @@ public class DocerHelper extends AbstractDocerHelper {
 		return IOUtils.toByteArray(getDocumentStream(documentId, versionNumber));
 	}
 
+	/**
+	 * 
+	 * @param PARENT_FOLDER_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> getProfileDocumentMapByParentFolder(String PARENT_FOLDER_ID) throws Exception {
+		List<Map<String, String>> data = new ArrayList<>();
+		List<String> documents = getFolderDocuments(PARENT_FOLDER_ID);
+		if (documents != null) {
+			for (String documentId : documents) {
+				Map<String, String> documentProfile = getProfileDocumentMap(documentId);
+				// data.put(documentId, documentProfile);
+				data.add(documentProfile);
+			}
+		}
+		return data;
+	}
 }
