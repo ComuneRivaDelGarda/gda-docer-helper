@@ -106,11 +106,12 @@ public class TestDocerHelper {
 
 	@Test
 	public void test7() throws Exception {
-		// init();
-		// token = helper.login();
-		// Object res = helper.addToFolderDocuments("885160", "885159");
-		// Assert.assertNotNull(res);
-		// logger.info("{}", res);
+		 init();
+		 token = helper.login();
+		 // Object res = helper.addToFolderDocuments("885160", "885159");
+		 Object res = helper.addToFolderDocument("885161", "885206");
+		 Assert.assertNotNull(res);
+		 logger.info("{}", res);		
 	}
 
 	@Test

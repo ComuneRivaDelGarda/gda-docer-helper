@@ -268,7 +268,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean addToFolderDocuments(String folderId, String documentsIds) throws Exception {
+	public boolean addToFolderDocument(String folderId, String documentsIds) throws Exception {
 		return addToFolderDocuments(folderId, Arrays.asList(documentsIds));
 	}
 
