@@ -191,7 +191,7 @@ public class DocerHelper extends AbstractDocerHelper {
      * Questo metodo permette di eseguire le ricerche sulle Folder del DMS.
      * 
      * @param folderName
-     *            specifica il nome della folder da cercare
+     *            specifica il nome della folder da cercare (null o empty per qualsiasi folder)
      * @param PARENT_FOLDER_ID
      *            specifica id cartella padre su cui cercare
      * @return
