@@ -2,8 +2,10 @@ package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -372,10 +374,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * elabora hashmap dei metadati generici per il documento specificato
+	 * elabora hashmap dei metadati per il documento specificato
 	 * 
 	 * @param documentId
-	 * @return mappa dei metadati generici
+	 * @return mappa dei metadati
 	 * @throws Exception
 	 */
 	public Map<String, String> getProfileDocumentMap(String documentId) throws Exception {
@@ -384,9 +386,9 @@ public class DocerHelper extends AbstractDocerHelper {
 		Map<String, String> res = new HashMap<>();
 		for (KeyValuePair kv : data) {
 			// verifico se è un chiave fra quelle del profilo base
-			if (DocumentoMetadatiGenericiEnum.getKeyList().contains(kv.getKey())) {
-				res.put(kv.getKey(), kv.getValue());
-			}
+			// if (DocumentoMetadatiGenericiEnum.getKeyList().contains(kv.getKey())) {
+			res.put(kv.getKey(), kv.getValue());
+			// }
 		}
 		// Map<String, String> test =
 		// HashMultimap.create(FluentIterable.from(data).transform(new
@@ -525,7 +527,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento di riferimento
-	 * @return collezione dei version number
+	 * @return collezione dei version number (ordine decrescente dal maggiore al minore)
 	 * @throws Exception
 	 */
 	public List<String> getVersions(String documentId) throws Exception {
@@ -537,6 +539,8 @@ public class DocerHelper extends AbstractDocerHelper {
 		GetVersionsResponse response = service.getVersions(request);
 		if (response.get_return() != null)
 			versions = Arrays.asList(response.get_return());
+		Collections.sort(versions);
+		Collections.reverse(versions);
 		return versions;
 	}
 
