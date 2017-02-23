@@ -17,6 +17,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersion;
@@ -65,6 +67,8 @@ import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 
 public class DocerHelper extends AbstractDocerHelper {
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	/**
 	 * Crea l'istanza di helper (chiamata a {@link #login()} effettuata
 	 * automaticamente alla chiamata di uno dei metodi)
@@ -336,6 +340,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public List<String> getFolderDocuments(String folderId) throws Exception {
+		logger.debug("getFolderDocuments {}", folderId);
 		List<String> res = new ArrayList<>();
 		DocerServicesStub service = getDocerService();
 		GetFolderDocuments request = new GetFolderDocuments();
@@ -356,6 +361,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return Profilo del Documento
 	 */
 	public KeyValuePair[] getProfileDocument(String documentId) throws Exception {
+		logger.debug("getProfileDocument {}", documentId);
 		DocerServicesStub service = getDocerService();
 		GetProfileDocument request = new GetProfileDocument();
 		request.setToken(getLoginTicket());
@@ -373,14 +379,14 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public Map<String, String> getProfileDocumentMap(String documentId) throws Exception {
+		logger.debug("getProfileDocumentMap {}", documentId);
 		KeyValuePair[] data = getProfileDocument(documentId);
 		Map<String, String> res = new HashMap<>();
 		for (KeyValuePair kv : data) {
-			// if
-			// (Arrays.asList(DocumentoMetadatiGenericiEnum.values()).contains(kv.getKey()))
-			// {
-			res.put(kv.getKey(), kv.getValue());
-			// }
+			// verifico se è un chiave fra quelle del profilo base
+			if (DocumentoMetadatiGenericiEnum.getKeyList().contains(kv.getKey())) {
+				res.put(kv.getKey(), kv.getValue());
+			}
 		}
 		// Map<String, String> test =
 		// HashMultimap.create(FluentIterable.from(data).transform(new
@@ -402,6 +408,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public KeyValuePair[] getACLDocument(String documentId) throws Exception {
+		logger.debug("getACLDocument {}", documentId);
 		DocerServicesStub service = getDocerService();
 		GetACLDocument request = new GetACLDocument();
 		request.setToken(getLoginTicket());
@@ -432,6 +439,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean setACLDocument(String documentId, KeyValuePair[] acls) throws Exception {
+		logger.debug("setACLDocument {} {}", documentId, acls);
 		DocerServicesStub service = getDocerService();
 		SetACLDocument request = new SetACLDocument();
 		request.setToken(getLoginTicket());
@@ -700,6 +708,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 */
 	public String createDocument(String folderId, String name, byte[] content, String title, String description) {
+		logger.debug("createDocument folderId={} name={} content.length={}", folderId, name, content.length);
 		return createDocument(folderId, name, content, title, description);
 	}
 
@@ -712,6 +721,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public String createVersion(String documentId, byte[] content) throws Exception {
+		logger.debug("createVersion documentId={} content.length={}", documentId, content.length);
 		ByteArrayDataSource rawData = new ByteArrayDataSource(content);
 		return addNewVersion(documentId, rawData);
 	}
@@ -724,6 +734,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public InputStream getDocumentStream(String documentId, String versionNumber) throws Exception {
+		logger.debug("getDocumentStream {} {}", documentId, versionNumber);
 		StreamDescriptor data = downloadVersion(documentId, versionNumber);
 		long size = data.getByteSize();
 		DataHandler dh = data.getHandler();
@@ -739,6 +750,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public byte[] getDocument(String documentId, String versionNumber) throws Exception {
+		logger.debug("getDocument {} {}", documentId, versionNumber);
 		return IOUtils.toByteArray(getDocumentStream(documentId, versionNumber));
 	}
 
@@ -749,6 +761,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public List<Map<String, String>> getProfileDocumentMapByParentFolder(String PARENT_FOLDER_ID) throws Exception {
+		logger.debug("getProfileDocumentMapByParentFolder {}", PARENT_FOLDER_ID);
 		List<Map<String, String>> data = new ArrayList<>();
 		List<String> documents = getFolderDocuments(PARENT_FOLDER_ID);
 		if (documents != null) {
