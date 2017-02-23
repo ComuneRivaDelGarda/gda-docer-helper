@@ -214,6 +214,15 @@ public class DocerHelper extends AbstractDocerHelper {
     }
 
     /**
+     * Questo metodo permette di eseguire le ricerche sulle Folder del DMS.
+     * @param folderName specifica il nome della folder da cercare
+     * @return
+     */
+    public List<Map<String, String>> searchFolders(String folderName) throws Exception {
+	return searchFolders(folderName, null);
+    }
+
+    /**
      * Questo metodo permette la creazione di un Documento nel DMS.
      * 
      * @param typeId
