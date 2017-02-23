@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum.TIPO_COMPONENTE;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE;
 
 public class TestDocerHelper {
 
@@ -106,12 +106,17 @@ public class TestDocerHelper {
 
 	@Test
 	public void test7() throws Exception {
-		 init();
-		 token = helper.login();
-		 // Object res = helper.addToFolderDocuments("885160", "885159");
-		 Object res = helper.addToFolderDocument("885161", "885206");
-		 Assert.assertNotNull(res);
-		 logger.info("{}", res);		
+		try {
+			init();
+			token = helper.login();
+			// Object res = helper.addToFolderDocuments("885160", "885159");
+			Object res = helper.addToFolderDocument("885161", "885206");
+			// Object res = helper.addToFolderDocument("885154", "885206");
+			Assert.assertNotNull(res);
+			logger.info("{}", res);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+		}
 	}
 
 	@Test

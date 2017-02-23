@@ -57,9 +57,9 @@ import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.StreamDescriptor;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocerKey;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum.ARCHIVE_TYPE;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum.TIPO_COMPONENTE;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum.ARCHIVE_TYPE;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE;
 import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeysEnum;
 import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 
@@ -170,7 +170,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		SearchItem[] folders = response.get_return();
 		return folders;
 	}
-	
+
 	/**
 	 * 
 	 * @param PARENT_FOLDER_ID
@@ -192,7 +192,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Questo metodo permette la creazione di un Documento nel DMS.
 	 * 
@@ -209,13 +209,13 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DataHandler dataHandler = new DataHandler(dataSource);
 
-		params.add(DocumentKeysEnum.APP_VERSANTE, docerApplication);
+		params.add(DocumentoMetadatiGenericiEnum.APP_VERSANTE, docerApplication);
 		String md5 = DigestUtils.md5Hex(dataSource.getInputStream());
-		params.add(DocumentKeysEnum.DOC_HASH, md5);
-		params.add(DocumentKeysEnum.TIPO_COMPONENTE, tipoComponente.getValue());
+		params.add(DocumentoMetadatiGenericiEnum.DOC_HASH, md5);
+		params.add(DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE, tipoComponente.getValue());
 		if (StringUtils.isNotBlank(description))
-			params.add(DocumentKeysEnum.ABSTRACT, description);
-		params.add(DocumentKeysEnum.ARCHIVE_TYPE, ARCHIVE_TYPE.ARCHIVE);
+			params.add(DocumentoMetadatiGenericiEnum.ABSTRACT, description);
+		params.add(DocumentoMetadatiGenericiEnum.ARCHIVE_TYPE, ARCHIVE_TYPE.ARCHIVE);
 
 		DocerServicesStub service = getDocerService();
 		CreateDocument request = new CreateDocument();
@@ -231,7 +231,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		FileDataSource fileDataSource = new FileDataSource(file);
 		return createDocument(typeId, documentName, fileDataSource, tipoComponente, description);
 	}
-	
+
 	public String createDocument(String documentName, File file, TIPO_COMPONENTE tipoComponente, String description) throws Exception {
 		return createDocument("DOCUMENT", documentName, file, tipoComponente, description);
 	}
@@ -347,7 +347,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * Questo metodo permette di recuperare il profilo di un Documento del DMS.
 	 * 
@@ -365,18 +365,31 @@ public class DocerHelper extends AbstractDocerHelper {
 		return res;
 	}
 
+	/**
+	 * elabora hashmap dei metadati generici per il documento specificato
+	 * 
+	 * @param documentId
+	 * @return mappa dei metadati generici
+	 * @throws Exception
+	 */
 	public Map<String, String> getProfileDocumentMap(String documentId) throws Exception {
 		KeyValuePair[] data = getProfileDocument(documentId);
 		Map<String, String> res = new HashMap<>();
 		for (KeyValuePair kv : data) {
+			// if
+			// (Arrays.asList(DocumentoMetadatiGenericiEnum.values()).contains(kv.getKey()))
+			// {
 			res.put(kv.getKey(), kv.getValue());
+			// }
 		}
-//		Map<String, String> test = HashMultimap.create(FluentIterable.from(data).transform(new Function<KeyValuePair, Map<String, String>>() {
-//			@Override
-//			public Map<String, String> apply(KeyValuePair input) {
-//				return 
-//			}
-//		}));
+		// Map<String, String> test =
+		// HashMultimap.create(FluentIterable.from(data).transform(new
+		// Function<KeyValuePair, Map<String, String>>() {
+		// @Override
+		// public Map<String, String> apply(KeyValuePair input) {
+		// return
+		// }
+		// }));
 		return res;
 	}
 
