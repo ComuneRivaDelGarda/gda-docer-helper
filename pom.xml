@@ -5,6 +5,7 @@
 	<artifactId>gda-docer-helper</artifactId>
 	<version>1.0.0</version>
 	<name>gda-docer-helper</name>
+	<packaging>jar</packaging>
 	<url>https://github.com/ComuneRivaDelGarda/gda-docer-helper</url>
 	
 	<properties>
