@@ -103,7 +103,19 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public String createFolder(String folderName) throws Exception {
-		return createFolder(folderName, "");
+		return createFolder(folderName, "", false);
+	}
+	
+	public String createFolderOwner(String folderName) throws Exception {
+		return createFolder(folderName, "", true);
+	}
+	
+	public String createFolderOwner(String folderName, String parentFolderId) throws Exception {
+		return createFolder(folderName, parentFolderId, true);
+	}
+	
+	public String createFolder(String folderName, String parentFolderId) throws Exception {
+		return createFolder(folderName, parentFolderId, false);
 	}
 	
 	/**
@@ -114,11 +126,14 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createFolder(String folderName, String parentFolderId) throws Exception {
+	public String createFolder(String folderName, String parentFolderId, boolean owner) throws Exception {
 		KeyValuePairFactory keyBuilder = KeyValuePairFactory.build(FolderKeysEnum.FOLDER_NAME, folderName)
 				.add(FolderKeysEnum.COD_ENTE, docerCodiceENTE).add(FolderKeysEnum.COD_AOO, docerCodiceAOO);
 		if (StringUtils.isNotBlank(parentFolderId)) {
 			keyBuilder.add(FolderKeysEnum.PARENT_FOLDER_ID, parentFolderId);
+		}
+		if (owner) {
+			keyBuilder.add(FolderKeysEnum.FOLDER_OWNER, docerUsername);
 		}
 		
 		KeyValuePair[] folderinfo = keyBuilder.get();
@@ -308,8 +323,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	/**
 	 * Questo metodo permette di aggiungere Documenti ad una Folder del DMS.
 	 * 
-	 * @param folderId
-	 * @param documentsIds
+	 * @param folderId id della cartella dove aggiungere il documento
+	 * @param documentId id del documento da aggiungere
 	 * @return
 	 * @throws Exception
 	 */
