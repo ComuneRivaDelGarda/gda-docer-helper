@@ -1,7 +1,7 @@
 import java.io.File;
+import java.util.Date;
 import java.util.Properties;
 
-import org.apache.tools.ant.types.resources.selectors.Date;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE;
 
@@ -67,12 +66,15 @@ public class TestDocerHelper {
 
 	@Test
 	public void test3() throws Exception {
-		// init();
-		// token = helper.login();
-		// String folderId = helper.createFolder("test1");
-		// // 885154
-		// Assert.assertNotNull(folderId);
-		// logger.info(folderId);
+		String folderName = "test" + new Date().getTime();
+		logger.info("createFolder {}", folderName);
+		//
+		init();
+		token = helper.login();
+		String folderId = helper.createFolder(folderName, "885221");
+		// 885154
+		Assert.assertNotNull(folderId);
+		logger.info(folderId);
 	}
 
 	@Test
@@ -95,13 +97,14 @@ public class TestDocerHelper {
 
 	@Test
 	public void test6() throws Exception {
-		 init();
-		 token = helper.login();
-		 String timestamp = String.valueOf(new Date().getMillis());
-		 Object res = helper.createDocument("DOCUMENTO", "test"+timestamp+".pdf", new File("stuff/Integrazione DOCER 1.1.pdf"), TIPO_COMPONENTE.PRINCIPALE, "DESC");
-		 Assert.assertNotNull(res);
-		 logger.info("{}", new Gson().toJson(res));
-		 // documento 885159
+		init();
+		token = helper.login();
+		String timestamp = String.valueOf(new Date().getTime());
+		Object res = helper.createDocument("DOCUMENTO", "test" + timestamp + ".pdf",
+				new File("stuff/Integrazione DOCER 1.1.pdf"), TIPO_COMPONENTE.PRINCIPALE, "DESC");
+		Assert.assertNotNull(res);
+		logger.info("{}", new Gson().toJson(res));
+		// documento 885159
 	}
 
 	@Test
@@ -121,28 +124,28 @@ public class TestDocerHelper {
 
 	@Test
 	public void test8() throws Exception {
-//		 init();
-//		 token = helper.login();
-//		 Object res = helper.getFolderDocuments("885160");
-//		 Assert.assertNotNull(res);
-//		 logger.info("{}", new Gson().toJson(res));
+		// init();
+		// token = helper.login();
+		// Object res = helper.getFolderDocuments("885160");
+		// Assert.assertNotNull(res);
+		// logger.info("{}", new Gson().toJson(res));
 	}
 
 	@Test
 	public void test9() throws Exception {
-//		init();
-//		token = helper.login();
-//		KeyValuePair[] res = helper.getProfileDocument("885159");
-//		Assert.assertNotNull(res);
-//		logger.info("{}", new Gson().toJson(res));
+		// init();
+		// token = helper.login();
+		// KeyValuePair[] res = helper.getProfileDocument("885159");
+		// Assert.assertNotNull(res);
+		// logger.info("{}", new Gson().toJson(res));
 	}
-	
+
 	@Test
 	public void test10() throws Exception {
-//		init();
-//		token = helper.login();
-//		SearchItem[] res = helper.searchFoldersByParent("885161");
-//		Assert.assertNotNull(res);
-//		logger.info("{}", new Gson().toJson(res));
-	}	
+		// init();
+		// token = helper.login();
+		// SearchItem[] res = helper.searchFoldersByParent("885161");
+		// Assert.assertNotNull(res);
+		// logger.info("{}", new Gson().toJson(res));
+	}
 }
