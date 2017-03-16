@@ -1,9 +1,12 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
+import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocerKey;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocerValue;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum;
@@ -80,4 +83,38 @@ public class KeyValuePairFactory {
 				.add(DocumentoMetadatiGenericiEnum.COD_ENTE, COD_ENTE)
 				.add(DocumentoMetadatiGenericiEnum.COD_AOO, COD_AOO);
 	}
+	
+	/**
+	 * Converte in una mappa di String un array di KeyValuePair
+	 * @param data KeyValuePair[]
+	 * @return
+	 */
+	public static Map<String, String> asMap(KeyValuePair[] data) {
+		Map<String, String> res = new HashMap<>();
+		if (data != null)
+			for (KeyValuePair kv : data) {
+				res.put(kv.getKey(), kv.getValue());
+			}
+		return res;
+	}
+	
+	/**
+	 * Converte in una lista di mappe un array di SearchItem
+	 * @param data SearchItem[]
+	 * @return
+	 */
+	public static List<Map<String, String>> asListMap(SearchItem[] data) {
+		List<Map<String, String>> result = new ArrayList<>();
+		if (data != null) {
+			for (SearchItem searchItem : data) {
+				Map<String, String> res = new HashMap<>();
+				KeyValuePair[] profilo = searchItem.getMetadata();
+				for (KeyValuePair kv : profilo) {
+					res.put(kv.getKey(), kv.getValue());
+				}
+				result.add(res);
+			}
+		}
+		return result;
+	}	
 }
