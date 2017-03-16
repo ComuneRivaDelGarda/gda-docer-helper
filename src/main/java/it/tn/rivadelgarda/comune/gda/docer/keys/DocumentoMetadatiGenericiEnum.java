@@ -94,7 +94,12 @@ public enum DocumentoMetadatiGenericiEnum implements DocerKey {
 	 * avanzato) per identificare il numero della versione in formato
 	 * alfanumerico.
 	 */
-	UD_VERSION("UD_VERSION");
+	UD_VERSION("UD_VERSION"),
+	/**
+	 * METADATO aggiunto il 16/03/2017 per memorizzare ID VERSANTE e fare 
+	 * successive ricerche per documenti appartenenti alla stessa ENTITA' del VERSANTE
+	 */
+	EXTERNAL_ID("EXTERNAL_ID");
 
 	private String key;
 

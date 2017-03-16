@@ -67,9 +67,17 @@ public class KeyValuePairFactory {
 		return this.list.toArray(new KeyValuePair[list.size()]);
 	}
 
-	public static KeyValuePairFactory createDocumentKeys(String typeId, String docName, String codEnte, String codAoo) {
-		return build(DocumentoMetadatiGenericiEnum.TYPE_ID, typeId).add(DocumentoMetadatiGenericiEnum.DOCNAME, docName)
-				.add(DocumentoMetadatiGenericiEnum.COD_ENTE, codEnte)
-				.add(DocumentoMetadatiGenericiEnum.COD_AOO, codAoo);
+	/**
+	 * 
+	 * @param TYPE_ID
+	 * @param DOCNAME
+	 * @param COD_ENTE
+	 * @param COD_AOO
+	 * @return
+	 */
+	public static KeyValuePairFactory createDocumentKeys(String TYPE_ID, String DOCNAME, String COD_ENTE, String COD_AOO) {
+		return build(DocumentoMetadatiGenericiEnum.TYPE_ID, TYPE_ID).add(DocumentoMetadatiGenericiEnum.DOCNAME, DOCNAME)
+				.add(DocumentoMetadatiGenericiEnum.COD_ENTE, COD_ENTE)
+				.add(DocumentoMetadatiGenericiEnum.COD_AOO, COD_AOO);
 	}
 }

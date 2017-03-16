@@ -251,17 +251,17 @@ public class DocerHelper extends AbstractDocerHelper {
 	/**
 	 * Questo metodo permette la creazione di un Documento nel DMS.
 	 * 
-	 * @param typeId
-	 * @param documentName
+	 * @param TYPE_ID
+	 * @param DOCNAME
 	 * @param file
-	 * @param tipoComponente
+	 * @param TIPO_COMPONENTE
 	 *            uno dei TIPO_COMPONENTE validi
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String typeId, String documentName, DataSource dataSource,
-			TIPO_COMPONENTE tipoComponente, String description) throws Exception {
-		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(typeId, documentName, docerCodiceENTE,
+	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource,
+			TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
+		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(TYPE_ID, DOCNAME, docerCodiceENTE,
 				docerCodiceAOO);
 
 		DataHandler dataHandler = new DataHandler(dataSource);
@@ -269,10 +269,12 @@ public class DocerHelper extends AbstractDocerHelper {
 		params.add(DocumentoMetadatiGenericiEnum.APP_VERSANTE, docerApplication);
 		String md5 = DigestUtils.md5Hex(dataSource.getInputStream());
 		params.add(DocumentoMetadatiGenericiEnum.DOC_HASH, md5);
-		params.add(DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE, tipoComponente.getValue());
-		if (StringUtils.isNotBlank(description))
-			params.add(DocumentoMetadatiGenericiEnum.ABSTRACT, description);
+		params.add(DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE, TIPO_COMPONENTE.getValue());
+		if (StringUtils.isNotBlank(ABSTRACT))
+			params.add(DocumentoMetadatiGenericiEnum.ABSTRACT, ABSTRACT);
 		params.add(DocumentoMetadatiGenericiEnum.ARCHIVE_TYPE, ARCHIVE_TYPE.ARCHIVE);
+		if (StringUtils.isNotBlank(EXTERNAL_ID))
+			params.add(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, EXTERNAL_ID);
 
 		DocerServicesStub service = getDocerService();
 		CreateDocument request = new CreateDocument();
@@ -284,22 +286,69 @@ public class DocerHelper extends AbstractDocerHelper {
 		return documentId;
 	}
 
-	public String createDocument(String typeId, String documentName, File file, TIPO_COMPONENTE tipoComponente,
-			String description) throws Exception {
+	/**
+	 * Create un Document con Tipo personalizzabile
+	 * @param TYPE_ID set di metadati da utilizzare
+	 * @param DOCNAME
+	 * @param file
+	 * @param TIPO_COMPONENTE
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String createDocument(String TYPE_ID, String DOCNAME, File file, TIPO_COMPONENTE TIPO_COMPONENTE,
+			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		FileDataSource fileDataSource = new FileDataSource(file);
-		return createDocument(typeId, documentName, fileDataSource, tipoComponente, description);
+		return createDocument(TYPE_ID, DOCNAME, fileDataSource, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
 
-	public String createDocument(String documentName, File file, TIPO_COMPONENTE tipoComponente, String description)
-			throws Exception {
-		return createDocument("DOCUMENT", documentName, file, tipoComponente, description);
-	}
-
-	public String createDocument(String typeId, String documentName, byte[] bytes, TIPO_COMPONENTE tipoComponente,
-			String description) throws Exception {
+	/**
+	 * Create un Document con Tipo personalizzabile
+	 * @param TYPE_ID set di metadati da utilizzare
+	 * @param DOCNAME
+	 * @param bytes
+	 * @param TIPO_COMPONENTE
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String createDocument(String TYPE_ID, String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE,
+			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		ByteArrayDataSource rawData = new ByteArrayDataSource(bytes);
-		return createDocument(typeId, documentName, rawData, tipoComponente, description);
+		return createDocument(TYPE_ID, DOCNAME, rawData, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
+	
+	/**
+	 * Crea un Documento con il tipo fisso a DOCUMENTO
+	 * @param DOCNAME
+	 * @param file
+	 * @param TIPO_COMPONENTE
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID)
+			throws Exception {
+		return createDocument("DOCUMENTO", DOCNAME, file, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+	}
+	
+	/**
+	 * Crea un Documento con il tipo fisso a DOCUMENTO
+	 * @param DOCNAME
+	 * @param bytes
+	 * @param TIPO_COMPONENTE
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID)
+			throws Exception {
+		return createDocument("DOCUMENTO", DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+	}	
 
 	/**
 	 * Questo metodo permette di aggiungere Documenti ad una Folder del DMS.
