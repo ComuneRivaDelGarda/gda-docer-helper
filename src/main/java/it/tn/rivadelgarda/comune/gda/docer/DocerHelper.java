@@ -53,6 +53,8 @@ import it.kdm.docer.webservices.DocerServicesStub.ProtocollaDocumento;
 import it.kdm.docer.webservices.DocerServicesStub.ProtocollaDocumentoResponse;
 import it.kdm.docer.webservices.DocerServicesStub.RemoveFromFolderDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.RemoveFromFolderDocumentsResponse;
+import it.kdm.docer.webservices.DocerServicesStub.SearchDocuments;
+import it.kdm.docer.webservices.DocerServicesStub.SearchDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFolders;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFoldersResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
@@ -223,18 +225,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public List<Map<String, String>> searchFolders(String folderName, String PARENT_FOLDER_ID) throws Exception {
 		SearchItem[] data = searchFoldersNative(folderName, PARENT_FOLDER_ID);
-		List<Map<String, String>> result = new ArrayList<>();
-		if (data != null) {
-			for (SearchItem searchItem : data) {
-				Map<String, String> res = new HashMap<>();
-				KeyValuePair[] profilo = searchItem.getMetadata();
-				for (KeyValuePair kv : profilo) {
-					res.put(kv.getKey(), kv.getValue());
-				}
-				result.add(res);
-			}
-		}
-		return result;
+		return KeyValuePairFactory.asListMap(data);
 	}
 
 	/**
@@ -435,6 +426,36 @@ public class DocerHelper extends AbstractDocerHelper {
 		return esito;
 	}
 
+	/**
+	 * Questo metodo permette di recuperare la lista dei Documenti correlati a uno specifico
+	 * externalId
+	 * 
+	 * @param externalId
+	 *            valore del metadato EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, KeyValuePair[] orderBy) throws Exception {
+		logger.debug("searchDocumentNative {} {}", searchCriteria, orderBy);		
+		DocerServicesStub service = getDocerService();
+		SearchDocuments request = new SearchDocuments();
+		request.setToken(getLoginTicket());
+		request.setSearchCriteria(searchCriteria);
+		request.setMaxRows(-1);
+		request.setOrderby(orderBy);
+		SearchDocumentsResponse response = service.searchDocuments(request);
+		SearchItem[] result = response.get_return();
+		return result;
+	}
+	
+	public List<Map<String, String>> searchDocumentsByExternalId(String externalId) throws Exception {
+		logger.debug("searchDocumentsByExternalId {}", externalId);		
+		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId).get();		
+		KeyValuePair[] orderBy = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.DOCNAME, KeyValuePairFactory.ASC).get();
+		SearchItem[] result = searchDocumentsNative(searchCriteria,orderBy);
+		return KeyValuePairFactory.asListMap(result);
+	}
+	
 	/**
 	 * Questo metodo permette di recuperare la lista dei Documenti contenuti in
 	 * una Folder del DMS.
