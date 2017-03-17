@@ -452,9 +452,25 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("searchDocumentsByExternalId {}", externalId);
 		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId).get();
 		KeyValuePair[] orderBy = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.DOCNAME, KeyValuePairFactory.ASC).get();
-		SearchItem[] result = searchDocumentsNative(searchCriteria,orderBy);
+		SearchItem[] result = searchDocumentsNative(searchCriteria, orderBy);
 		return KeyValuePairFactory.asListMap(result);
 	}
+	
+//	/**
+//	 * 
+//	 * @param externalId
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	public List<Map<String, String>> searchDocumentsByExternalIdAndRelated(String externalId) throws Exception {
+//		logger.debug("searchDocumentsByExternalIdAndRelated {}", externalId);
+//		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId).get();
+//		KeyValuePair[] orderBy = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.DOCNAME, KeyValuePairFactory.ASC).get();
+//		SearchItem[] result = searchDocumentsNative(searchCriteria,orderBy);
+//		List<Map<String, String>> documentsByExternalId = KeyValuePairFactory.asListMap(result);
+//		
+//		return
+//	}	
 	
 	/**
 	 * Questo metodo permette di recuperare la lista dei Documenti contenuti in
