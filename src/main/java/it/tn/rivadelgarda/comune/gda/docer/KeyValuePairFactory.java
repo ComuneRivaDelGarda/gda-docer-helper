@@ -1,6 +1,7 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,7 +133,7 @@ public class KeyValuePairFactory {
 	public static String searchMetadata(List<Map<String, String>> metadataList, DocerKey key) {
 		String metadataValue = null;
 		for (Map<String, String> metadata : metadataList) {
-			metadataValue = searchMetadata(metadataList, key);
+			metadataValue = searchMetadata(metadata, key);
 			if (metadataValue != null)
 				break;
 		}
@@ -146,4 +147,13 @@ public class KeyValuePairFactory {
 		}
 		return metadataValue;
 	}
+	
+	public static String[] joinMetadata(List<Map<String, String>> metadataList, DocerKey key) {
+		List<String> metadataValues = new ArrayList<>();
+		for (Map<String, String> metadata : metadataList) {
+			String metadataValue = searchMetadata(metadata, key);
+			metadataValues.add(metadataValue);
+		}
+		return metadataValues.toArray(new String[metadataValues.size()]);
+	}	
 }
