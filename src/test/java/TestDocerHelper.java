@@ -155,21 +155,38 @@ public class TestDocerHelper {
 
 	@Test
 	public void test60() throws Exception {
-		String typeId = "DOCUMENTO";
+		// String typeId = "DOCUMENTO";
 		String timestamp = String.valueOf(new Date().getTime());
 		String fileName = "test" + timestamp + ".pdf";
 		String file = "stuff/Integrazione DOCER 1.1.pdf";
 
 		String criteria = "test*";
-		logger.info("createDocument {} {} - {}", typeId, fileName, file);
+		// logger.info("createDocument {} {} - {}", typeId, fileName, file);
 
 		init();
 		// token = helper.login();
-		String res = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE,
-				"descrizione con spazi");
+		String res = helper.createDocumentTypeDocumento(fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE,
+				"descrizione con spazi", "TEST");
 		Assert.assertNotNull(res);
 		logger.info("{}", res);
 	}
+	
+	@Test
+	public void test61() throws Exception {
+		// String typeId = "DOCUMENTO";
+//		String timestamp = String.valueOf(new Date().getTime());
+//		String fileName = "test" + timestamp + ".pdf";
+//		String file = "stuff/Integrazione DOCER 1.1.pdf";
+
+		String criteria = "test*";
+		// logger.info("createDocument {} {} - {}", typeId, fileName, file);
+
+		init();
+		// token = helper.login();
+		List<Map<String, String>> res = helper.searchDocumentsByExternalId("TEST");
+		Assert.assertNotNull(res);
+		logger.info("{}", res);
+	}	
 
 	@Test
 	public void test70() throws Exception {
@@ -208,7 +225,7 @@ public class TestDocerHelper {
 		init();
 		// token = helper.login();
 		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE,
-				"descrizione con spazi");
+				"descrizione con spazi", "");
 
 		try {
 			boolean res = helper.addToFolderDocument(folderId, documentId);
@@ -250,7 +267,7 @@ public class TestDocerHelper {
 		init();
 		// token = helper.login();
 		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE,
-				"descrizione con spazi");
+				"descrizione con spazi", "");
 
 		boolean res = helper.addToFolderDocument(subFolderId, documentId);
 	}
