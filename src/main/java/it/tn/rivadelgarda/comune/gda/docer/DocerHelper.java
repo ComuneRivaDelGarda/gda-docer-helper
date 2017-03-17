@@ -2,6 +2,7 @@ package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -46,6 +47,8 @@ import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.GetProfileDocumentResponse;
+import it.kdm.docer.webservices.DocerServicesStub.GetRelatedDocuments;
+import it.kdm.docer.webservices.DocerServicesStub.GetRelatedDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersions;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersionsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
@@ -107,24 +110,27 @@ public class DocerHelper extends AbstractDocerHelper {
 	public String createFolder(String folderName) throws Exception {
 		return createFolder(folderName, "", false);
 	}
-	
+
 	public String createFolderOwner(String folderName) throws Exception {
 		return createFolder(folderName, "", true);
 	}
-	
+
 	public String createFolderOwner(String folderName, String parentFolderId) throws Exception {
 		return createFolder(folderName, parentFolderId, true);
 	}
-	
+
 	public String createFolder(String folderName, String parentFolderId) throws Exception {
 		return createFolder(folderName, parentFolderId, false);
 	}
-	
+
 	/**
-	 * Questo metodo permette la creazione di una Folder nel DMS specificando anche PARENT_FOLDER_ID
+	 * Questo metodo permette la creazione di una Folder nel DMS specificando
+	 * anche PARENT_FOLDER_ID
 	 * 
-	 * @param folderName attributo FOLDER_NAME
-	 * @param parentFolderId attributo PARENT_FOLDER_ID
+	 * @param folderName
+	 *            attributo FOLDER_NAME
+	 * @param parentFolderId
+	 *            attributo PARENT_FOLDER_ID
 	 * @return
 	 * @throws Exception
 	 */
@@ -137,9 +143,9 @@ public class DocerHelper extends AbstractDocerHelper {
 		if (owner) {
 			keyBuilder.add(FolderKeysEnum.FOLDER_OWNER, docerUsername);
 		}
-		
+
 		KeyValuePair[] folderinfo = keyBuilder.get();
-		
+
 		DocerServicesStub service = getDocerService();
 		CreateFolder request = new CreateFolder();
 		request.setToken(getLoginTicket());
@@ -250,8 +256,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource,
-			TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
+	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource, TIPO_COMPONENTE TIPO_COMPONENTE,
+			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(TYPE_ID, DOCNAME, docerCodiceENTE,
 				docerCodiceAOO);
 
@@ -279,7 +285,9 @@ public class DocerHelper extends AbstractDocerHelper {
 
 	/**
 	 * Create un Document con Tipo personalizzabile
-	 * @param TYPE_ID set di metadati da utilizzare
+	 * 
+	 * @param TYPE_ID
+	 *            set di metadati da utilizzare
 	 * @param DOCNAME
 	 * @param file
 	 * @param TIPO_COMPONENTE
@@ -296,7 +304,9 @@ public class DocerHelper extends AbstractDocerHelper {
 
 	/**
 	 * Create un Document con Tipo personalizzabile
-	 * @param TYPE_ID set di metadati da utilizzare
+	 * 
+	 * @param TYPE_ID
+	 *            set di metadati da utilizzare
 	 * @param DOCNAME
 	 * @param bytes
 	 * @param TIPO_COMPONENTE
@@ -310,9 +320,10 @@ public class DocerHelper extends AbstractDocerHelper {
 		ByteArrayDataSource rawData = new ByteArrayDataSource(bytes);
 		return createDocument(TYPE_ID, DOCNAME, rawData, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
-	
+
 	/**
 	 * Crea un Documento con il tipo fisso a DOCUMENTO
+	 * 
 	 * @param DOCNAME
 	 * @param file
 	 * @param TIPO_COMPONENTE
@@ -321,13 +332,14 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID)
-			throws Exception {
+	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE TIPO_COMPONENTE,
+			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		return createDocument("DOCUMENTO", DOCNAME, file, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
-	
+
 	/**
 	 * Crea un Documento con il tipo fisso a DOCUMENTO
+	 * 
 	 * @param DOCNAME
 	 * @param bytes
 	 * @param TIPO_COMPONENTE
@@ -336,10 +348,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID)
-			throws Exception {
+	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE,
+			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		return createDocument("DOCUMENTO", DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
-	}	
+	}
 
 	/**
 	 * Questo metodo permette di aggiungere Documenti ad una Folder del DMS.
@@ -363,8 +375,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	/**
 	 * Questo metodo permette di aggiungere Documenti ad una Folder del DMS.
 	 * 
-	 * @param folderId id della cartella dove aggiungere il documento
-	 * @param documentId id del documento da aggiungere
+	 * @param folderId
+	 *            id della cartella dove aggiungere il documento
+	 * @param documentId
+	 *            id del documento da aggiungere
 	 * @return
 	 * @throws Exception
 	 */
@@ -427,8 +441,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Questo metodo permette di recuperare la lista dei Documenti correlati a uno specifico
-	 * externalId
+	 * Questo metodo permette di recuperare la lista dei Documenti correlati a
+	 * uno specifico externalId
 	 * 
 	 * @param externalId
 	 *            valore del metadato EXTERNAL_ID
@@ -436,7 +450,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, KeyValuePair[] orderBy) throws Exception {
-		logger.debug("searchDocumentNative {} {}", searchCriteria, orderBy);		
+		logger.debug("searchDocumentNative {} {}", searchCriteria, orderBy);
 		DocerServicesStub service = getDocerService();
 		SearchDocuments request = new SearchDocuments();
 		request.setToken(getLoginTicket());
@@ -447,31 +461,83 @@ public class DocerHelper extends AbstractDocerHelper {
 		SearchItem[] result = response.get_return();
 		return result;
 	}
-	
+
 	public List<Map<String, String>> searchDocumentsByExternalId(String externalId) throws Exception {
 		logger.debug("searchDocumentsByExternalId {}", externalId);
-		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId).get();
-		KeyValuePair[] orderBy = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.DOCNAME, KeyValuePairFactory.ASC).get();
+		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId)
+				.get();
+		KeyValuePair[] orderBy = KeyValuePairFactory
+				.build(DocumentoMetadatiGenericiEnum.DOCNAME, KeyValuePairFactory.ASC).get();
 		SearchItem[] result = searchDocumentsNative(searchCriteria, orderBy);
 		return KeyValuePairFactory.asListMap(result);
 	}
-	
-//	/**
-//	 * 
-//	 * @param externalId
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	public List<Map<String, String>> searchDocumentsByExternalIdAndRelated(String externalId) throws Exception {
-//		logger.debug("searchDocumentsByExternalIdAndRelated {}", externalId);
-//		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId).get();
-//		KeyValuePair[] orderBy = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.DOCNAME, KeyValuePairFactory.ASC).get();
-//		SearchItem[] result = searchDocumentsNative(searchCriteria,orderBy);
-//		List<Map<String, String>> documentsByExternalId = KeyValuePairFactory.asListMap(result);
-//		
-//		return
-//	}	
-	
+
+	/**
+	 * Ricerca tutti i documenti related partendo da EXTERNAL_ID. Ricerca i
+	 * documenti con metadato EXTERNAL_ID, in ordine di data di inserimento in
+	 * DOCER. Ricerca successivamente tutti i related al primo dei risultati
+	 * precedenti (che potrebbero potenzialmente essere related da un'altra app
+	 * senza valorizzazione di EXTERNAL_ID
+	 * 
+	 * @param externalId
+	 *            valore del metadato EXTERNAL_ID da cercare
+	 * @return lista dei metadati di tutti i documenti related
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchDocumentsByExternalIdAndRelated(String externalId) throws Exception {
+		logger.debug("searchDocumentsByExternalIdAndRelated {}", externalId);
+		// effettuo una ricera per EXTERNAL_ID ordinata per CREATION_DATE
+		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId)
+				.get();
+		KeyValuePair[] orderBy = KeyValuePairFactory
+				.build(DocumentoMetadatiGenericiEnum.CREATION_DATE, KeyValuePairFactory.ASC).get();
+		SearchItem[] result = searchDocumentsNative(searchCriteria, orderBy);
+		List<Map<String, String>> documentsByExternalId = KeyValuePairFactory.asListMap(result);
+		String firstDocNum = KeyValuePairFactory.searchMetadata(documentsByExternalId,
+				DocumentoMetadatiGenericiEnum.DOCNUM);
+		// carico i related al primo docnum
+		List<String> relatedDocuments = getRelatedDocuments(firstDocNum);
+		// carico i metadati di tutti i documenti related
+		List<Map<String, String>> relatedMetadata = new ArrayList<>();
+		for (String documentId : relatedDocuments) {
+			Map<String, String> documentProfile = getProfileDocumentMap(documentId);
+			relatedMetadata.add(documentProfile);
+		}
+		return relatedMetadata;
+	}
+
+	/**
+	 * 
+	 * @param DOCNUM
+	 * @return
+	 * @throws Exception
+	 */
+	private String[] getRelatedDocumentsNative(String DOCNUM) throws Exception {
+		logger.debug("getRelated {}", DOCNUM);
+		DocerServicesStub service = getDocerService();
+		GetRelatedDocuments request = new GetRelatedDocuments();
+		request.setToken(getLoginTicket());
+		request.setDocId(DOCNUM);
+		GetRelatedDocumentsResponse response = service.getRelatedDocuments(request);
+		String[] result = response.get_return();
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param DOCNUM
+	 * @return
+	 * @throws Exception
+	 */
+	private List<String> getRelatedDocuments(String DOCNUM) throws Exception {
+		List<String> res = new ArrayList<>();
+		String[] documents = getRelatedDocumentsNative(DOCNUM);
+		if (documents != null) {
+			res = Arrays.asList(documents);
+		}
+		return res;
+	}
+
 	/**
 	 * Questo metodo permette di recuperare la lista dei Documenti contenuti in
 	 * una Folder del DMS.
