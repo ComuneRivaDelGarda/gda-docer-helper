@@ -1,9 +1,9 @@
 sample.axisversion
-it.tn.rivadelgarda.comune.gda.docer.exceptions
+it.tn.rivadelgarda.comune.gda.docer
 it.tn.rivadelgarda.comune.gda.docer.values
 it.tn.rivadelgarda.comune.gda.docer.keys
-it.tn.rivadelgarda.comune.gda.docer
-it.kdm.docer.core.authentication
+it.tn.rivadelgarda.comune.gda.docer.exceptions
 it.kdm.docer.protocollazione
-it.kdm.docer.fascicolazione
 it.kdm.docer.webservices
+it.kdm.docer.core.authentication
+it.kdm.docer.fascicolazione
