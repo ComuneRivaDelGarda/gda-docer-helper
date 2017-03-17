@@ -462,12 +462,19 @@ public class DocerHelper extends AbstractDocerHelper {
 		return result;
 	}
 
+	/**
+	 * effettua una ricera per EXTERNAL_ID ordinata per CREATION_DATE
+	 * 
+	 * @param externalId
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Map<String, String>> searchDocumentsByExternalId(String externalId) throws Exception {
 		logger.debug("searchDocumentsByExternalId {}", externalId);
 		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId)
 				.get();
 		KeyValuePair[] orderBy = KeyValuePairFactory
-				.build(DocumentoMetadatiGenericiEnum.DOCNAME, KeyValuePairFactory.ASC).get();
+				.build(DocumentoMetadatiGenericiEnum.CREATION_DATE, KeyValuePairFactory.ASC).get();
 		SearchItem[] result = searchDocumentsNative(searchCriteria, orderBy);
 		return KeyValuePairFactory.asListMap(result);
 	}
@@ -481,27 +488,62 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param externalId
 	 *            valore del metadato EXTERNAL_ID da cercare
-	 * @return lista dei metadati di tutti i documenti related
+	 * @return lista dei metadati del primo documento trovato e tutti i
+	 *         documenti related
 	 * @throws Exception
 	 */
-	public List<Map<String, String>> searchDocumentsByExternalIdAndRelated(String externalId) throws Exception {
-		logger.debug("searchDocumentsByExternalIdAndRelated {}", externalId);
-		// effettuo una ricera per EXTERNAL_ID ordinata per CREATION_DATE
-		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId)
-				.get();
-		KeyValuePair[] orderBy = KeyValuePairFactory
-				.build(DocumentoMetadatiGenericiEnum.CREATION_DATE, KeyValuePairFactory.ASC).get();
-		SearchItem[] result = searchDocumentsNative(searchCriteria, orderBy);
-		List<Map<String, String>> documentsByExternalId = KeyValuePairFactory.asListMap(result);
+	public List<Map<String, String>> searchDocumentsByExternalIdFirstAndRelated(String externalId) throws Exception {
+		logger.debug("searchDocumentsByExternalIdFirstAndRelated {}", externalId);
+		List<Map<String, String>> documentsByExternalId = searchDocumentsByExternalId(externalId);
 		String firstDocNum = KeyValuePairFactory.searchMetadata(documentsByExternalId,
 				DocumentoMetadatiGenericiEnum.DOCNUM);
 		// carico i related al primo docnum
 		List<String> relatedDocuments = getRelatedDocuments(firstDocNum);
-		// carico i metadati di tutti i documenti related
+		// carico i metadati di tutti i documenti risultati ricerca + documenti
+		// related
 		List<Map<String, String>> relatedMetadata = new ArrayList<>();
+		// aggiunta metadati risultato ricerca
+		Map<String, String> documentProfile = getProfileDocumentMap(firstDocNum);
+		relatedMetadata.add(documentProfile);
+		// aggiunta metadati related
 		for (String documentId : relatedDocuments) {
-			Map<String, String> documentProfile = getProfileDocumentMap(documentId);
+			documentProfile = getProfileDocumentMap(documentId);
 			relatedMetadata.add(documentProfile);
+		}
+		return relatedMetadata;
+	}
+
+	/**
+	 * ricerca tutti i document per EXTERNAL_ID e tutti i related
+	 * 
+	 * @param externalId
+	 *            valore del metadato EXTERNAL_ID da cercare
+	 * @return lista dei metadati di tutti i documenti trovato e tutti i
+	 *         documenti related a questi
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchDocumentsByExternalIdAllAndRelatedAll(String externalId) throws Exception {
+		logger.debug("searchDocumentsByExternalIdAllAndRelatedAll {}", externalId);
+		List<Map<String, String>> documentsByExternalId = searchDocumentsByExternalId(externalId);
+		// lista dei DOCNUM risultati dalla ricerca
+		String[] firstDocNum = KeyValuePairFactory.joinMetadata(documentsByExternalId,
+				DocumentoMetadatiGenericiEnum.DOCNUM);
+
+		// carico i metadati di tutti i documenti risultati ricerca + documenti
+		// related
+		List<Map<String, String>> relatedMetadata = new ArrayList<>();
+		for (String docNum : firstDocNum) {
+			// carico i related al primo docnum
+			List<String> relatedDocuments = getRelatedDocuments(docNum);
+
+			// aggiunta metadati risultato ricerca
+			Map<String, String> documentProfile = getProfileDocumentMap(docNum);
+			relatedMetadata.add(documentProfile);
+			// aggiunta metadati related
+			for (String documentId : relatedDocuments) {
+				documentProfile = getProfileDocumentMap(documentId);
+				relatedMetadata.add(documentProfile);
+			}
 		}
 		return relatedMetadata;
 	}
