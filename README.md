@@ -1,6 +1,18 @@
 # gda-docer-helper
 
-## USO
+## API DOC
+
+- [https://comunerivadelgarda.github.io/gda-docer-helper/](https://comunerivadelgarda.github.io/gda-docer-helper/)
+- [https://comunerivadelgarda.github.io/gda-docer-helper/apidocs/](https://comunerivadelgarda.github.io/gda-docer-helper/apidocs/)
+
+## ESEMPIO
+
+```java
+DocerHelper helper = new DocerHelper(docerUrl, username, password);
+// creazione 
+helper.createFolder("TEST");
+List<Map<String, String>> res = helper.searchFolders("TEST*");
+```
 
 config.properties richiesto nel classpath con configurazione connessione a DOCER
 
@@ -57,4 +69,11 @@ va eseguita per ogni wsdl
 
 	mvn clean compile
 
+### documentazione (per pubblicazione su repository)
 
+- https://comunerivadelgarda.github.io/gda-docer-helper/
+- https://comunerivadelgarda.github.io/gda-docer-helper/apidocs/
+
+	mvn site
+	mvn javadoc:javadoc
+	rsync -avz --delete target/site/ docs/

@@ -1,12 +1,15 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
+import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocerKey;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocerValue;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum;
 
 public class KeyValuePairFactory {
 
@@ -67,9 +70,51 @@ public class KeyValuePairFactory {
 		return this.list.toArray(new KeyValuePair[list.size()]);
 	}
 
-	public static KeyValuePairFactory createDocumentKeys(String typeId, String docName, String codEnte, String codAoo) {
-		return build(DocumentKeysEnum.TYPE_ID, typeId).add(DocumentKeysEnum.DOCNAME, docName)
-				.add(DocumentKeysEnum.COD_ENTE, codEnte).add(DocumentKeysEnum.COD_AOO, codAoo);
+	/**
+	 * 
+	 * @param TYPE_ID
+	 * @param DOCNAME
+	 * @param COD_ENTE
+	 * @param COD_AOO
+	 * @return
+	 */
+	public static KeyValuePairFactory createDocumentKeys(String TYPE_ID, String DOCNAME, String COD_ENTE, String COD_AOO) {
+		return build(DocumentoMetadatiGenericiEnum.TYPE_ID, TYPE_ID).add(DocumentoMetadatiGenericiEnum.DOCNAME, DOCNAME)
+				.add(DocumentoMetadatiGenericiEnum.COD_ENTE, COD_ENTE)
+				.add(DocumentoMetadatiGenericiEnum.COD_AOO, COD_AOO);
 	}
-
+	
+	/**
+	 * Converte in una mappa di String un array di KeyValuePair
+	 * @param data KeyValuePair[]
+	 * @return
+	 */
+	public static Map<String, String> asMap(KeyValuePair[] data) {
+		Map<String, String> res = new HashMap<>();
+		if (data != null)
+			for (KeyValuePair kv : data) {
+				res.put(kv.getKey(), kv.getValue());
+			}
+		return res;
+	}
+	
+	/**
+	 * Converte in una lista di mappe un array di SearchItem
+	 * @param data SearchItem[]
+	 * @return
+	 */
+	public static List<Map<String, String>> asListMap(SearchItem[] data) {
+		List<Map<String, String>> result = new ArrayList<>();
+		if (data != null) {
+			for (SearchItem searchItem : data) {
+				Map<String, String> res = new HashMap<>();
+				KeyValuePair[] profilo = searchItem.getMetadata();
+				for (KeyValuePair kv : profilo) {
+					res.put(kv.getKey(), kv.getValue());
+				}
+				result.add(res);
+			}
+		}
+		return result;
+	}	
 }

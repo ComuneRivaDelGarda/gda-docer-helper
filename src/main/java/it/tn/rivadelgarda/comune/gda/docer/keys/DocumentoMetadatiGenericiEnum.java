@@ -1,6 +1,23 @@
 package it.tn.rivadelgarda.comune.gda.docer.keys;
 
-public enum DocumentKeysEnum implements DocerKey {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Profilo di un documento
+ * 
+ * Ogni documento versato nel documentale possiederà un insieme di proprietà i
+ * cui nomi sono predefiniti e così conosciuti a tutti i livelli del modello
+ * GeDoc. L’insieme delle proprietà può cambiare da tipo a tipo di documento.
+ * 
+ * Indipendentemente dal tipo, i metadati di base posseduti da ogni documento
+ * sono:
+ * 
+ * @author mirco
+ *
+ */
+public enum DocumentoMetadatiGenericiEnum implements DocerKey {
 
 	/**
 	 * obbligatorio, il document-type del documento. è il tipo di documento,
@@ -77,11 +94,16 @@ public enum DocumentKeysEnum implements DocerKey {
 	 * avanzato) per identificare il numero della versione in formato
 	 * alfanumerico.
 	 */
-	UD_VERSION("UD_VERSION");
+	UD_VERSION("UD_VERSION"),
+	/**
+	 * METADATO aggiunto il 16/03/2017 per memorizzare ID VERSANTE e fare 
+	 * successive ricerche per documenti appartenenti alla stessa ENTITA' del VERSANTE
+	 */
+	EXTERNAL_ID("EXTERNAL_ID");
 
 	private String key;
 
-	private DocumentKeysEnum(final String key) {
+	private DocumentoMetadatiGenericiEnum(final String key) {
 		this.key = key;
 	}
 
@@ -95,6 +117,19 @@ public enum DocumentKeysEnum implements DocerKey {
 		return this.getValue();
 	}
 
+	public static List<String> getKeyList() {
+		ArrayList<String> res = new ArrayList<>();
+		for (DocumentoMetadatiGenericiEnum k : DocumentoMetadatiGenericiEnum.values()) {
+			res.add(k.getValue());
+		}
+		return res;
+	}
+
+	/**
+	 * 
+	 * @author mirco
+	 *
+	 */
 	public enum TIPO_COMPONENTE implements DocerValue {
 		PRINCIPALE("PRINCIPALE"), ALLEGATO("ALLEGATO"), ANNESSO("ANNESSO"), ANNOTAZIONE("ANNOTAZIONE");
 		private String value;
@@ -108,6 +143,11 @@ public enum DocumentKeysEnum implements DocerKey {
 		}
 	}
 
+	/**
+	 * 
+	 * @author mirco
+	 *
+	 */
 	public enum ARCHIVE_TYPE implements DocerValue {
 		ARCHIVE("ARCHIVE"), URL("URL");
 		private String value;

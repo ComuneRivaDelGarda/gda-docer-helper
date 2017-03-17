@@ -1,11 +1,13 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -16,6 +18,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersion;
@@ -49,6 +53,8 @@ import it.kdm.docer.webservices.DocerServicesStub.ProtocollaDocumento;
 import it.kdm.docer.webservices.DocerServicesStub.ProtocollaDocumentoResponse;
 import it.kdm.docer.webservices.DocerServicesStub.RemoveFromFolderDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.RemoveFromFolderDocumentsResponse;
+import it.kdm.docer.webservices.DocerServicesStub.SearchDocuments;
+import it.kdm.docer.webservices.DocerServicesStub.SearchDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFolders;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFoldersResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
@@ -56,24 +62,34 @@ import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.StreamDescriptor;
 import it.tn.rivadelgarda.comune.gda.docer.keys.DocerKey;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum.ARCHIVE_TYPE;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentKeysEnum.TIPO_COMPONENTE;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum.ARCHIVE_TYPE;
+import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE;
 import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeysEnum;
 import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 
 public class DocerHelper extends AbstractDocerHelper {
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
 	/**
-	 * Crea l'istanza di helper (chiamata a {@link #login()} effettuata automaticamente alla chiamata di uno dei metodi)
-	* <pre>
-	* {@code
-	* DocerHelper helper = new DocerHelper(url, username, password);
-	* }
-	* </pre>
-	 * @param docerSerivcesUrl indirizzo http:// del server Docer al quale connettersi (esempio: http://192.168.1.1:8080/)
-	 * @param docerUsername Docer username per autenticazione
-	 * @param docerPassword Docer password per autenticazione
+	 * Crea l'istanza di helper (chiamata a {@link #login()} effettuata
+	 * automaticamente alla chiamata di uno dei metodi)
+	 * 
+	 * <pre>
+	 * {
+	 * 	&#64;code
+	 * 	DocerHelper helper = new DocerHelper(url, username, password);
+	 * }
+	 * </pre>
+	 * 
+	 * @param docerSerivcesUrl
+	 *            indirizzo http:// del server Docer al quale connettersi
+	 *            (esempio: http://192.168.1.1:8080/)
+	 * @param docerUsername
+	 *            Docer username per autenticazione
+	 * @param docerPassword
+	 *            Docer password per autenticazione
 	 */
 	public DocerHelper(String docerSerivcesUrl, String docerUsername, String docerPassword) {
 		super(docerSerivcesUrl, docerUsername, docerPassword);
@@ -89,18 +105,41 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public String createFolder(String folderName) throws Exception {
-		/*
-		 * KeyValuePair[] folderinfo = new KeyValuePair[3]; folderinfo[0] =
-		 * KeyValuePairFactory.createKey(GenericKeyValuePair.FOLDER_NAME,
-		 * folderName); folderinfo[1] =
-		 * KeyValuePairFactory.createKey(GenericKeyValuePair.COD_ENTE,
-		 * docerCodiceENTE); folderinfo[2] =
-		 * KeyValuePairFactory.createKey(GenericKeyValuePair.COD_AOO,
-		 * docerCodiceAOO);
-		 */
-		KeyValuePair[] folderinfo = KeyValuePairFactory.build(FolderKeysEnum.FOLDER_NAME, folderName)
-				.add(FolderKeysEnum.COD_ENTE, docerCodiceENTE).add(FolderKeysEnum.COD_AOO, docerCodiceAOO).get();
-
+		return createFolder(folderName, "", false);
+	}
+	
+	public String createFolderOwner(String folderName) throws Exception {
+		return createFolder(folderName, "", true);
+	}
+	
+	public String createFolderOwner(String folderName, String parentFolderId) throws Exception {
+		return createFolder(folderName, parentFolderId, true);
+	}
+	
+	public String createFolder(String folderName, String parentFolderId) throws Exception {
+		return createFolder(folderName, parentFolderId, false);
+	}
+	
+	/**
+	 * Questo metodo permette la creazione di una Folder nel DMS specificando anche PARENT_FOLDER_ID
+	 * 
+	 * @param folderName attributo FOLDER_NAME
+	 * @param parentFolderId attributo PARENT_FOLDER_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String createFolder(String folderName, String parentFolderId, boolean owner) throws Exception {
+		KeyValuePairFactory keyBuilder = KeyValuePairFactory.build(FolderKeysEnum.FOLDER_NAME, folderName)
+				.add(FolderKeysEnum.COD_ENTE, docerCodiceENTE).add(FolderKeysEnum.COD_AOO, docerCodiceAOO);
+		if (StringUtils.isNotBlank(parentFolderId)) {
+			keyBuilder.add(FolderKeysEnum.PARENT_FOLDER_ID, parentFolderId);
+		}
+		if (owner) {
+			keyBuilder.add(FolderKeysEnum.FOLDER_OWNER, docerUsername);
+		}
+		
+		KeyValuePair[] folderinfo = keyBuilder.get();
+		
 		DocerServicesStub service = getDocerService();
 		CreateFolder request = new CreateFolder();
 		request.setToken(getLoginTicket());
@@ -114,17 +153,24 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * Questo metodo permette di eseguire le ricerche sulle Folder del DMS.
 	 * 
 	 * @param folderName
+	 *            specifica il nome della folder da cercare
+	 * @param PARENT_FOLDER_ID
+	 *            specifica id cartella padre su cui cercare
 	 * @return
 	 * @throws Exception
 	 */
-	public SearchItem[] searchFolders(String folderName) throws Exception {
-		KeyValuePair[] param = new KeyValuePair[3];
+	private SearchItem[] searchFoldersNative(String folderName, String PARENT_FOLDER_ID) throws Exception {
+		List<KeyValuePair> builder = new ArrayList<>();
 		if (StringUtils.isNoneEmpty(folderName))
-			param[0] = KeyValuePairFactory.createKey(DocerKey.FOLDER_NAME, folderName);
+			builder.add(KeyValuePairFactory.createKey(DocerKey.FOLDER_NAME, folderName));
 		else
-			param[0] = KeyValuePairFactory.createKey(DocerKey.FOLDER_NAME, "*");
-		param[1] = KeyValuePairFactory.createKey(DocerKey.COD_ENTE, docerCodiceENTE);
-		param[2] = KeyValuePairFactory.createKey(DocerKey.COD_AOO, docerCodiceAOO);
+			builder.add(KeyValuePairFactory.createKey(DocerKey.FOLDER_NAME, "*"));
+		builder.add(KeyValuePairFactory.createKey(DocerKey.COD_ENTE, docerCodiceENTE));
+		builder.add(KeyValuePairFactory.createKey(DocerKey.COD_AOO, docerCodiceAOO));
+		if (StringUtils.isNoneEmpty(PARENT_FOLDER_ID)) {
+			builder.add(KeyValuePairFactory.createKey(DocerKey.PARENT_FOLDER_ID, PARENT_FOLDER_ID));
+		}
+		KeyValuePair[] param = builder.toArray(new KeyValuePair[builder.size()]);
 
 		KeyValuePair[] search = new KeyValuePair[1];
 		search[0] = KeyValuePairFactory.createKeyOrderByAsc(DocerKey.FOLDER_NAME);
@@ -141,30 +187,85 @@ public class DocerHelper extends AbstractDocerHelper {
 		return folders;
 	}
 
+	// private SearchItem[] searchFoldersByParent(String PARENT_FOLDER_ID)
+	// throws Exception {
+	// /*
+	// * KeyValuePair[] param = new KeyValuePair[4]; param[0] =
+	// * KeyValuePairFactory.createKey(DocerKey.FOLDER_NAME, "*"); param[1] =
+	// * KeyValuePairFactory.createKey(DocerKey.COD_ENTE, docerCodiceENTE);
+	// * param[2] = KeyValuePairFactory.createKey(DocerKey.COD_AOO,
+	// * docerCodiceAOO); param[3] =
+	// * KeyValuePairFactory.createKey(DocerKey.PARENT_FOLDER_ID,
+	// * PARENT_FOLDER_ID);
+	// *
+	// * KeyValuePair[] search = new KeyValuePair[1]; search[0] =
+	// * KeyValuePairFactory.createKeyOrderByAsc(DocerKey.FOLDER_NAME);
+	// *
+	// * DocerServicesStub service = getDocerService(); SearchFolders request
+	// * = new SearchFolders(); request.setToken(getLoginTicket());
+	// * request.setSearchCriteria(param); request.setMaxRows(-1);
+	// * request.setOrderby(search);
+	// *
+	// * SearchFoldersResponse response = service.searchFolders(request);
+	// * SearchItem[] folders = response.get_return(); return folders;
+	// */
+	// return searchFoldersNative(null, PARENT_FOLDER_ID);
+	// }
+
+	/**
+	 * Questo metodo permette di eseguire le ricerche sulle Folder del DMS.
+	 * 
+	 * @param folderName
+	 *            specifica il nome della folder da cercare (null o empty per
+	 *            qualsiasi folder)
+	 * @param PARENT_FOLDER_ID
+	 *            specifica id cartella padre su cui cercare
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchFolders(String folderName, String PARENT_FOLDER_ID) throws Exception {
+		SearchItem[] data = searchFoldersNative(folderName, PARENT_FOLDER_ID);
+		return KeyValuePairFactory.asListMap(data);
+	}
+
+	/**
+	 * Questo metodo permette di eseguire le ricerche sulle Folder del DMS.
+	 * 
+	 * @param folderName
+	 *            specifica il nome della folder da cercare
+	 * @return
+	 */
+	public List<Map<String, String>> searchFolders(String folderName) throws Exception {
+		return searchFolders(folderName, null);
+	}
+
 	/**
 	 * Questo metodo permette la creazione di un Documento nel DMS.
 	 * 
-	 * @param typeId
-	 * @param documentName
+	 * @param TYPE_ID
+	 * @param DOCNAME
 	 * @param file
-	 * @param tipoComponente
+	 * @param TIPO_COMPONENTE
 	 *            uno dei TIPO_COMPONENTE validi
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String typeId, String documentName, DataSource dataSource,
-			TIPO_COMPONENTE tipoComponente, String description) throws Exception {
-		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(typeId, documentName, docerCodiceENTE,
+	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource,
+			TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
+		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(TYPE_ID, DOCNAME, docerCodiceENTE,
 				docerCodiceAOO);
 
 		DataHandler dataHandler = new DataHandler(dataSource);
 
-		params.add(DocumentKeysEnum.APP_VERSANTE, docerApplication);
+		params.add(DocumentoMetadatiGenericiEnum.APP_VERSANTE, docerApplication);
 		String md5 = DigestUtils.md5Hex(dataSource.getInputStream());
-		params.add(DocumentKeysEnum.DOC_HASH, md5);
-		params.add(DocumentKeysEnum.TIPO_COMPONENTE, tipoComponente.getValue());
-		params.add(DocumentKeysEnum.ABSTRACT, description);
-		params.add(DocumentKeysEnum.ARCHIVE_TYPE, ARCHIVE_TYPE.ARCHIVE);
+		params.add(DocumentoMetadatiGenericiEnum.DOC_HASH, md5);
+		params.add(DocumentoMetadatiGenericiEnum.TIPO_COMPONENTE, TIPO_COMPONENTE.getValue());
+		if (StringUtils.isNotBlank(ABSTRACT))
+			params.add(DocumentoMetadatiGenericiEnum.ABSTRACT, ABSTRACT);
+		params.add(DocumentoMetadatiGenericiEnum.ARCHIVE_TYPE, ARCHIVE_TYPE.ARCHIVE);
+		if (StringUtils.isNotBlank(EXTERNAL_ID))
+			params.add(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, EXTERNAL_ID);
 
 		DocerServicesStub service = getDocerService();
 		CreateDocument request = new CreateDocument();
@@ -176,17 +277,69 @@ public class DocerHelper extends AbstractDocerHelper {
 		return documentId;
 	}
 
-	public String createDocument(String typeId, String documentName, File file, TIPO_COMPONENTE tipoComponente,
-			String description) throws Exception {
+	/**
+	 * Create un Document con Tipo personalizzabile
+	 * @param TYPE_ID set di metadati da utilizzare
+	 * @param DOCNAME
+	 * @param file
+	 * @param TIPO_COMPONENTE
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String createDocument(String TYPE_ID, String DOCNAME, File file, TIPO_COMPONENTE TIPO_COMPONENTE,
+			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		FileDataSource fileDataSource = new FileDataSource(file);
-		return createDocument(typeId, documentName, fileDataSource, tipoComponente, description);
+		return createDocument(TYPE_ID, DOCNAME, fileDataSource, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
 
-	public String createDocument(String typeId, String documentName, byte[] bytes, TIPO_COMPONENTE tipoComponente,
-			String description) throws Exception {
+	/**
+	 * Create un Document con Tipo personalizzabile
+	 * @param TYPE_ID set di metadati da utilizzare
+	 * @param DOCNAME
+	 * @param bytes
+	 * @param TIPO_COMPONENTE
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String createDocument(String TYPE_ID, String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE,
+			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		ByteArrayDataSource rawData = new ByteArrayDataSource(bytes);
-		return createDocument(typeId, documentName, rawData, tipoComponente, description);
+		return createDocument(TYPE_ID, DOCNAME, rawData, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
+	
+	/**
+	 * Crea un Documento con il tipo fisso a DOCUMENTO
+	 * @param DOCNAME
+	 * @param file
+	 * @param TIPO_COMPONENTE
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID)
+			throws Exception {
+		return createDocument("DOCUMENTO", DOCNAME, file, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+	}
+	
+	/**
+	 * Crea un Documento con il tipo fisso a DOCUMENTO
+	 * @param DOCNAME
+	 * @param bytes
+	 * @param TIPO_COMPONENTE
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID)
+			throws Exception {
+		return createDocument("DOCUMENTO", DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+	}	
 
 	/**
 	 * Questo metodo permette di aggiungere Documenti ad una Folder del DMS.
@@ -210,13 +363,13 @@ public class DocerHelper extends AbstractDocerHelper {
 	/**
 	 * Questo metodo permette di aggiungere Documenti ad una Folder del DMS.
 	 * 
-	 * @param folderId
-	 * @param documentsIds
+	 * @param folderId id della cartella dove aggiungere il documento
+	 * @param documentId id del documento da aggiungere
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean addToFolderDocuments(String folderId, String documentsIds) throws Exception {
-		return addToFolderDocuments(folderId, Arrays.asList(documentsIds));
+	public boolean addToFolderDocument(String folderId, String documentId) throws Exception {
+		return addToFolderDocuments(folderId, Arrays.asList(documentId));
 	}
 
 	/**
@@ -274,6 +427,36 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
+	 * Questo metodo permette di recuperare la lista dei Documenti correlati a uno specifico
+	 * externalId
+	 * 
+	 * @param externalId
+	 *            valore del metadato EXTERNAL_ID
+	 * @return
+	 * @throws Exception
+	 */
+	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, KeyValuePair[] orderBy) throws Exception {
+		logger.debug("searchDocumentNative {} {}", searchCriteria, orderBy);		
+		DocerServicesStub service = getDocerService();
+		SearchDocuments request = new SearchDocuments();
+		request.setToken(getLoginTicket());
+		request.setSearchCriteria(searchCriteria);
+		request.setMaxRows(-1);
+		request.setOrderby(orderBy);
+		SearchDocumentsResponse response = service.searchDocuments(request);
+		SearchItem[] result = response.get_return();
+		return result;
+	}
+	
+	public List<Map<String, String>> searchDocumentsByExternalId(String externalId) throws Exception {
+		logger.debug("searchDocumentsByExternalId {}", externalId);
+		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId).get();
+		KeyValuePair[] orderBy = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.DOCNAME, KeyValuePairFactory.ASC).get();
+		SearchItem[] result = searchDocumentsNative(searchCriteria,orderBy);
+		return KeyValuePairFactory.asListMap(result);
+	}
+	
+	/**
 	 * Questo metodo permette di recuperare la lista dei Documenti contenuti in
 	 * una Folder del DMS.
 	 * 
@@ -283,6 +466,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public List<String> getFolderDocuments(String folderId) throws Exception {
+		logger.debug("getFolderDocuments {}", folderId);
 		List<String> res = new ArrayList<>();
 		DocerServicesStub service = getDocerService();
 		GetFolderDocuments request = new GetFolderDocuments();
@@ -302,13 +486,45 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            id del Documento
 	 * @return Profilo del Documento
 	 */
-	public KeyValuePair[] getProfileDocument(String documentId) throws Exception {
+	private KeyValuePair[] getProfileDocumentNative(String documentId) throws Exception {
+		logger.debug("getProfileDocument {}", documentId);
 		DocerServicesStub service = getDocerService();
 		GetProfileDocument request = new GetProfileDocument();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
 		GetProfileDocumentResponse response = service.getProfileDocument(request);
 		KeyValuePair[] res = response.get_return();
+		return res;
+	}
+
+	/**
+	 * Questo metodo permette di recuperare il profilo di un Documento del DMS.
+	 * Elabora hashmap dei metadati per il documento specificato
+	 * 
+	 * @param documentId
+	 * @return mappa dei metadati
+	 * @throws Exception
+	 */
+	public Map<String, String> getProfileDocumentMap(String documentId) throws Exception {
+		logger.debug("getProfileDocumentMap {}", documentId);
+		KeyValuePair[] data = getProfileDocumentNative(documentId);
+		Map<String, String> res = new HashMap<>();
+		for (KeyValuePair kv : data) {
+			// verifico se è un chiave fra quelle del profilo base
+			// if
+			// (DocumentoMetadatiGenericiEnum.getKeyList().contains(kv.getKey()))
+			// {
+			res.put(kv.getKey(), kv.getValue());
+			// }
+		}
+		// Map<String, String> test =
+		// HashMultimap.create(FluentIterable.from(data).transform(new
+		// Function<KeyValuePair, Map<String, String>>() {
+		// @Override
+		// public Map<String, String> apply(KeyValuePair input) {
+		// return
+		// }
+		// }));
 		return res;
 	}
 
@@ -321,6 +537,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public KeyValuePair[] getACLDocument(String documentId) throws Exception {
+		logger.debug("getACLDocument {}", documentId);
 		DocerServicesStub service = getDocerService();
 		GetACLDocument request = new GetACLDocument();
 		request.setToken(getLoginTicket());
@@ -351,6 +568,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean setACLDocument(String documentId, KeyValuePair[] acls) throws Exception {
+		logger.debug("setACLDocument {} {}", documentId, acls);
 		DocerServicesStub service = getDocerService();
 		SetACLDocument request = new SetACLDocument();
 		request.setToken(getLoginTicket());
@@ -436,7 +654,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento di riferimento
-	 * @return collezione dei version number
+	 * @return collezione dei version number (ordine decrescente dal maggiore al
+	 *         minore)
 	 * @throws Exception
 	 */
 	public List<String> getVersions(String documentId) throws Exception {
@@ -448,6 +667,8 @@ public class DocerHelper extends AbstractDocerHelper {
 		GetVersionsResponse response = service.getVersions(request);
 		if (response.get_return() != null)
 			versions = Arrays.asList(response.get_return());
+		Collections.sort(versions);
+		Collections.reverse(versions);
 		return versions;
 	}
 
@@ -586,11 +807,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<KeyValuePair> chilren(String folderId) throws Exception {
+	private List<KeyValuePair> chilren(String folderId) throws Exception {
 		List<KeyValuePair> res = new ArrayList<>();
 		List<String> folderDocuments = getFolderDocuments(folderId);
 		for (String documentId : folderDocuments) {
-			KeyValuePair[] profiloDocumento = getProfileDocument(documentId);
+			KeyValuePair[] profiloDocumento = getProfileDocumentNative(documentId);
 			if (profiloDocumento != null)
 				res.addAll(Arrays.asList(profiloDocumento));
 		}
@@ -619,6 +840,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 */
 	public String createDocument(String folderId, String name, byte[] content, String title, String description) {
+		logger.debug("createDocument folderId={} name={} content.length={}", folderId, name, content.length);
 		return createDocument(folderId, name, content, title, description);
 	}
 
@@ -631,6 +853,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public String createVersion(String documentId, byte[] content) throws Exception {
+		logger.debug("createVersion documentId={} content.length={}", documentId, content.length);
 		ByteArrayDataSource rawData = new ByteArrayDataSource(content);
 		return addNewVersion(documentId, rawData);
 	}
@@ -643,6 +866,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public InputStream getDocumentStream(String documentId, String versionNumber) throws Exception {
+		logger.debug("getDocumentStream {} {}", documentId, versionNumber);
 		StreamDescriptor data = downloadVersion(documentId, versionNumber);
 		long size = data.getByteSize();
 		DataHandler dh = data.getHandler();
@@ -655,10 +879,30 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId
 	 * @param versionNumber
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public byte[] getDocument(String documentId, String versionNumber) throws Exception {
+		logger.debug("getDocument {} {}", documentId, versionNumber);
 		return IOUtils.toByteArray(getDocumentStream(documentId, versionNumber));
 	}
 
+	/**
+	 * 
+	 * @param PARENT_FOLDER_ID
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> getProfileDocumentMapByParentFolder(String PARENT_FOLDER_ID) throws Exception {
+		logger.debug("getProfileDocumentMapByParentFolder {}", PARENT_FOLDER_ID);
+		List<Map<String, String>> data = new ArrayList<>();
+		List<String> documents = getFolderDocuments(PARENT_FOLDER_ID);
+		if (documents != null) {
+			for (String documentId : documents) {
+				Map<String, String> documentProfile = getProfileDocumentMap(documentId);
+				// data.put(documentId, documentProfile);
+				data.add(documentProfile);
+			}
+		}
+		return data;
+	}
 }
