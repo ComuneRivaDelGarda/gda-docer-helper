@@ -449,8 +449,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 	
 	public List<Map<String, String>> searchDocumentsByExternalId(String externalId) throws Exception {
-		logger.debug("searchDocumentsByExternalId {}", externalId);		
-		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId).get();		
+		logger.debug("searchDocumentsByExternalId {}", externalId);
+		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.EXTERNAL_ID, externalId).get();
 		KeyValuePair[] orderBy = KeyValuePairFactory.build(DocumentoMetadatiGenericiEnum.DOCNAME, KeyValuePairFactory.ASC).get();
 		SearchItem[] result = searchDocumentsNative(searchCriteria,orderBy);
 		return KeyValuePairFactory.asListMap(result);
