@@ -1,6 +1,7 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,15 +79,18 @@ public class KeyValuePairFactory {
 	 * @param COD_AOO
 	 * @return
 	 */
-	public static KeyValuePairFactory createDocumentKeys(String TYPE_ID, String DOCNAME, String COD_ENTE, String COD_AOO) {
+	public static KeyValuePairFactory createDocumentKeys(String TYPE_ID, String DOCNAME, String COD_ENTE,
+			String COD_AOO) {
 		return build(DocumentoMetadatiGenericiEnum.TYPE_ID, TYPE_ID).add(DocumentoMetadatiGenericiEnum.DOCNAME, DOCNAME)
 				.add(DocumentoMetadatiGenericiEnum.COD_ENTE, COD_ENTE)
 				.add(DocumentoMetadatiGenericiEnum.COD_AOO, COD_AOO);
 	}
-	
+
 	/**
 	 * Converte in una mappa di String un array di KeyValuePair
-	 * @param data KeyValuePair[]
+	 * 
+	 * @param data
+	 *            KeyValuePair[]
 	 * @return
 	 */
 	public static Map<String, String> asMap(KeyValuePair[] data) {
@@ -97,10 +101,12 @@ public class KeyValuePairFactory {
 			}
 		return res;
 	}
-	
+
 	/**
 	 * Converte in una lista di mappe un array di SearchItem
-	 * @param data SearchItem[]
+	 * 
+	 * @param data
+	 *            SearchItem[]
 	 * @return
 	 */
 	public static List<Map<String, String>> asListMap(SearchItem[] data) {
@@ -116,5 +122,38 @@ public class KeyValuePairFactory {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * 
+	 * @param metadataList
+	 * @param key
+	 * @return
+	 */
+	public static String searchMetadata(List<Map<String, String>> metadataList, DocerKey key) {
+		String metadataValue = null;
+		for (Map<String, String> metadata : metadataList) {
+			metadataValue = getMetadata(metadata, key);
+			if (metadataValue != null)
+				break;
+		}
+		return metadataValue;
+	}
+	
+	public static String getMetadata(Map<String, String> metadata, DocerKey key) {
+		String metadataValue = null;
+		if (metadata.containsKey(key.getValue())) {
+			metadataValue = metadata.get(key.getValue());
+		}
+		return metadataValue;
+	}
+	
+	public static String[] joinMetadata(List<Map<String, String>> metadataList, DocerKey key) {
+		List<String> metadataValues = new ArrayList<>();
+		for (Map<String, String> metadata : metadataList) {
+			String metadataValue = getMetadata(metadata, key);
+			metadataValues.add(metadataValue);
+		}
+		return metadataValues.toArray(new String[metadataValues.size()]);
 	}	
 }
