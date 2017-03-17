@@ -183,7 +183,7 @@ public class TestDocerHelper {
 
 		init();
 		// token = helper.login();
-		List<Map<String, String>> res = helper.searchDocumentsByExternalId("TEST");
+		List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll("TEST");
 		Assert.assertNotNull(res);
 		logger.info("{}", res);
 	}	

@@ -133,14 +133,14 @@ public class KeyValuePairFactory {
 	public static String searchMetadata(List<Map<String, String>> metadataList, DocerKey key) {
 		String metadataValue = null;
 		for (Map<String, String> metadata : metadataList) {
-			metadataValue = searchMetadata(metadata, key);
+			metadataValue = getMetadata(metadata, key);
 			if (metadataValue != null)
 				break;
 		}
 		return metadataValue;
 	}
 	
-	public static String searchMetadata(Map<String, String> metadata, DocerKey key) {
+	public static String getMetadata(Map<String, String> metadata, DocerKey key) {
 		String metadataValue = null;
 		if (metadata.containsKey(key.getValue())) {
 			metadataValue = metadata.get(key.getValue());
@@ -151,7 +151,7 @@ public class KeyValuePairFactory {
 	public static String[] joinMetadata(List<Map<String, String>> metadataList, DocerKey key) {
 		List<String> metadataValues = new ArrayList<>();
 		for (Map<String, String> metadata : metadataList) {
-			String metadataValue = searchMetadata(metadata, key);
+			String metadataValue = getMetadata(metadata, key);
 			metadataValues.add(metadataValue);
 		}
 		return metadataValues.toArray(new String[metadataValues.size()]);
