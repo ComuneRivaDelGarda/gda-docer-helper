@@ -564,40 +564,41 @@ public class DocerHelper extends AbstractDocerHelper {
 		return relatedMetadata;
 	}
 
-	/**
-	 * ricerca tutti i document per EXTERNAL_ID e tutti i related
-	 * 
-	 * @param externalId
-	 *            valore del metadato EXTERNAL_ID da cercare
-	 * @return lista dei metadati di tutti i documenti trovato e tutti i
-	 *         documenti related a questi
-	 * @throws Exception
-	 */
-	public List<Map<String, String>> searchDocumentsByExternalIdAllAndRelatedAll(String externalId) throws Exception {
-		logger.debug("searchDocumentsByExternalIdAllAndRelatedAll {}", externalId);
-		List<Map<String, String>> documentsByExternalId = searchDocumentsByExternalIdAll(externalId);
-		// lista dei DOCNUM risultati dalla ricerca
-		String[] firstDocNum = KeyValuePairFactory.joinMetadata(documentsByExternalId,
-				DocumentoMetadatiGenericiEnum.DOCNUM);
-
-		// carico i metadati di tutti i documenti risultati ricerca + documenti
-		// related
-		List<Map<String, String>> relatedMetadata = new ArrayList<>();
-		for (String docNum : firstDocNum) {
-			// carico i related al primo docnum
-			List<String> relatedDocuments = getRelatedDocuments(docNum);
-
-			// aggiunta metadati risultato ricerca
-			Map<String, String> documentProfile = getProfileDocumentMap(docNum);
-			relatedMetadata.add(documentProfile);
-			// aggiunta metadati related
-			for (String documentId : relatedDocuments) {
-				documentProfile = getProfileDocumentMap(documentId);
-				relatedMetadata.add(documentProfile);
-			}
-		}
-		return relatedMetadata;
-	}
+//	/**
+//	 * ricerca tutti i document per EXTERNAL_ID e tutti i related
+//	 * 
+//	 * @param externalId
+//	 *            valore del metadato EXTERNAL_ID da cercare
+//	 * @return lista dei metadati di tutti i documenti trovato e tutti i
+//	 *         documenti related a questi
+//	 * @throws Exception
+//	 */
+//	@Deprecated
+//	public List<Map<String, String>> searchDocumentsByExternalIdAllAndRelatedAll(String externalId) throws Exception {
+//		logger.debug("searchDocumentsByExternalIdAllAndRelatedAll {}", externalId);
+//		List<Map<String, String>> documentsByExternalId = searchDocumentsByExternalIdAll(externalId);
+//		// lista dei DOCNUM risultati dalla ricerca
+//		String[] firstDocNum = KeyValuePairFactory.joinMetadata(documentsByExternalId,
+//				DocumentoMetadatiGenericiEnum.DOCNUM);
+//
+//		// carico i metadati di tutti i documenti risultati ricerca + documenti
+//		// related
+//		List<Map<String, String>> relatedMetadata = new ArrayList<>();
+//		for (String docNum : firstDocNum) {
+//			// carico i related al primo docnum
+//			List<String> relatedDocuments = getRelatedDocuments(docNum);
+//
+//			// aggiunta metadati risultato ricerca
+//			Map<String, String> documentProfile = getProfileDocumentMap(docNum);
+//			relatedMetadata.add(documentProfile);
+//			// aggiunta metadati related
+//			for (String documentId : relatedDocuments) {
+//				documentProfile = getProfileDocumentMap(documentId);
+//				relatedMetadata.add(documentProfile);
+//			}
+//		}
+//		return relatedMetadata;
+//	}
 
 	/**
 	 * 
