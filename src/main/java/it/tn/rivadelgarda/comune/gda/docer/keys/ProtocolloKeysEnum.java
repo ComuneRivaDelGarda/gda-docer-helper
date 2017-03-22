@@ -5,7 +5,7 @@ package it.tn.rivadelgarda.comune.gda.docer.keys;
  * @author mirco
  *
  */
-public enum ProtocolloKeysEnum implements DocerKey {
+public enum ProtocolloKeysEnum implements MetadatoDocer {
 
     /**
      * codice dell’Ente assegnato al documento

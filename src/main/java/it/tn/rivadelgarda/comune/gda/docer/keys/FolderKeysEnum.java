@@ -5,7 +5,7 @@ package it.tn.rivadelgarda.comune.gda.docer.keys;
  * @author mirco
  *
  */
-public enum FolderKeysEnum implements DocerKey {
+public enum FolderKeysEnum implements MetadatoDocer {
 
     /**
      * identificativo univoco del folder assegnato automaticamente dal sistema,
