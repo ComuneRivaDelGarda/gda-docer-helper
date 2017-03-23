@@ -46,5 +46,16 @@ public interface MetadatoDocer {
 	public final static String SORT_ASC = "ASC";
 	public final static String SORT_DESC = "DESC";
 	
+	public static final String NUM_PG_KEY = "NUM_PG";
+	public static final String ANNO_PG_KEY = "ANNO_PG";
+	public static final String OGGETTO_PG_KEY = "OGGETTO_PG";
+	public static final String REGISTRO_PG_KEY = "REGISTRO_PG";
+	public static final String DATA_PG_KEY = "DATA_PG";
+	public static final String TIPO_PROTOCOLLAZIONE_KEY = "TIPO_PROTOCOLLAZIONE";
+	public static final String MITTENTI_KEY = "MITTENTI";
+	public static final String DESTINATARI_KEY = "DESTINATARI";
+	public static final String TIPO_FIRMA_KEY = "TIPO_FIRMA";
+	public static final String FIRMATARIO_KEY = "FIRMATARIO";
+	
     String getValue();
 }
