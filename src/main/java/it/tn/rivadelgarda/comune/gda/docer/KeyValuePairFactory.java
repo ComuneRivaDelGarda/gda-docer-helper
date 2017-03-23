@@ -1,21 +1,16 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocerKey;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocerValue;
-import it.tn.rivadelgarda.comune.gda.docer.keys.DocumentoMetadatiGenericiEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 
-public class KeyValuePairFactory {
-
-	public final static String ASC = "ASC";
-	public final static String DESC = "DESC";
+public class KeyValuePairFactory<T extends MetadatoDocer> {
 
 	public static KeyValuePair createKey(String key, String value) {
 		KeyValuePair res = new KeyValuePair();
@@ -27,37 +22,63 @@ public class KeyValuePairFactory {
 	public static KeyValuePair createKeyOrderByAsc(String key) {
 		KeyValuePair res = new KeyValuePair();
 		res.setKey(key);
-		res.setValue(KeyValuePairFactory.ASC);
+		res.setValue(MetadatoDocer.SORT_ASC);
 		return res;
 	}
 
 	public static KeyValuePair createKeyOrderByDesc(String key) {
 		KeyValuePair res = new KeyValuePair();
 		res.setKey(key);
-		res.setValue(KeyValuePairFactory.DESC);
+		res.setValue(MetadatoDocer.SORT_DESC);
 		return res;
 	}
 
 	private List<KeyValuePair> list = new ArrayList<>();
 
-	public static KeyValuePairFactory build(DocerKey key, String value) {
-		KeyValuePairFactory res = new KeyValuePairFactory();
+	/**
+	 * crea un oggetto {@link KeyValuePairFactory} con un metadato
+	 * @param key
+	 *            consulta {@link MetadatiDocumento} per vedere metadati dei
+	 *            documenti conosciuti
+	 * @param value
+	 *            valore da assegnare al metadato
+	 * @return
+	 */
+	public static <F extends MetadatoDocer> KeyValuePairFactory<F> build(F key, String value) {
+		KeyValuePairFactory<F> res = new KeyValuePairFactory<F>();
 		res.add(key, value);
 		return res;
 	}
 
-	public static KeyValuePairFactory build(String key, String value) {
-		KeyValuePairFactory res = new KeyValuePairFactory();
+	public static <F extends MetadatoDocer> KeyValuePairFactory<F> build(String key, String value) {
+		KeyValuePairFactory<F> res = new KeyValuePairFactory<F>();
 		res.add(key, value);
 		return res;
 	}
 
-	public KeyValuePairFactory add(DocerKey key, DocerValue value) {
+	/**
+	 * aggiunge un metadato alla catena {@link KeyValuePairFactory} corrente
+	 * @param key
+	 *            consulta {@link MetadatiDocumento} per vedere metadati dei
+	 *            documenti conosciuti
+	 * @param value
+	 *            valore da assegnare al metadato
+	 * @return
+	 */
+	public KeyValuePairFactory add(T key, T value) {
 		this.list.add(createKey(key.getValue(), value.getValue()));
 		return this;
 	}
 
-	public KeyValuePairFactory add(DocerKey key, String value) {
+	/**
+	 * aggiunge un metadato alla catena {@link KeyValuePairFactory} corrente
+	 * @param key
+	 *            consulta {@link MetadatiDocumento} per vedere metadati dei
+	 *            documenti conosciuti
+	 * @param value valore da assegnare al metadato
+	 * @return
+	 */
+	public KeyValuePairFactory add(T key, String value) {
 		this.list.add(createKey(key.getValue(), value));
 		return this;
 	}
@@ -81,9 +102,8 @@ public class KeyValuePairFactory {
 	 */
 	public static KeyValuePairFactory createDocumentKeys(String TYPE_ID, String DOCNAME, String COD_ENTE,
 			String COD_AOO) {
-		return build(DocumentoMetadatiGenericiEnum.TYPE_ID, TYPE_ID).add(DocumentoMetadatiGenericiEnum.DOCNAME, DOCNAME)
-				.add(DocumentoMetadatiGenericiEnum.COD_ENTE, COD_ENTE)
-				.add(DocumentoMetadatiGenericiEnum.COD_AOO, COD_AOO);
+		return build(MetadatiDocumento.TYPE_ID, TYPE_ID).add(MetadatiDocumento.DOCNAME, DOCNAME)
+				.add(MetadatiDocumento.COD_ENTE, COD_ENTE).add(MetadatiDocumento.COD_AOO, COD_AOO);
 	}
 
 	/**
@@ -130,7 +150,7 @@ public class KeyValuePairFactory {
 	 * @param key
 	 * @return
 	 */
-	public static String searchMetadata(List<Map<String, String>> metadataList, DocerKey key) {
+	public static <F extends MetadatoDocer> String searchMetadata(List<Map<String, String>> metadataList, F key) {
 		String metadataValue = null;
 		for (Map<String, String> metadata : metadataList) {
 			metadataValue = getMetadata(metadata, key);
@@ -139,21 +159,21 @@ public class KeyValuePairFactory {
 		}
 		return metadataValue;
 	}
-	
-	public static String getMetadata(Map<String, String> metadata, DocerKey key) {
+
+	public static <F extends MetadatoDocer> String getMetadata(Map<String, String> metadata, F key) {
 		String metadataValue = null;
 		if (metadata.containsKey(key.getValue())) {
 			metadataValue = metadata.get(key.getValue());
 		}
 		return metadataValue;
 	}
-	
-	public static String[] joinMetadata(List<Map<String, String>> metadataList, DocerKey key) {
+
+	public static <F extends MetadatoDocer> String[] joinMetadata(List<Map<String, String>> metadataList, F key) {
 		List<String> metadataValues = new ArrayList<>();
 		for (Map<String, String> metadata : metadataList) {
 			String metadataValue = getMetadata(metadata, key);
 			metadataValues.add(metadataValue);
 		}
 		return metadataValues.toArray(new String[metadataValues.size()]);
-	}	
+	}
 }
