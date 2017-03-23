@@ -291,7 +291,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean updateProfileDocumentNative(String docId, KeyValuePair[] metadata) throws Exception {
+	private boolean updateProfileDocumentNative(String docId, KeyValuePair[] metadata) throws Exception {
 		DocerServicesStub service = getDocerService();
 		UpdateProfileDocument request = new UpdateProfileDocument();
 		request.setToken(getLoginTicket());
@@ -301,10 +301,13 @@ public class DocerHelper extends AbstractDocerHelper {
 		return success;
 	}
 
+	public <F extends MetadatoDocer> boolean updateProfileDocumentNative(String docId, KeyValuePairFactory<F> metadata) throws Exception {
+		return updateProfileDocumentNative(docId, metadata.get());
+	}
 	
 	public boolean updateProfileDocumentNative(String docId, String externalId) throws Exception {
 		KeyValuePairFactory<MetadatiDocumento> metadata = KeyValuePairFactory.build(MetadatiDocumento.EXTERNAL_ID, externalId);
-		return updateProfileDocumentNative(docId, metadata.get());
+		return updateProfileDocumentNative(docId, metadata);
 	}
 	
 	/**
