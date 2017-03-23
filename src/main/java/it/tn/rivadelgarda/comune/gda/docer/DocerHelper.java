@@ -67,8 +67,8 @@ import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocumentResponse;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE_VALUES;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 
@@ -258,7 +258,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource, TIPO_COMPONENTE TIPO_COMPONENTE,
+	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
 			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		KeyValuePairFactory<MetadatiDocumento> params = KeyValuePairFactory.createDocumentKeys(TYPE_ID, DOCNAME,
 				docerCodiceENTE, docerCodiceAOO);
@@ -271,7 +271,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		params.add(MetadatiDocumento.TIPO_COMPONENTE_KEY, TIPO_COMPONENTE.getValue());
 		if (StringUtils.isNotBlank(ABSTRACT))
 			params.add(MetadatiDocumento.ABSTRACT_KEY, ABSTRACT);
-		params.add(MetadatiDocumento.ARCHIVE_TYPE_KEY, ARCHIVE_TYPE.ARCHIVE_TYPE_ARCHIVE);
+		params.add(MetadatiDocumento.ARCHIVE_TYPE_KEY, ARCHIVE_TYPE_VALUES.ARCHIVE_TYPE_ARCHIVE);
 		if (StringUtils.isNotBlank(EXTERNAL_ID))
 			params.add(MetadatiDocumento.EXTERNAL_ID_KEY, EXTERNAL_ID);
 
@@ -346,7 +346,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String TYPE_ID, String DOCNAME, File file, TIPO_COMPONENTE TIPO_COMPONENTE,
+	public String createDocument(String TYPE_ID, String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
 			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		FileDataSource fileDataSource = new FileDataSource(file);
 		return createDocument(TYPE_ID, DOCNAME, fileDataSource, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
@@ -365,7 +365,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String TYPE_ID, String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE,
+	public String createDocument(String TYPE_ID, String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
 			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		ByteArrayDataSource rawData = new ByteArrayDataSource(bytes);
 		return createDocument(TYPE_ID, DOCNAME, rawData, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
@@ -382,7 +382,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE TIPO_COMPONENTE,
+	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
 			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, file, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
@@ -398,7 +398,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE,
+	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
 			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
@@ -414,7 +414,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes,
-			TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
+			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		String DOCNUM = createDocumentTypeDocumento(DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 		// ricerco documenti per EXTERNAL_ID
 		Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
