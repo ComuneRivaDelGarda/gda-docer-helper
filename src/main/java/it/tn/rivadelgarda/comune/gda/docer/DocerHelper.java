@@ -301,13 +301,13 @@ public class DocerHelper extends AbstractDocerHelper {
 		return success;
 	}
 
-	public <F extends MetadatoDocer> boolean updateProfileDocumentNative(String docId, KeyValuePairFactory<F> metadata) throws Exception {
+	public <F extends MetadatoDocer> boolean updateProfileDocument(String docId, KeyValuePairFactory<F> metadata) throws Exception {
 		return updateProfileDocumentNative(docId, metadata.get());
 	}
 	
-	public boolean updateProfileDocumentNative(String docId, String externalId) throws Exception {
+	public boolean updateProfileDocumentExternalId(String docId, String externalId) throws Exception {
 		KeyValuePairFactory<MetadatiDocumento> metadata = KeyValuePairFactory.build(MetadatiDocumento.EXTERNAL_ID, externalId);
-		return updateProfileDocumentNative(docId, metadata);
+		return updateProfileDocument(docId, metadata);
 	}
 	
 	/**
