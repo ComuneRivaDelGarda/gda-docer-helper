@@ -2,7 +2,6 @@ package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.io.File;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -66,12 +65,11 @@ import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.StreamDescriptor;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocumentResponse;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TYPE_ID;
-import it.tn.rivadelgarda.comune.gda.docer.keys.FolderKeysEnum;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
 
 public class DocerHelper extends AbstractDocerHelper {
@@ -138,13 +136,13 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public String createFolder(String folderName, String parentFolderId, boolean owner) throws Exception {
-		KeyValuePairFactory keyBuilder = KeyValuePairFactory.build(FolderKeysEnum.FOLDER_NAME, folderName)
-				.add(FolderKeysEnum.COD_ENTE, docerCodiceENTE).add(FolderKeysEnum.COD_AOO, docerCodiceAOO);
+		KeyValuePairFactory<MetadatiFolder> keyBuilder = KeyValuePairFactory.build(MetadatiFolder.FOLDER_NAME, folderName)
+				.add(MetadatiFolder.COD_ENTE, docerCodiceENTE).add(MetadatiFolder.COD_AOO, docerCodiceAOO);
 		if (StringUtils.isNotBlank(parentFolderId)) {
-			keyBuilder.add(FolderKeysEnum.PARENT_FOLDER_ID, parentFolderId);
+			keyBuilder.add(MetadatiFolder.PARENT_FOLDER_ID, parentFolderId);
 		}
 		if (owner) {
-			keyBuilder.add(FolderKeysEnum.FOLDER_OWNER, docerUsername);
+			keyBuilder.add(MetadatiFolder.FOLDER_OWNER, docerUsername);
 		}
 
 		KeyValuePair[] folderinfo = keyBuilder.get();
@@ -261,7 +259,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource, TIPO_COMPONENTE TIPO_COMPONENTE,
 			String ABSTRACT, String EXTERNAL_ID) throws Exception {
-		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(TYPE_ID, DOCNAME, docerCodiceENTE,
+		KeyValuePairFactory<MetadatiDocumento> params = KeyValuePairFactory.createDocumentKeys(TYPE_ID, DOCNAME, docerCodiceENTE,
 				docerCodiceAOO);
 		
 		DataHandler dataHandler = new DataHandler(dataSource);
@@ -303,6 +301,12 @@ public class DocerHelper extends AbstractDocerHelper {
 		return success;
 	}
 
+	
+	public boolean updateProfileDocumentNative(String docId, String externalId) throws Exception {
+		KeyValuePairFactory<MetadatiDocumento> metadata = KeyValuePairFactory.build(MetadatiDocumento.EXTERNAL_ID, externalId);
+		return updateProfileDocumentNative(docId, metadata.get());
+	}
+	
 	/**
 	 * Create un Document con Tipo personalizzabile
 	 * 

@@ -10,7 +10,7 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 
-public class KeyValuePairFactory {
+public class KeyValuePairFactory<T extends MetadatoDocer> {
 
 	public static KeyValuePair createKey(String key, String value) {
 		KeyValuePair res = new KeyValuePair();
@@ -35,24 +35,50 @@ public class KeyValuePairFactory {
 
 	private List<KeyValuePair> list = new ArrayList<>();
 
-	public static KeyValuePairFactory build(MetadatoDocer key, String value) {
-		KeyValuePairFactory res = new KeyValuePairFactory();
+	/**
+	 * crea un oggetto {@link KeyValuePairFactory} con un metadato
+	 * @param key
+	 *            consulta {@link MetadatiDocumento} per vedere metadati dei
+	 *            documenti conosciuti
+	 * @param value
+	 *            valore da assegnare al metadato
+	 * @return
+	 */
+	public static <F extends MetadatoDocer> KeyValuePairFactory<F> build(F key, String value) {
+		KeyValuePairFactory<F> res = new KeyValuePairFactory<F>();
 		res.add(key, value);
 		return res;
 	}
 
-	public static KeyValuePairFactory build(String key, String value) {
-		KeyValuePairFactory res = new KeyValuePairFactory();
+	public static <F extends MetadatoDocer> KeyValuePairFactory<F> build(String key, String value) {
+		KeyValuePairFactory<F> res = new KeyValuePairFactory<F>();
 		res.add(key, value);
 		return res;
 	}
 
-	public KeyValuePairFactory add(MetadatoDocer key, MetadatoDocer value) {
+	/**
+	 * aggiunge un metadato alla catena {@link KeyValuePairFactory} corrente
+	 * @param key
+	 *            consulta {@link MetadatiDocumento} per vedere metadati dei
+	 *            documenti conosciuti
+	 * @param value
+	 *            valore da assegnare al metadato
+	 * @return
+	 */
+	public KeyValuePairFactory add(T key, T value) {
 		this.list.add(createKey(key.getValue(), value.getValue()));
 		return this;
 	}
 
-	public KeyValuePairFactory add(MetadatoDocer key, String value) {
+	/**
+	 * aggiunge un metadato alla catena {@link KeyValuePairFactory} corrente
+	 * @param key
+	 *            consulta {@link MetadatiDocumento} per vedere metadati dei
+	 *            documenti conosciuti
+	 * @param value valore da assegnare al metadato
+	 * @return
+	 */
+	public KeyValuePairFactory add(T key, String value) {
 		this.list.add(createKey(key.getValue(), value));
 		return this;
 	}
@@ -77,8 +103,7 @@ public class KeyValuePairFactory {
 	public static KeyValuePairFactory createDocumentKeys(String TYPE_ID, String DOCNAME, String COD_ENTE,
 			String COD_AOO) {
 		return build(MetadatiDocumento.TYPE_ID, TYPE_ID).add(MetadatiDocumento.DOCNAME, DOCNAME)
-				.add(MetadatiDocumento.COD_ENTE, COD_ENTE)
-				.add(MetadatiDocumento.COD_AOO, COD_AOO);
+				.add(MetadatiDocumento.COD_ENTE, COD_ENTE).add(MetadatiDocumento.COD_AOO, COD_AOO);
 	}
 
 	/**
@@ -125,7 +150,7 @@ public class KeyValuePairFactory {
 	 * @param key
 	 * @return
 	 */
-	public static String searchMetadata(List<Map<String, String>> metadataList, MetadatoDocer key) {
+	public static <F extends MetadatoDocer> String searchMetadata(List<Map<String, String>> metadataList, F key) {
 		String metadataValue = null;
 		for (Map<String, String> metadata : metadataList) {
 			metadataValue = getMetadata(metadata, key);
@@ -134,21 +159,21 @@ public class KeyValuePairFactory {
 		}
 		return metadataValue;
 	}
-	
-	public static String getMetadata(Map<String, String> metadata, MetadatoDocer key) {
+
+	public static <F extends MetadatoDocer> String getMetadata(Map<String, String> metadata, F key) {
 		String metadataValue = null;
 		if (metadata.containsKey(key.getValue())) {
 			metadataValue = metadata.get(key.getValue());
 		}
 		return metadataValue;
 	}
-	
-	public static String[] joinMetadata(List<Map<String, String>> metadataList, MetadatoDocer key) {
+
+	public static <F extends MetadatoDocer> String[] joinMetadata(List<Map<String, String>> metadataList, F key) {
 		List<String> metadataValues = new ArrayList<>();
 		for (Map<String, String> metadata : metadataList) {
 			String metadataValue = getMetadata(metadata, key);
 			metadataValues.add(metadataValue);
 		}
 		return metadataValues.toArray(new String[metadataValues.size()]);
-	}	
+	}
 }

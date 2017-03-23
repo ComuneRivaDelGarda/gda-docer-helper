@@ -1,7 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer.keys;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,7 +17,7 @@ import java.util.List;
  *
  */
 public enum MetadatiDocumento implements MetadatoDocer {
-
+	
 	/**
 	 * obbligatorio, il document-type del documento. è il tipo di documento,
 	 * individua l’insieme delle proprietà del profilo
