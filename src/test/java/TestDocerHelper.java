@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 
 public class TestDocerHelper {
 
@@ -165,7 +165,7 @@ public class TestDocerHelper {
 
 		init();
 		// token = helper.login();
-		String res = helper.createDocumentTypeDocumento(fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE,
+		String res = helper.createDocumentTypeDocumento(fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
 				"descrizione con spazi", "TEST");
 		Assert.assertNotNull(res);
 		logger.info("{}", res);
@@ -224,7 +224,7 @@ public class TestDocerHelper {
 
 		init();
 		// token = helper.login();
-		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE,
+		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
 				"descrizione con spazi", "");
 
 		try {
@@ -266,7 +266,7 @@ public class TestDocerHelper {
 
 		init();
 		// token = helper.login();
-		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE,
+		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
 				"descrizione con spazi", "");
 
 		boolean res = helper.addToFolderDocument(subFolderId, documentId);

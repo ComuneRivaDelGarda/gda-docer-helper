@@ -124,11 +124,11 @@ public enum MetadatiDocumento implements MetadatoDocer {
 		return res;
 	}
 
-	public enum TYPE_ID implements MetadatoDocer {
+	public enum TYPE_ID_VALUES implements MetadatoDocer {
 		DOCUMENTO(TYPE_ID_DOCUMENTO);
 		private String value;
 
-		private TYPE_ID(String value) {
+		private TYPE_ID_VALUES(String value) {
 			this.value = value;
 		}
 
@@ -142,11 +142,11 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	 * @author mirco
 	 *
 	 */
-	public enum TIPO_COMPONENTE implements MetadatoDocer {
+	public enum TIPO_COMPONENTE_VALUES implements MetadatoDocer {
 		PRINCIPALE(TIPO_COMPONENTE_PRINCIPALE), ALLEGATO(TIPO_COMPONENTE_ALLEGATO), ANNESSO(TIPO_COMPONENTE_ANNESSO), ANNOTAZIONE(TIPO_COMPONENTE_ANNOTAZIONE);
 		private String value;
 
-		private TIPO_COMPONENTE(String value) {
+		private TIPO_COMPONENTE_VALUES(String value) {
 			this.value = value;
 		}
 
@@ -160,11 +160,11 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	 * @author mirco
 	 *
 	 */
-	public enum ARCHIVE_TYPE implements MetadatoDocer {
+	public enum ARCHIVE_TYPE_VALUES implements MetadatoDocer {
 		ARCHIVE(ARCHIVE_TYPE_ARCHIVE), URL(ARCHIVE_TYPE_URL);
 		private String value;
 
-		private ARCHIVE_TYPE(String value) {
+		private ARCHIVE_TYPE_VALUES(String value) {
 			this.value = value;
 		}
 
