@@ -64,6 +64,8 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.StreamDescriptor;
+import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocument;
+import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocumentResponse;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE;
@@ -261,9 +263,9 @@ public class DocerHelper extends AbstractDocerHelper {
 			String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		KeyValuePairFactory params = KeyValuePairFactory.createDocumentKeys(TYPE_ID, DOCNAME, docerCodiceENTE,
 				docerCodiceAOO);
-
+		
 		DataHandler dataHandler = new DataHandler(dataSource);
-
+		
 		params.add(MetadatiDocumento.APP_VERSANTE_KEY, docerApplication);
 		String md5 = DigestUtils.md5Hex(dataSource.getInputStream());
 		params.add(MetadatiDocumento.DOC_HASH_KEY, md5);
@@ -273,7 +275,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		params.add(MetadatiDocumento.ARCHIVE_TYPE_KEY, ARCHIVE_TYPE.ARCHIVE_TYPE_ARCHIVE);
 		if (StringUtils.isNotBlank(EXTERNAL_ID))
 			params.add(MetadatiDocumento.EXTERNAL_ID_KEY, EXTERNAL_ID);
-
+		
 		DocerServicesStub service = getDocerService();
 		CreateDocument request = new CreateDocument();
 		request.setToken(getLoginTicket());
@@ -282,6 +284,23 @@ public class DocerHelper extends AbstractDocerHelper {
 		CreateDocumentResponse response = service.createDocument(request);
 		String documentId = response.get_return();
 		return documentId;
+	}
+	
+	/**
+	 * 
+	 * @param docId
+	 * @param metadata
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean updateProfileDocumentNative(String docId, KeyValuePair[] metadata) throws Exception {
+		DocerServicesStub service = getDocerService();
+		UpdateProfileDocument request = new UpdateProfileDocument();
+		request.setToken(getLoginTicket());
+		request.setMetadata(metadata);
+		UpdateProfileDocumentResponse response = service.updateProfileDocument(request);
+		boolean success = response.get_return();
+		return success;
 	}
 
 	/**
