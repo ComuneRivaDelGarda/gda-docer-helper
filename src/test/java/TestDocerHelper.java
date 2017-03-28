@@ -9,7 +9,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
+import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 
 public class TestDocerHelper {
@@ -298,4 +302,27 @@ public class TestDocerHelper {
 		// Assert.assertNotNull(res);
 		// logger.info("{}", new Gson().toJson(res));
 	}
+	
+	@Test
+	public void test110() throws Exception {
+		 init();
+		 //token = helper.login();
+		 boolean changed = false;
+		 
+//		 List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll("TEST");
+//		 for (Map<String, String> metadata : res) {
+//			 String[] docnums = KeyValuePairFactory.joinMetadata(res, MetadatiDocumento.DOCNUM);
+//			 for (String docnum : docnums) {
+//				 changed = helper.updateProfileDocumentExternalId(docnum, "TEST2");
+				 
+				 List<Map<String, String>> res2 = helper.searchDocumentsByExternalIdAll("TEST2");
+				 String[] docnums2 = KeyValuePairFactory.joinMetadata(res2, MetadatiDocumento.DOCNUM);
+				 
+//			 }
+//		 }
+//		 
+
+		 Assert.assertNotNull(docnums2);
+		 logger.info("{}", new Gson().toJson(docnums2));
+	}	
 }
