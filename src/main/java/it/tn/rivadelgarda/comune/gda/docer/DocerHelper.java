@@ -258,8 +258,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
-			String ABSTRACT, String EXTERNAL_ID) throws Exception {
+	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource,
+			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		KeyValuePairFactory<MetadatiDocumento> params = KeyValuePairFactory.createDocumentKeys(TYPE_ID, DOCNAME,
 				docerCodiceENTE, docerCodiceAOO);
 
@@ -296,6 +296,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		DocerServicesStub service = getDocerService();
 		UpdateProfileDocument request = new UpdateProfileDocument();
 		request.setToken(getLoginTicket());
+		request.setDocId(docId);
 		request.setMetadata(metadata);
 		UpdateProfileDocumentResponse response = service.updateProfileDocument(request);
 		boolean success = response.get_return();
@@ -323,7 +324,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param docId
 	 *            id del documento
 	 * @param externalId
-	 *            nuovo valore del metadato EXTERNAL_ID {@link MetadatiDocumento}
+	 *            nuovo valore del metadato EXTERNAL_ID
+	 *            {@link MetadatiDocumento}
 	 * @return
 	 * @throws Exception
 	 */
