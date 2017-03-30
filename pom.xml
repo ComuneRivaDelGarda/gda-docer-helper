@@ -16,6 +16,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<axis.version>1.4.1</axis.version>
+		
+    	<maven.test.skip>true</maven.test.skip>		
 	</properties>
 
 	<build>
