@@ -69,6 +69,11 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 		this.list.add(createKey(key.getValue(), value.getValue()));
 		return this;
 	}
+	
+	public KeyValuePairFactory add(String key, T value) {
+		this.list.add(createKey(key, value.getValue()));
+		return this;
+	}
 
 	/**
 	 * aggiunge un metadato alla catena {@link KeyValuePairFactory} corrente
