@@ -56,6 +56,10 @@ public interface MetadatoDocer {
 	public static final String DESTINATARI_KEY = "DESTINATARI";
 	public static final String TIPO_FIRMA_KEY = "TIPO_FIRMA";
 	public static final String FIRMATARIO_KEY = "FIRMATARIO";
-	
+
+    public final static String ACL_READ_ONLY_ACCESS = "0";
+    public final static String ACL_NORMAL_ACCESS = "1";
+    public final static String ACL_FULL_ACCESS = "2";
+    
     String getValue();
 }

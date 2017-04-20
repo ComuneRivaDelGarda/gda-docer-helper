@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -70,7 +71,7 @@ import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
-import it.tn.rivadelgarda.comune.gda.docer.values.ACLValuesEnum;
+import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
 
 public class DocerHelper extends AbstractDocerHelper {
 
@@ -797,7 +798,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean setACLDocument(String documentId, KeyValuePair[] acls) throws Exception {
+	private boolean setACLDocumentNative(String documentId, KeyValuePair[] acls) throws Exception {
 		logger.debug("setACLDocument {} {}", documentId, acls);
 		DocerServicesStub service = getDocerService();
 		SetACLDocument request = new SetACLDocument();
@@ -810,7 +811,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * 
+	 * Imposta ACL
 	 * @param documentId
 	 *            id del Documento
 	 * @param GROUP_USER_ID
@@ -819,10 +820,41 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACLValuesEnum acl) throws Exception {
-		return setACLDocument(documentId, KeyValuePairFactory.build(GROUP_USER_ID, acl.getValue()).get());
+	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACL_VALUES acl) throws Exception {
+		return setACLDocumentNative(documentId, KeyValuePairFactory.build(GROUP_USER_ID, acl.getValue()).get());
 	}
+	
+	/**
+	 * Sovrascrive le ACLs attuali
+	 * @param documentId su cui applicare le acl
+	 * @param acls mapps di groupId or userId come chiavi e valori interi come valore acl
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean setACLDocument(String documentId, Map<String, ACL_VALUES> acls) throws Exception {
+		// KeyValuePairFactory.build(GROUP_USER_ID, acl.getValue()).get();
+		KeyValuePairFactory<ACL_VALUES> keyBuilder = new KeyValuePairFactory<>();
+		for (Entry<String, ACL_VALUES> entry : acls.entrySet()) {
+			keyBuilder.add(entry.getKey(), entry.getValue());
+		}
+		return setACLDocumentNative(documentId, keyBuilder.get());
+	}	
 
+	/**
+	 * Sovrascrive le ACLs attuali
+	 * @param documentId su cui applicare le acl
+	 * @param acls mapps di groupId or userId come chiavi e valori interi come valore acl
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acls) throws Exception {
+		KeyValuePairFactory<ACL_VALUES> keyBuilder = new KeyValuePairFactory<>();
+		for (Entry<String, Integer> entry : acls.entrySet()) {
+			keyBuilder.add(entry.getKey(), ACL_VALUES.values()[entry.getValue()]);
+		}
+		return setACLDocumentNative(documentId, keyBuilder.get());
+	}
+	
 	/**
 	 * Questo metodo permette di correlare un Documento ad uno o più Documenti
 	 * nel DMS.
