@@ -811,7 +811,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * 
+	 * Imposta ACL
 	 * @param documentId
 	 *            id del Documento
 	 * @param GROUP_USER_ID
@@ -825,9 +825,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 	
 	/**
-	 * 
-	 * @param documentId
-	 * @param acls 
+	 * Sovrascrive le ACLs attuali
+	 * @param documentId su cui applicare le acl
+	 * @param acls mapps di groupId or userId come chiavi e valori interi come valore acl
 	 * @return
 	 * @throws Exception
 	 */
@@ -840,6 +840,21 @@ public class DocerHelper extends AbstractDocerHelper {
 		return setACLDocumentNative(documentId, keyBuilder.get());
 	}	
 
+	/**
+	 * Sovrascrive le ACLs attuali
+	 * @param documentId su cui applicare le acl
+	 * @param acls mapps di groupId or userId come chiavi e valori interi come valore acl
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acls) throws Exception {
+		KeyValuePairFactory<ACL_VALUES> keyBuilder = new KeyValuePairFactory<>();
+		for (Entry<String, Integer> entry : acls.entrySet()) {
+			keyBuilder.add(entry.getKey(), ACL_VALUES.values()[entry.getValue()]);
+		}
+		return setACLDocumentNative(documentId, keyBuilder.get());
+	}
+	
 	/**
 	 * Questo metodo permette di correlare un Documento ad uno o più Documenti
 	 * nel DMS.
