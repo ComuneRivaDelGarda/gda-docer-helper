@@ -23,36 +23,36 @@ config.properties richiesto nel classpath con configurazione connessione a DOCER
 ## API HELPER
 
 Ripilogo API Helper:
-[x] VERSAMENTO (testate ed usate nell'Explorer)*
-   [x] createFolder
-   [x] createDocument
-   [x] addToFolderDocuments
-   [x] removeFromFolderDocuments
-   [x] deleteDocument
-   [x] setACLDocument**
-   [x] addRelated
-   [x] searchFolders
-   [x] getFolderDocuments
+- [x] VERSAMENTO (testate ed usate nell'Explorer)*
+  - [x] createFolder
+  - [x] createDocument
+  - [x] addToFolderDocuments
+  - [x] removeFromFolderDocuments
+  - [x] deleteDocument
+  - [x] setACLDocument**
+  - [x] addRelated
+  - [x] searchFolders
+  - [x] getFolderDocuments
 
-* dalla versione 1.1 dell'Helper (numerazione virtuale usata solo per comunicarvi via email gli aggiornamenti, perché internamente il progetto è sempre 1.0.0 per non crearvi problemi con le dipendenze nei progetti) sono disponibili le aggiunte ed adeguamenti per EXTERNAL_ID
-- createDocument
-- updateProfileDocumentExternalId
-- createDocumentTypeDocumentoAndRelateToExternalId
-- searchDocumentsByExternalId
+> *dalla versione 1.1 dell'Helper (numerazione virtuale usata solo per comunicarvi via email gli aggiornamenti, perché internamente il progetto è sempre 1.0.0 per non crearvi problemi con le dipendenze nei progetti) sono disponibili le aggiunte ed adeguamenti per EXTERNAL_ID
+> - createDocument
+> - updateProfileDocumentExternalId
+> - createDocumentTypeDocumentoAndRelateToExternalId
+> - searchDocumentsByExternalId
 
-** non richiamata da Explorer
+> **non richiamata da Explorer
    
-[x] VERSIONAMENTO (testate ed usate nell'Explorer)
-   [x] addNewVersion
-   [x] getVersions
-   [x] downloadVersion
+- [x] VERSIONAMENTO (testate ed usate nell'Explorer)
+  - [x] addNewVersion
+  - [x] getVersions
+  - [x] downloadVersion
 
-[x] PROTOCOLLAZIONE E ARCHIVIAZIONE (pronte ma non richiamate)*
-   [x] protocollaDocumento
-   [x] classificaDocumenti
-   [x] archiviaDocumenti
+- [x] PROTOCOLLAZIONE E ARCHIVIAZIONE (pronte ma non richiamate)*
+  - [x] protocollaDocumento
+  - [x] classificaDocumenti
+  - [x] archiviaDocumenti
 
-* non essendo ancora state usate potrebbe rivelarsi utile, come avvenuto per VERSAMENTO e VERSIONAMENTO uno strato ulteriore di incapsulamento dei parametri previsti\gestiti per semplificare ulteriormente le chiamate (basta valutare insieme se e dove può essere utile).
+> *non essendo ancora state usate potrebbe rivelarsi utile, come avvenuto per VERSAMENTO e VERSIONAMENTO uno strato ulteriore di incapsulamento dei parametri previsti\gestiti per semplificare ulteriormente le chiamate (basta valutare insieme se e dove può essere utile).
 
 ## DOCER
 ﻿
