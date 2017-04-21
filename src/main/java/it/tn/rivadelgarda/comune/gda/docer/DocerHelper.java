@@ -78,13 +78,12 @@ import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateUser;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateUserResponse;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiGruppi;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiUtente;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiComuni;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiGruppi;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiUtente;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
 
