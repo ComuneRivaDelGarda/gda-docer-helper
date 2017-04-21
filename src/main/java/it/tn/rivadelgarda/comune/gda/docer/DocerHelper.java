@@ -72,6 +72,8 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchUsersResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.StreamDescriptor;
+import it.kdm.docer.webservices.DocerServicesStub.UpdateGroup;
+import it.kdm.docer.webservices.DocerServicesStub.UpdateGroupResponse;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateUser;
@@ -79,6 +81,7 @@ import it.kdm.docer.webservices.DocerServicesStub.UpdateUserResponse;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiGruppi;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiUtente;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiComuni;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
@@ -1233,8 +1236,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	public boolean createUser(String USER_ID, String password, String nome, String cognome, String fullName,
 			String email) throws Exception {
 
-		KeyValuePairFactory<MetadatiUtente> keyBuilder = KeyValuePairFactory.build(MetadatiFolder.USER_ID_KEY, USER_ID)
-				.add(MetadatiFolder.COD_ENTE, docerCodiceENTE).add(MetadatiFolder.COD_AOO, docerCodiceAOO);
+		KeyValuePairFactory<MetadatiUtente> keyBuilder = new KeyValuePairFactory<>();
+		keyBuilder.add(MetadatiUtente.USER_ID, USER_ID).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
+				.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
 		if (StringUtils.isNotEmpty(fullName))
 			keyBuilder.add(MetadatiUtente.FULL_NAME, fullName);
 
@@ -1274,8 +1278,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public boolean updateUser(String userId, Map<MetadatiUtente, String> metadati) throws Exception {
 
-		KeyValuePairFactory<MetadatiUtente> keyBuilder = KeyValuePairFactory.build(MetadatiFolder.USER_ID_KEY, userId)
-				.add(MetadatiFolder.COD_ENTE, docerCodiceENTE).add(MetadatiFolder.COD_AOO, docerCodiceAOO);
+		KeyValuePairFactory<MetadatiUtente> keyBuilder = new KeyValuePairFactory<>();
+		keyBuilder.add(MetadatiFolder.USER_ID_KEY, userId).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
+				.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
+
 		if (metadati != null && !metadati.isEmpty()) {
 			for (Entry<MetadatiUtente, String> metadato : metadati.entrySet()) {
 				keyBuilder.add(metadato.getKey(), metadato.getValue());
@@ -1363,8 +1369,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public boolean createGroup(String GROUP_ID, String GROUP_NAME, String PARENT_GROUP_ID) throws Exception {
 
-		KeyValuePairFactory<MetadatiGruppi> keyBuilder = KeyValuePairFactory.build(MetadatiGruppi.GROUP_ID, GROUP_ID)
-				.add(MetadatiGruppi.GROUP_NAME, GROUP_NAME).add(MetadatiGruppi.PARENT_GROUP_ID, PARENT_GROUP_ID);
+		KeyValuePairFactory<MetadatiGruppi> keyBuilder = new KeyValuePairFactory<>();
+		keyBuilder.add(MetadatiGruppi.GROUP_ID, GROUP_ID).add(MetadatiGruppi.GROUP_NAME, GROUP_NAME)
+				.add(MetadatiGruppi.PARENT_GROUP_ID, PARENT_GROUP_ID);
 
 		KeyValuePair[] userInfo = keyBuilder.get();
 
@@ -1373,6 +1380,37 @@ public class DocerHelper extends AbstractDocerHelper {
 		request.setToken(getLoginTicket());
 		request.setGroupInfo(userInfo);
 		CreateGroupResponse response = service.createGroup(request);
+		boolean esito = response.get_return();
+		return esito;
+	}
+
+	/**
+	 * Questo metodo permette la modifica del profilo di un gruppo nel DMS.
+	 * 
+	 * @param groupId
+	 *            id del gruppo da modificare
+	 * @param metadati
+	 *            Collezione dei metadati da aggiornare nel profilo del gruppo
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean updateGroup(String groupId, Map<MetadatiGruppi, String> metadati) throws Exception {
+
+		KeyValuePairFactory<MetadatiGruppi> keyBuilder = new KeyValuePairFactory<>();
+		if (metadati != null && !metadati.isEmpty()) {
+			for (Entry<MetadatiGruppi, String> metadato : metadati.entrySet()) {
+				keyBuilder.add(metadato.getKey(), metadato.getValue());
+			}
+		}
+
+		KeyValuePair[] groupInfo = keyBuilder.get();
+
+		DocerServicesStub service = getDocerService();
+		UpdateGroup request = new UpdateGroup();
+		request.setToken(getLoginTicket());
+		request.setGroupId(groupId);
+		request.setGroupInfo(groupInfo);
+		UpdateGroupResponse response = service.updateGroup(request);
 		boolean esito = response.get_return();
 		return esito;
 	}

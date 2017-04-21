@@ -8,6 +8,14 @@ package it.tn.rivadelgarda.comune.gda.docer.keys;
 public enum MetadatiUtente implements MetadatoDocer {
 
 	/**
+	 * (la AOO primaria di appartenenza)
+	 */
+	COD_AOO(COD_AOO_KEY), 
+	/**
+	 * (l’Ente primario di appartenenza)
+	 */
+	COD_ENTE(COD_ENTE_KEY),
+	/**
 	 * id dell’utente,
 	 */
 	USER_ID(USER_ID_KEY),
@@ -20,7 +28,7 @@ public enum MetadatiUtente implements MetadatoDocer {
 	 * profilo
 	 * 
 	 */
-	USER_PASSWORD(USER_PASSWORD_KEY), COD_AOO(COD_AOO_KEY), COD_ENTE(COD_ENTE_KEY),
+	USER_PASSWORD(USER_PASSWORD_KEY),
 	/**
 	 * (nome dell’utente)
 	 */
