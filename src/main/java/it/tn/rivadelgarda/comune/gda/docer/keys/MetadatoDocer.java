@@ -61,5 +61,21 @@ public interface MetadatoDocer {
     public final static String ACL_NORMAL_ACCESS = "1";
     public final static String ACL_FULL_ACCESS = "2";
     
+    /*
+     * UTENTE
+     */
+	public final static String USER_ID_KEY = "USER_ID";
+	public final static String FULL_NAME_KEY = "FULL_NAME";
+	public final static String USER_PASSWORD_KEY = "USER_PASSWORD";
+	public final static String FIRST_NAME_KEY = "FIRST_NAME";
+	public final static String LAST_NAME_KEY = "LAST_NAME";
+	public final static String EMAIL_ADDRESS_KEY = "EMAIL_ADDRESS";
+	/*
+	 * GRUPPO
+	 */
+	public final static String GROUP_ID_KEY = "GROUP_ID";
+	public final static String GROUP_NAME_KEY = "GROUP_NAME";
+	public final static String PARENT_GROUP_ID_KEY = "PARENT_GROUP_ID";
+	
     String getValue();
 }

@@ -324,5 +324,29 @@ public class TestDocerHelper {
 
 		 Assert.assertNotNull(docnums2);
 		 logger.info("{}", new Gson().toJson(docnums2));
+	}
+	
+	@Test
+	public void test200() throws Exception {
+		logger.info("test200 createUser {}");
+		init();
+		try {
+			boolean res = helper.createUser("pivamichela", "pivamichela", "pivamichela", "pivamichela", "pivamichela", "michela@piva.it");
+			Assert.assertNotNull(res);
+			logger.info("{}", new Gson().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test200", ex.getMessage());
+		}
+	}	
+	
+	@Test
+	public void test210() throws Exception {
+		logger.info("test200 searchUsers {}");
+		init();
+				 
+		List<Map<String, String>> res = helper.searchUsers(null);
+				 
+		Assert.assertNotNull(res);
+		logger.info("{}", new Gson().toJson(res));
 	}	
 }
