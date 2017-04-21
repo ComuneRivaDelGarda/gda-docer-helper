@@ -37,6 +37,8 @@ import it.kdm.docer.webservices.DocerServicesStub.CreateDocument;
 import it.kdm.docer.webservices.DocerServicesStub.CreateDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.CreateFolder;
 import it.kdm.docer.webservices.DocerServicesStub.CreateFolderResponse;
+import it.kdm.docer.webservices.DocerServicesStub.CreateUser;
+import it.kdm.docer.webservices.DocerServicesStub.CreateUserResponse;
 import it.kdm.docer.webservices.DocerServicesStub.DeleteDocument;
 import it.kdm.docer.webservices.DocerServicesStub.DeleteDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.DownloadVersion;
@@ -49,6 +51,8 @@ import it.kdm.docer.webservices.DocerServicesStub.GetProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.GetProfileDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetRelatedDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.GetRelatedDocumentsResponse;
+import it.kdm.docer.webservices.DocerServicesStub.GetUser;
+import it.kdm.docer.webservices.DocerServicesStub.GetUserResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersions;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersionsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
@@ -61,12 +65,17 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFolders;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFoldersResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
+import it.kdm.docer.webservices.DocerServicesStub.SearchUsers;
+import it.kdm.docer.webservices.DocerServicesStub.SearchUsersResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.StreamDescriptor;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocumentResponse;
+import it.kdm.docer.webservices.DocerServicesStub.UpdateUser;
+import it.kdm.docer.webservices.DocerServicesStub.UpdateUserResponse;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiUtente;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
@@ -812,6 +821,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 	/**
 	 * Imposta ACL
+	 * 
 	 * @param documentId
 	 *            id del Documento
 	 * @param GROUP_USER_ID
@@ -823,11 +833,15 @@ public class DocerHelper extends AbstractDocerHelper {
 	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACL_VALUES acl) throws Exception {
 		return setACLDocumentNative(documentId, KeyValuePairFactory.build(GROUP_USER_ID, acl.getValue()).get());
 	}
-	
+
 	/**
 	 * Sovrascrive le ACLs attuali
-	 * @param documentId su cui applicare le acl
-	 * @param acls mapps di groupId or userId come chiavi e valori interi come valore acl
+	 * 
+	 * @param documentId
+	 *            su cui applicare le acl
+	 * @param acls
+	 *            mapps di groupId or userId come chiavi e valori interi come
+	 *            valore acl
 	 * @return
 	 * @throws Exception
 	 */
@@ -838,12 +852,16 @@ public class DocerHelper extends AbstractDocerHelper {
 			keyBuilder.add(entry.getKey(), entry.getValue());
 		}
 		return setACLDocumentNative(documentId, keyBuilder.get());
-	}	
+	}
 
 	/**
 	 * Sovrascrive le ACLs attuali
-	 * @param documentId su cui applicare le acl
-	 * @param acls mapps di groupId or userId come chiavi e valori interi come valore acl
+	 * 
+	 * @param documentId
+	 *            su cui applicare le acl
+	 * @param acls
+	 *            mapps di groupId or userId come chiavi e valori interi come
+	 *            valore acl
 	 * @return
 	 * @throws Exception
 	 */
@@ -854,7 +872,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		}
 		return setACLDocumentNative(documentId, keyBuilder.get());
 	}
-	
+
 	/**
 	 * Questo metodo permette di correlare un Documento ad uno o più Documenti
 	 * nel DMS.
@@ -1173,4 +1191,138 @@ public class DocerHelper extends AbstractDocerHelper {
 		}
 		return data;
 	}
+
+	/**
+	 * Questo metodo permette la creazione degli utenti nel DMS.
+	 * <p>
+	 * L’oggetto userInfo[] è una collezione di nodi userInfo. Ogni nodo
+	 * userInfo contiene una KeyValuePair ovvero due nodi key e value di tipo
+	 * string dove i valori ammessi per i nodi key sono (si veda paragrafo 4.3
+	 * Profilo degli Utenti):
+	 * <li>USER_ID (id dell’utente)
+	 * <li>FULL_NAME (nome completo dell’utente)
+	 * <li>COD_ENTE (l’Ente primario di appartenenza)
+	 * <li>COD_AOO (la AOO primaria di appartenenza)
+	 * <li>USER_PASSWORD (è possibile assegnare un default in fase di creazione
+	 * ma non fa parte del profilo)
+	 * <li>FIRST_NAME (nome dell’utente)
+	 * <li>LAST_NAME (cognome dell’utente)
+	 * <li>EMAIL_ADDRESS (indirizzo email dell’utente)
+	 * <li>metadati extra
+	 * 
+	 * @param USER_ID
+	 *            id dell’utente
+	 * @param password
+	 *            password dell’utente
+	 * @param nome
+	 *            nome dell’utente            
+	 * @param cognome
+	 *            cognome dell’utente            
+	 * @param fullName
+	 *            nome completo dell’utente
+	 * @param email
+	 *            email dell’utente
+	 * @return true se il metodo è andato a buon fine
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public boolean createUser(String USER_ID, String password, String nome, String cognome, String fullName, String email) throws Exception {
+
+		KeyValuePairFactory<MetadatiUtente> keyBuilder = KeyValuePairFactory.build(MetadatiFolder.USER_ID_KEY, USER_ID)
+				.add(MetadatiFolder.COD_ENTE, docerCodiceENTE).add(MetadatiFolder.COD_AOO, docerCodiceAOO);
+		if (StringUtils.isNotEmpty(fullName))
+			keyBuilder.add(MetadatiUtente.FULL_NAME, fullName);
+		
+		if (StringUtils.isNotEmpty(password))
+			keyBuilder.add(MetadatiUtente.USER_PASSWORD, password);
+		if (StringUtils.isNotEmpty(nome))
+			keyBuilder.add(MetadatiUtente.FIRST_NAME, nome);
+		if (StringUtils.isNotEmpty(cognome))
+			keyBuilder.add(MetadatiUtente.LAST_NAME, cognome);
+		if (StringUtils.isNotEmpty(email))
+			keyBuilder.add(MetadatiUtente.EMAIL_ADDRESS, email);
+		
+		KeyValuePair[] userInfo = keyBuilder.get();
+
+		DocerServicesStub service = getDocerService();
+		CreateUser request = new CreateUser();
+		request.setToken(getLoginTicket());
+		request.setUserInfo(userInfo);
+		CreateUserResponse response = service.createUser(request);
+		boolean esito = response.get_return();
+		return esito;
+	}
+	
+	/**
+	 * Questo metodo permette la modifica del profilo di un utente nel DMS.
+	 * <p>
+	 * Il metodo non permette la modifica della USER_ID degli utenti.
+	 * 
+	 * @param userId id dell'utente da modificare
+	 * @param metadati lista di metadati Utente da modificare
+	 * @return
+	 * @throws Exception In tutti i casi di errore il metodo solleva una SOAPException contenente il messaggio di errore.
+	 */
+	public boolean updateUser(String userId, Map<MetadatiUtente, String> metadati) throws Exception {
+
+		KeyValuePairFactory<MetadatiUtente> keyBuilder = KeyValuePairFactory.build(MetadatiFolder.USER_ID_KEY, userId)
+				.add(MetadatiFolder.COD_ENTE, docerCodiceENTE).add(MetadatiFolder.COD_AOO, docerCodiceAOO);
+		if (metadati != null && ! metadati.isEmpty()) {
+			for (Entry<MetadatiUtente, String> metadato : metadati.entrySet()) {
+				keyBuilder.add(metadato.getKey(), metadato.getValue());
+			}
+		}
+		
+		KeyValuePair[] userInfo = keyBuilder.get();
+
+		DocerServicesStub service = getDocerService();
+		UpdateUser request = new UpdateUser();
+		request.setToken(getLoginTicket());
+		request.setUserId(userId);
+		request.setUserInfo(userInfo);
+		UpdateUserResponse response = service.updateUser(request);
+		boolean esito = response.get_return();
+		return esito;
+	}	
+
+	/**
+	 * Questo metodo permette di recuperare il profilo di un utente del DMS.
+	 * @param userId id dell’utente di riferimento
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<String, String> getUser(String userId) throws Exception {
+		Map<MetadatiUtente, String> res = new HashMap<>();
+		
+		DocerServicesStub service = getDocerService();
+		GetUser request = new GetUser();
+		request.setToken(getLoginTicket());
+		request.setUserId(userId);
+		GetUserResponse response = service.getUser(request);
+		KeyValuePair[] metadati = response.get_return();
+		return KeyValuePairFactory.asMap(metadati);
+	}
+	
+	/**
+	 * Questo metodo permette di eseguire delle ricerche sulla collezione degli utenti del DMS.
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchUsers(String userId) throws Exception {
+		
+		logger.debug("searchUsers {}", userId);
+		KeyValuePairFactory<MetadatiUtente> searchCriteria = new KeyValuePairFactory<>();
+		if (StringUtils.isNotEmpty(userId)) {
+			KeyValuePairFactory.build(MetadatiUtente.USER_ID_KEY, userId).get();
+		}
+		DocerServicesStub service = getDocerService();
+		SearchUsers request = new SearchUsers();
+		request.setToken(getLoginTicket());
+		request.setSearchCriteria(searchCriteria.get());
+		SearchUsersResponse response = service.searchUsers(request);
+		SearchItem[] data = response.get_return();
+		return KeyValuePairFactory.asListMap(data);
+	}	
 }
