@@ -70,6 +70,12 @@ public interface MetadatoDocer {
 	public final static String FIRST_NAME_KEY = "FIRST_NAME";
 	public final static String LAST_NAME_KEY = "LAST_NAME";
 	public final static String EMAIL_ADDRESS_KEY = "EMAIL_ADDRESS";
+	/*
+	 * GRUPPO
+	 */
+	public final static String GROUP_ID_KEY = "GROUP_ID";
+	public final static String GROUP_NAME_KEY = "GROUP_NAME";
+	public final static String PARENT_GROUP_ID_KEY = "PARENT_GROUP_ID";
 	
     String getValue();
 }

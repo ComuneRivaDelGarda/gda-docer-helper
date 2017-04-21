@@ -37,6 +37,8 @@ import it.kdm.docer.webservices.DocerServicesStub.CreateDocument;
 import it.kdm.docer.webservices.DocerServicesStub.CreateDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.CreateFolder;
 import it.kdm.docer.webservices.DocerServicesStub.CreateFolderResponse;
+import it.kdm.docer.webservices.DocerServicesStub.CreateGroup;
+import it.kdm.docer.webservices.DocerServicesStub.CreateGroupResponse;
 import it.kdm.docer.webservices.DocerServicesStub.CreateUser;
 import it.kdm.docer.webservices.DocerServicesStub.CreateUserResponse;
 import it.kdm.docer.webservices.DocerServicesStub.DeleteDocument;
@@ -75,6 +77,7 @@ import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateUser;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateUserResponse;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiGruppi;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiUtente;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE_VALUES;
@@ -1215,9 +1218,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param password
 	 *            password dell’utente
 	 * @param nome
-	 *            nome dell’utente            
+	 *            nome dell’utente
 	 * @param cognome
-	 *            cognome dell’utente            
+	 *            cognome dell’utente
 	 * @param fullName
 	 *            nome completo dell’utente
 	 * @param email
@@ -1227,13 +1230,14 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean createUser(String USER_ID, String password, String nome, String cognome, String fullName, String email) throws Exception {
+	public boolean createUser(String USER_ID, String password, String nome, String cognome, String fullName,
+			String email) throws Exception {
 
 		KeyValuePairFactory<MetadatiUtente> keyBuilder = KeyValuePairFactory.build(MetadatiFolder.USER_ID_KEY, USER_ID)
 				.add(MetadatiFolder.COD_ENTE, docerCodiceENTE).add(MetadatiFolder.COD_AOO, docerCodiceAOO);
 		if (StringUtils.isNotEmpty(fullName))
 			keyBuilder.add(MetadatiUtente.FULL_NAME, fullName);
-		
+
 		if (StringUtils.isNotEmpty(password))
 			keyBuilder.add(MetadatiUtente.USER_PASSWORD, password);
 		if (StringUtils.isNotEmpty(nome))
@@ -1242,7 +1246,7 @@ public class DocerHelper extends AbstractDocerHelper {
 			keyBuilder.add(MetadatiUtente.LAST_NAME, cognome);
 		if (StringUtils.isNotEmpty(email))
 			keyBuilder.add(MetadatiUtente.EMAIL_ADDRESS, email);
-		
+
 		KeyValuePair[] userInfo = keyBuilder.get();
 
 		DocerServicesStub service = getDocerService();
@@ -1253,27 +1257,31 @@ public class DocerHelper extends AbstractDocerHelper {
 		boolean esito = response.get_return();
 		return esito;
 	}
-	
+
 	/**
 	 * Questo metodo permette la modifica del profilo di un utente nel DMS.
 	 * <p>
 	 * Il metodo non permette la modifica della USER_ID degli utenti.
 	 * 
-	 * @param userId id dell'utente da modificare
-	 * @param metadati lista di metadati Utente da modificare
+	 * @param userId
+	 *            id dell'utente da modificare
+	 * @param metadati
+	 *            lista di metadati Utente da modificare
 	 * @return
-	 * @throws Exception In tutti i casi di errore il metodo solleva una SOAPException contenente il messaggio di errore.
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
 	 */
 	public boolean updateUser(String userId, Map<MetadatiUtente, String> metadati) throws Exception {
 
 		KeyValuePairFactory<MetadatiUtente> keyBuilder = KeyValuePairFactory.build(MetadatiFolder.USER_ID_KEY, userId)
 				.add(MetadatiFolder.COD_ENTE, docerCodiceENTE).add(MetadatiFolder.COD_AOO, docerCodiceAOO);
-		if (metadati != null && ! metadati.isEmpty()) {
+		if (metadati != null && !metadati.isEmpty()) {
 			for (Entry<MetadatiUtente, String> metadato : metadati.entrySet()) {
 				keyBuilder.add(metadato.getKey(), metadato.getValue());
 			}
 		}
-		
+
 		KeyValuePair[] userInfo = keyBuilder.get();
 
 		DocerServicesStub service = getDocerService();
@@ -1284,17 +1292,19 @@ public class DocerHelper extends AbstractDocerHelper {
 		UpdateUserResponse response = service.updateUser(request);
 		boolean esito = response.get_return();
 		return esito;
-	}	
+	}
 
 	/**
 	 * Questo metodo permette di recuperare il profilo di un utente del DMS.
-	 * @param userId id dell’utente di riferimento
+	 * 
+	 * @param userId
+	 *            id dell’utente di riferimento
 	 * @return
 	 * @throws Exception
 	 */
 	public Map<String, String> getUser(String userId) throws Exception {
 		Map<MetadatiUtente, String> res = new HashMap<>();
-		
+
 		DocerServicesStub service = getDocerService();
 		GetUser request = new GetUser();
 		request.setToken(getLoginTicket());
@@ -1303,15 +1313,17 @@ public class DocerHelper extends AbstractDocerHelper {
 		KeyValuePair[] metadati = response.get_return();
 		return KeyValuePairFactory.asMap(metadati);
 	}
-	
+
 	/**
-	 * Questo metodo permette di eseguire delle ricerche sulla collezione degli utenti del DMS.
+	 * Questo metodo permette di eseguire delle ricerche sulla collezione degli
+	 * utenti del DMS.
+	 * 
 	 * @param userId
 	 * @return
 	 * @throws Exception
 	 */
 	public List<Map<String, String>> searchUsers(String userId) throws Exception {
-		
+
 		logger.debug("searchUsers {}", userId);
 		KeyValuePairFactory<MetadatiUtente> searchCriteria = new KeyValuePairFactory<>();
 		if (StringUtils.isNotEmpty(userId)) {
@@ -1324,5 +1336,44 @@ public class DocerHelper extends AbstractDocerHelper {
 		SearchUsersResponse response = service.searchUsers(request);
 		SearchItem[] data = response.get_return();
 		return KeyValuePairFactory.asListMap(data);
-	}	
+	}
+
+	/**
+	 * Questo metodo permette la creazione dei gruppi nel DMS.
+	 * <p>
+	 * L’oggetto groupInfo[] è una collezione di nodi groupInfo. Ogni nodo
+	 * groupInfo contiene una KeyValuePair ovvero due nodi key e value di tipo
+	 * string dove i valori ammessi per i nodi key sono (si veda il paragrafo
+	 * 4.2 Profilo dei Gruppi):
+	 * <li>GROUP_ID (id del gruppo)
+	 * <li>GROUP_NAME (nome del gruppo)
+	 * <li>PARENT_GROUP_ID (id del gruppo padre)
+	 * <li>metadati extra Tale lista coincide con il profilo minimo richiesto
+	 * per la creazione. Per i gruppi di primo livello la chiave PARENT_GROUP_ID
+	 * deve indicare l’id del gruppo “Ente” di appartenenza (si veda paragrafo
+	 * il 4.1.1 Anagrafica Ente).
+	 * 
+	 * @param USER_ID
+	 * @param GROUP_NAME
+	 * @param PARENT_GROUP_ID
+	 * @return true se il metodo è andato a buon fine
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public boolean createGroup(String GROUP_ID, String GROUP_NAME, String PARENT_GROUP_ID) throws Exception {
+
+		KeyValuePairFactory<MetadatiGruppi> keyBuilder = KeyValuePairFactory.build(MetadatiGruppi.GROUP_ID, GROUP_ID)
+				.add(MetadatiGruppi.GROUP_NAME, GROUP_NAME).add(MetadatiGruppi.PARENT_GROUP_ID, PARENT_GROUP_ID);
+
+		KeyValuePair[] userInfo = keyBuilder.get();
+
+		DocerServicesStub service = getDocerService();
+		CreateGroup request = new CreateGroup();
+		request.setToken(getLoginTicket());
+		request.setGroupInfo(userInfo);
+		CreateGroupResponse response = service.createGroup(request);
+		boolean esito = response.get_return();
+		return esito;
+	}
 }
