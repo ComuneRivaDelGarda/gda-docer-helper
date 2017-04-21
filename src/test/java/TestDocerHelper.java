@@ -335,7 +335,7 @@ public class TestDocerHelper {
 			Assert.assertNotNull(res);
 			logger.info("{}", new Gson().toJson(res));
 		} catch (Exception ex) {
-			logger.error("test200", ex);
+			logger.error("test200", ex.getMessage());
 		}
 	}	
 	
