@@ -71,9 +71,13 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchUsers;
 import it.kdm.docer.webservices.DocerServicesStub.SearchUsersResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.SetACLDocumentResponse;
+import it.kdm.docer.webservices.DocerServicesStub.SetGroupsOfUser;
+import it.kdm.docer.webservices.DocerServicesStub.SetGroupsOfUserResponse;
 import it.kdm.docer.webservices.DocerServicesStub.StreamDescriptor;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateGroup;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateGroupResponse;
+import it.kdm.docer.webservices.DocerServicesStub.UpdateGroupsOfUser;
+import it.kdm.docer.webservices.DocerServicesStub.UpdateGroupsOfUserResponse;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateUser;
@@ -1234,7 +1238,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public boolean createUser(String USER_ID, String password, String nome, String cognome, String fullName,
 			String email) throws Exception {
-
+		logger.debug("createUser {} {} {} {} {} {}", USER_ID, password, nome, cognome, fullName, email);
 		KeyValuePairFactory<MetadatiUtente> keyBuilder = new KeyValuePairFactory<>();
 		keyBuilder.add(MetadatiUtente.USER_ID, USER_ID).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
 				.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
@@ -1276,7 +1280,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             contenente il messaggio di errore.
 	 */
 	public boolean updateUser(String userId, Map<MetadatiUtente, String> metadati) throws Exception {
-
+		logger.debug("updateUser {} {}", userId,  metadati);
 		KeyValuePairFactory<MetadatiUtente> keyBuilder = new KeyValuePairFactory<>();
 		keyBuilder.add(MetadatiFolder.USER_ID_KEY, userId).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
 				.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
@@ -1308,6 +1312,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public Map<String, String> getUser(String userId) throws Exception {
+		logger.debug("getUser {}", userId);
 		Map<MetadatiUtente, String> res = new HashMap<>();
 
 		DocerServicesStub service = getDocerService();
@@ -1328,7 +1333,6 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public List<Map<String, String>> searchUsers(String userId) throws Exception {
-
 		logger.debug("searchUsers {}", userId);
 		KeyValuePairFactory<MetadatiUtente> searchCriteria = new KeyValuePairFactory<>();
 		if (StringUtils.isNotEmpty(userId)) {
@@ -1367,7 +1371,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             contenente il messaggio di errore.
 	 */
 	public boolean createGroup(String GROUP_ID, String GROUP_NAME, String PARENT_GROUP_ID) throws Exception {
-
+		logger.debug("createGroup {} {} {}", GROUP_ID, GROUP_NAME, PARENT_GROUP_ID);
 		KeyValuePairFactory<MetadatiGruppi> keyBuilder = new KeyValuePairFactory<>();
 		keyBuilder.add(MetadatiGruppi.GROUP_ID, GROUP_ID).add(MetadatiGruppi.GROUP_NAME, GROUP_NAME)
 				.add(MetadatiGruppi.PARENT_GROUP_ID, PARENT_GROUP_ID);
@@ -1394,7 +1398,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean updateGroup(String groupId, Map<MetadatiGruppi, String> metadati) throws Exception {
-
+		logger.debug("updateGroup {} {}", groupId, metadati);
 		KeyValuePairFactory<MetadatiGruppi> keyBuilder = new KeyValuePairFactory<>();
 		if (metadati != null && !metadati.isEmpty()) {
 			for (Entry<MetadatiGruppi, String> metadato : metadati.entrySet()) {
@@ -1410,6 +1414,71 @@ public class DocerHelper extends AbstractDocerHelper {
 		request.setGroupId(groupId);
 		request.setGroupInfo(groupInfo);
 		UpdateGroupResponse response = service.updateGroup(request);
+		boolean esito = response.get_return();
+		return esito;
+	}
+
+	/**
+	 * Questo metodo permette di assegnare i gruppi ad un utente del DMS.
+	 * <p>
+	 * L’oggetto groups[] è una collezione di nodi groups. Ogni nodo groups
+	 * contiene un dato di tipo string dove i valori ammessi sono i GROUP_ID dei
+	 * gruppi del DMS.
+	 * 
+	 * @param userId
+	 *            id dell’utente di riferimento
+	 * @param groups
+	 *            Collezione degli id dei gruppi da assegnare all’utente
+	 * @return true se il metodo è andato a buon fine
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public boolean setGroupsOfUser(String userId, List<String> groups) throws Exception {
+		logger.debug("setGroupsOfUser {} {}", userId, groups);
+		DocerServicesStub service = getDocerService();
+		SetGroupsOfUser request = new SetGroupsOfUser();
+		request.setToken(getLoginTicket());
+		request.setUserId(userId);
+		if (groups != null)
+			request.setGroups(groups.toArray(new String[groups.size()]));
+		SetGroupsOfUserResponse response = service.setGroupsOfUser(request);
+		boolean esito = response.get_return();
+		return esito;
+	}
+
+	/**
+	 * Questo metodo permette di modificare la lista dei gruppi di un utente del
+	 * DMS.
+	 * <p>
+	 * Gli oggetti groupsToAdd[] e groupsToRemove[] sono delle sequenze di nodi
+	 * groupsToAdd e groupsToRemove rispettivamente. Ogni nodo groupsToAdd o
+	 * groupsToRemove contiene un dato di tipo string dove i valori ammessi sono
+	 * i GROUP_ID dei gruppi del DMS.
+	 * 
+	 * @param userId
+	 *            id dell’utente di riferimento
+	 * @param groupsToAdd
+	 *            Collezione degli id dei gruppi da assegnare all’utente
+	 * @param groupsToRemove
+	 *            Collezione degli id dei gruppi da rimuovere dall’utente
+	 * @return true se il metodo è andato a buon fine
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public boolean updateGroupsOfUser(String userId, List<String> groupsToAdd, List<String> groupsToRemove)
+			throws Exception {
+		logger.debug("updateGroupsOfUser {} {} {}", userId, groupsToAdd, groupsToRemove);
+		DocerServicesStub service = getDocerService();
+		UpdateGroupsOfUser request = new UpdateGroupsOfUser();
+		request.setToken(getLoginTicket());
+		request.setUserId(userId);
+		if (groupsToAdd != null)
+			request.setGroupsToAdd(groupsToAdd.toArray(new String[groupsToAdd.size()]));
+		if (groupsToRemove != null)
+			request.setGroupsToRemove(groupsToRemove.toArray(new String[groupsToRemove.size()]));
+		UpdateGroupsOfUserResponse response = service.updateGroupsOfUser(request);
 		boolean esito = response.get_return();
 		return esito;
 	}
