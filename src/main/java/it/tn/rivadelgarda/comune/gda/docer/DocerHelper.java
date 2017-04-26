@@ -1097,9 +1097,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean protocollaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
-		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
-		return protocollaDocumentoNative(documentId, data);
+	public boolean protocollaDocumento(String documentId, List<Map<MetadatiDocumento,String>> metadati) throws Exception {
+		return protocollaDocumentoNative(documentId, KeyValuePairFactory.toArray(metadati));
 	}
 	
 	/**
@@ -1226,9 +1225,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean classificaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
-		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
-		return classificaDocumentoNative(documentId, data);
+	public boolean classificaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati) throws Exception {
+		return classificaDocumentoNative(documentId, KeyValuePairFactory.toArray(metadati));
 	}
 	
 	/**
@@ -1317,9 +1315,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
 	 */
-	public boolean archiviaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
-		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
-		return archiviaDocumentoNative(documentId, data);
+	public boolean archiviaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati) throws Exception {
+		return archiviaDocumentoNative(documentId, KeyValuePairFactory.toArray(metadati));
 	}
 	
 	/**

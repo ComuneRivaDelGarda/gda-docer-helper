@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
@@ -182,11 +183,19 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 		return metadataValues.toArray(new String[metadataValues.size()]);
 	}
 	
-	public static KeyValuePair[] toArray(List<MetadatoDocer> metadati) {
-		KeyValuePair[] res = new KeyValuePair[0];
-		if (metadati != null) {
-			res = metadati.toArray(new KeyValuePair[metadati.size()]);
+	public static <T extends MetadatoDocer> KeyValuePair[] toArray(List<Map<T, String>> listMetadati) {
+		List<KeyValuePair> res = new ArrayList<>();
+		if (listMetadati != null && !listMetadati.isEmpty()) {
+			res = metadati.toArray(new KeyValuePair[listMetadati.size()]);
+			for (Map<T, String> metadati : listMetadati) {
+				for (Entry<T, String> entry : metadati.entrySet()) {
+					KeyValuePair kvp = new KeyValuePair();
+					kvp.setKey(entry.getKey().getValue());
+					kvp.setValue(entry.getValue());
+					res.add(kvp);
+				}
+			}
 		}
-		return res;
+		return res.toArray(new KeyValuePair[res.size()]);
 	}
 }
