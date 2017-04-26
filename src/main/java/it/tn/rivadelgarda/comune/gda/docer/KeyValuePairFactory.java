@@ -186,7 +186,6 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 	public static <T extends MetadatoDocer> KeyValuePair[] toArray(List<Map<T, String>> listMetadati) {
 		List<KeyValuePair> res = new ArrayList<>();
 		if (listMetadati != null && !listMetadati.isEmpty()) {
-			res = metadati.toArray(new KeyValuePair[listMetadati.size()]);
 			for (Map<T, String> metadati : listMetadati) {
 				for (Entry<T, String> entry : metadati.entrySet()) {
 					KeyValuePair kvp = new KeyValuePair();
