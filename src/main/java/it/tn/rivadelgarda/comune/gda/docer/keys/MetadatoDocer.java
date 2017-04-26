@@ -46,6 +46,11 @@ public interface MetadatoDocer {
 	public final static String SORT_ASC = "ASC";
 	public final static String SORT_DESC = "DESC";
 	
+	public final static String CLASSIFICA_KEY = "CLASSIFICA";
+	public final static String PROGR_FASCICOLO_KEY = "PROGR_FASCICOLO";
+	public final static String ANNO_FASCICOLO_KEY = "ANNO_FASCICOLO";
+	public final static String FASC_SECONDARI_KEY = "FASC_SECONDARI";
+	
 	public static final String NUM_PG_KEY = "NUM_PG";
 	public static final String ANNO_PG_KEY = "ANNO_PG";
 	public static final String OGGETTO_PG_KEY = "OGGETTO_PG";
