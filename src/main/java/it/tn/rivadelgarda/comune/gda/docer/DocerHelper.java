@@ -1101,6 +1101,69 @@ public class DocerHelper extends AbstractDocerHelper {
 		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
 		return protocollaDocumentoNative(documentId, data);
 	}
+	
+	/**
+	 * Questo metodo permette l’assegnazione dei metadati di protocollazione ad
+	 * un Documento del DMS.
+	 * <p>
+	 * La variabile docId è l’id del Documento nel DMS. L’oggetto metadata[] è
+	 * una collezione di nodi metadata. Ogni nodo metadata contiene una
+	 * KeyValuePair ovvero due nodi, key e value, di tipo string dove i valori
+	 * ammessi per i nodi key sono i nomi dei metadati del profilo relativi alla
+	 * protocollazione di un documento(si veda paragrafo 4.4. Profilo di un
+	 * documento). Per questo metodo i metadati specificabili sono:
+	 * <li>COD_ENTE: codice dell’Ente assegnato al documento
+	 * <li>COD_AOO: codice della AOO assegnata al documento
+	 * <li>NUM_PG: numero di protocollo assegnato al documento
+	 * <li>ANNO_PG: anno di protocollo assegnato al documento, se assente viene
+	 * ricavata da DATA_PG; se specificato deve coincidere con l’anno presente
+	 * in DATA_PG
+	 * <li>OGGETTO_PG: oggetto del protocollo
+	 * <li>REGISTRO_PG: registro del protocollo
+	 * <li>DATA_PG: data di protocollazione
+	 * <li>TIPO_PROTOCOLLAZIONE: tipo protocollazione o E (entrata) o I
+	 * (interna( o U (uscita) o ND (non definita)
+	 * <li>MITTENTI: i mittenti (è anche metadato di Registrazione)
+	 * <li>DESTINATARI: i destinatari (è anche metadato di Registrazione)
+	 * <li>TIPO_FIRMA: tipo firma (è anche metadato di Registrazione)
+	 * <li>FIRMATARIO: firmatario : firmatario (è anche metadato di
+	 * Registrazione)
+	 * <p>
+	 * Il metodo controlla il metadato TIPO_COMPONENTE per tutti gli elementi
+	 * della catena dei correlati e verifica che nessun correlato, ad esclusione
+	 * del documento individuato da docId abbia TIPO_COMPONENTE uguale a
+	 * PRINCIPALE. Al documento oggetto del metodo viene impostato
+	 * TIPO_COMPONENTE uguale a PRINCIPALE; agli altri correlati con
+	 * TIPO_COMPONENTE non valorizzato viene impostato il valore ALLEGATO. Il
+	 * metodo verifica inoltre il valore del metadato DOCNUM_PRINC per tutta la
+	 * catena dei correlati: deve essere vuoto o coincidere con docId.
+	 * <p>
+	 * Se DOCNUM_PRINC non è assegnato viene impostato a docId per tutta la
+	 * catena dei correlati ad eccezione del documento individuato da docId per
+	 * il quale viene lasciato vuoto. Se uno o più dei metadati condivisi con la
+	 * Registrazione (MITTENTI, DESTINATARI, TIPO_FIRMA, FIRMATARIO) risultano
+	 * valorizzati, il metodo controlla che nessuna modifica venga apportata a
+	 * questi metadati.
+	 * <p>
+	 * Il metadato STATO_ARCHIVISTICO viene impostato implicitamente a 3
+	 * (Protocollato), per tutta la catena dei correlati, solo se il documento
+	 * non possiede una classifica o un fascicolo principale 74assegnato,
+	 * altrimenti viene impostato al valore 4 (Classificato) o 5 (Fascicolato)
+	 * rispettivamente. Questo metodo non è invocabile per i documenti in
+	 * STATO_ARCHIVISTICO 6 (in archivio di deposito)
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @param metadata
+	 *            Collezione dei metadati del profilo da modificare
+	 * @return true se l’operazione è andata a buon fine
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */	
+	public boolean protocollaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory) throws Exception {
+		return protocollaDocumentoNative(documentId, factory.get());
+	}
 
 	/**
 	 * Questo metodo permette la classificazione di un Documento e di tutti i
@@ -1167,6 +1230,44 @@ public class DocerHelper extends AbstractDocerHelper {
 		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
 		return classificaDocumentoNative(documentId, data);
 	}
+	
+	/**
+	 * Questo metodo permette la classificazione di un Documento e di tutti i
+	 * suoi related nel DMS.
+	 * <p>
+	 * La variabile docId è l’id del Documento nel DMS.
+	 * <p>
+	 * L’oggetto metadata[] è una collezione di nodi metadata. Ogni nodo
+	 * metadata contiene una KeyValuePair ovvero due nodi, key e value, di tipo
+	 * string dove i valori ammessi per i nodi key sono i nomi dei metadati del
+	 * profilo relativi alla classificazione (si veda paragrafo 4.4. Profilo di
+	 * un documento).
+	 * <p>
+	 * Per questo metodo i metadati specificabili sono:
+	 * <li>COD_ENTE: codice dell’Ente assegnato al documento
+	 * <li>COD_AOO: codice della AOO assegnata al documento
+	 * <li>CLASSIFICA: classifica principale assegnata al documento
+	 * <p>
+	 * Il metadato STATO_ARCHIVISTICO viene impostato implicitamente a 4
+	 * (Classificato) per tutta la catena dei correlati solo se il documento
+	 * principale si trova in STATO_ARCHIVISTICO 2 (Registrato) o 3
+	 * (Protocollato).
+	 * <p>
+	 * Questo metodo non è invocabile per i documenti in STATO_ARCHIVISTICO 6
+	 * (in archivio di deposito).
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @param metadati
+	 *            Collezione dei metadati del profilo da modificare
+	 * @return true se l’operazione è andata a buon fine
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */	
+	public boolean classificaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory) throws Exception {
+		return classificaDocumentoNative(documentId, factory.get());
+	}
 
 	/**
 	 * Questo metodo permette l’archiviazione (in archivio di deposito) di un
@@ -1219,6 +1320,32 @@ public class DocerHelper extends AbstractDocerHelper {
 	public boolean archiviaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
 		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
 		return archiviaDocumentoNative(documentId, data);
+	}
+	
+	/**
+	 * Questo metodo permette l’archiviazione (in archivio di deposito) di un
+	 * Documento e di tutti i suoi related nel DMS.
+	 * <p>
+	 * La variabile docId è l’id del Documento nel DMS.
+	 * <p>
+	 * L’oggetto metadata[] è una collezione di nodi metadata. Ogni nodo
+	 * metadata contiene una KeyValuePair ovvero due nodi, key e value, di tipo
+	 * string dove i valori ammessi per i nodi key sono i nomi dei metadati del
+	 * profilo relativi all’archivio di deposito (si veda paragrafo 4.4. Profilo
+	 * di un documento).
+	 * <p>
+	 * Il metadato STATO_ARCHIVISTICO viene impostato implicitamente a 6
+	 * (Archiviato) per tutta la catena dei correlati.
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @param metadati
+	 *            Collezione dei metadati del profilo da modificare
+	 * @return true se l’operazione è andata a buon fine
+	 * @throws Exception
+	 */	
+	public boolean archiviaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory) throws Exception {
+		return archiviaDocumentoNative(documentId, factory.get());
 	}
 
 	/** HELPER */
