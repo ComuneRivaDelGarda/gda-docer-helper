@@ -181,4 +181,12 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 		}
 		return metadataValues.toArray(new String[metadataValues.size()]);
 	}
+	
+	public static KeyValuePair[] toArray(List<MetadatoDocer> metadati) {
+		KeyValuePair[] res = new KeyValuePair[0];
+		if (metadati != null) {
+			res = metadati.toArray(new KeyValuePair[metadati.size()]);
+		}
+		return res;
+	}
 }

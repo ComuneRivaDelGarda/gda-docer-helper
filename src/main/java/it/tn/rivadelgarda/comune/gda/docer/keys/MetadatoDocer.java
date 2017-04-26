@@ -61,6 +61,20 @@ public interface MetadatoDocer {
     public final static String ACL_NORMAL_ACCESS = "1";
     public final static String ACL_FULL_ACCESS = "2";
     
+	public final static String STATO_ARCHIVISTICO_GENERICO_DOCUMENT = "0";
+	public final static String STATO_ARCHIVISTICO_GENERICO_DEFINITIVO = "2";
+	public final static String STATO_ARCHIVISTICO_REGISTRATO = "2";
+	public final static String STATO_ARCHIVISTICO_PROTOCOLLATO = "3";
+	public final static String STATO_ARCHIVISTICO_CLASSIFICATO = "4";
+	public final static String STATO_ARCHIVISTICO_FASCICOLATO = "5";
+	public final static String STATO_ARCHIVISTICO_IN_ARCHIVIO_DI_DEPOSITO = "6";
+	
+	public final static String STATO_BUSINESS_NON_DEFINITO = "0";
+	public final static String STATO_BUSINESS_DA_PROTOCOLLARE = "2";
+	public final static String STATO_BUSINESS_DA_FASCICOLARE = "2";
+	public final static String STATO_BUSINESS_DA_REGISTRARE = "3";
+	public final static String STATO_BUSINESS_DA_FIRMARE = "4";
+	
     /*
      * UTENTE
      */

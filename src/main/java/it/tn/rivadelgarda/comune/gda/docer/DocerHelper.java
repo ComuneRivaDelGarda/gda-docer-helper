@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.swing.plaf.metal.MetalTabbedPaneUI;
 
 import org.apache.axiom.attachments.ByteArrayDataSource;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -810,9 +811,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            o la USER_ID di un Utente del DMS ed il relativo value
 	 *            contiene il diritto da assegnare al Documento. Per i diritti è
 	 *            assunta la seguente convenzione (si veda il paragrafo 4.6
-	 *            Livelli di Accesso ai documenti e anagrafiche): • 2 se si
-	 *            vuole assegnare “Read Only Access” • 1 se si vuole assegnare
-	 *            “Normal Access” • 0 se si vuole assegnare “Full Access”
+	 *            Livelli di Accesso ai documenti e anagrafiche):
+	 *            <li>2 se si vuole assegnare “Read Only Access”
+	 *            <li>1 se si vuole assegnare “Normal Access”
+	 *            <li>0 se si vuole assegnare “Full Access”
 	 * @return
 	 * @throws Exception
 	 */
@@ -1025,7 +1027,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
 	 */
-	public boolean protocollaDocumento(String documentId, KeyValuePair[] metadata) throws Exception {
+	private boolean protocollaDocumentoNative(String documentId, KeyValuePair[] metadata) throws Exception {
 		DocerServicesStub service = getDocerService();
 		ProtocollaDocumento request = new ProtocollaDocumento();
 		request.setToken(getLoginTicket());
@@ -1034,6 +1036,70 @@ public class DocerHelper extends AbstractDocerHelper {
 		ProtocollaDocumentoResponse response = service.protocollaDocumento(request);
 		boolean esito = response.get_return();
 		return esito;
+	}
+
+	/**
+	 * Questo metodo permette l’assegnazione dei metadati di protocollazione ad
+	 * un Documento del DMS.
+	 * <p>
+	 * La variabile docId è l’id del Documento nel DMS. L’oggetto metadata[] è
+	 * una collezione di nodi metadata. Ogni nodo metadata contiene una
+	 * KeyValuePair ovvero due nodi, key e value, di tipo string dove i valori
+	 * ammessi per i nodi key sono i nomi dei metadati del profilo relativi alla
+	 * protocollazione di un documento(si veda paragrafo 4.4. Profilo di un
+	 * documento). Per questo metodo i metadati specificabili sono:
+	 * <li>COD_ENTE: codice dell’Ente assegnato al documento
+	 * <li>COD_AOO: codice della AOO assegnata al documento
+	 * <li>NUM_PG: numero di protocollo assegnato al documento
+	 * <li>ANNO_PG: anno di protocollo assegnato al documento, se assente viene
+	 * ricavata da DATA_PG; se specificato deve coincidere con l’anno presente
+	 * in DATA_PG
+	 * <li>OGGETTO_PG: oggetto del protocollo
+	 * <li>REGISTRO_PG: registro del protocollo
+	 * <li>DATA_PG: data di protocollazione
+	 * <li>TIPO_PROTOCOLLAZIONE: tipo protocollazione o E (entrata) o I
+	 * (interna( o U (uscita) o ND (non definita)
+	 * <li>MITTENTI: i mittenti (è anche metadato di Registrazione)
+	 * <li>DESTINATARI: i destinatari (è anche metadato di Registrazione)
+	 * <li>TIPO_FIRMA: tipo firma (è anche metadato di Registrazione)
+	 * <li>FIRMATARIO: firmatario : firmatario (è anche metadato di
+	 * Registrazione)
+	 * <p>
+	 * Il metodo controlla il metadato TIPO_COMPONENTE per tutti gli elementi
+	 * della catena dei correlati e verifica che nessun correlato, ad esclusione
+	 * del documento individuato da docId abbia TIPO_COMPONENTE uguale a
+	 * PRINCIPALE. Al documento oggetto del metodo viene impostato
+	 * TIPO_COMPONENTE uguale a PRINCIPALE; agli altri correlati con
+	 * TIPO_COMPONENTE non valorizzato viene impostato il valore ALLEGATO. Il
+	 * metodo verifica inoltre il valore del metadato DOCNUM_PRINC per tutta la
+	 * catena dei correlati: deve essere vuoto o coincidere con docId.
+	 * <p>
+	 * Se DOCNUM_PRINC non è assegnato viene impostato a docId per tutta la
+	 * catena dei correlati ad eccezione del documento individuato da docId per
+	 * il quale viene lasciato vuoto. Se uno o più dei metadati condivisi con la
+	 * Registrazione (MITTENTI, DESTINATARI, TIPO_FIRMA, FIRMATARIO) risultano
+	 * valorizzati, il metodo controlla che nessuna modifica venga apportata a
+	 * questi metadati.
+	 * <p>
+	 * Il metadato STATO_ARCHIVISTICO viene impostato implicitamente a 3
+	 * (Protocollato), per tutta la catena dei correlati, solo se il documento
+	 * non possiede una classifica o un fascicolo principale 74assegnato,
+	 * altrimenti viene impostato al valore 4 (Classificato) o 5 (Fascicolato)
+	 * rispettivamente. Questo metodo non è invocabile per i documenti in
+	 * STATO_ARCHIVISTICO 6 (in archivio di deposito)
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @param metadata
+	 *            Collezione dei metadati del profilo da modificare
+	 * @return true se l’operazione è andata a buon fine
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public boolean protocollaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
+		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
+		return protocollaDocumentoNative(documentId, data);
 	}
 
 	/**
@@ -1052,7 +1118,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean classificaDocumento(String documentId, KeyValuePair[] metadata) throws Exception {
+	private boolean classificaDocumentoNative(String documentId, KeyValuePair[] metadata) throws Exception {
 		DocerServicesStub service = getDocerService();
 		ClassificaDocumento request = new ClassificaDocumento();
 		request.setToken(getLoginTicket());
@@ -1061,6 +1127,45 @@ public class DocerHelper extends AbstractDocerHelper {
 		ClassificaDocumentoResponse response = service.classificaDocumento(request);
 		boolean esito = response.get_return();
 		return esito;
+	}
+
+	/**
+	 * Questo metodo permette la classificazione di un Documento e di tutti i
+	 * suoi related nel DMS.
+	 * <p>
+	 * La variabile docId è l’id del Documento nel DMS.
+	 * <p>
+	 * L’oggetto metadata[] è una collezione di nodi metadata. Ogni nodo
+	 * metadata contiene una KeyValuePair ovvero due nodi, key e value, di tipo
+	 * string dove i valori ammessi per i nodi key sono i nomi dei metadati del
+	 * profilo relativi alla classificazione (si veda paragrafo 4.4. Profilo di
+	 * un documento).
+	 * <p>
+	 * Per questo metodo i metadati specificabili sono:
+	 * <li>COD_ENTE: codice dell’Ente assegnato al documento
+	 * <li>COD_AOO: codice della AOO assegnata al documento
+	 * <li>CLASSIFICA: classifica principale assegnata al documento
+	 * <p>
+	 * Il metadato STATO_ARCHIVISTICO viene impostato implicitamente a 4
+	 * (Classificato) per tutta la catena dei correlati solo se il documento
+	 * principale si trova in STATO_ARCHIVISTICO 2 (Registrato) o 3
+	 * (Protocollato).
+	 * <p>
+	 * Questo metodo non è invocabile per i documenti in STATO_ARCHIVISTICO 6
+	 * (in archivio di deposito).
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @param metadati
+	 *            Collezione dei metadati del profilo da modificare
+	 * @return true se l’operazione è andata a buon fine
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public boolean classificaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
+		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
+		return classificaDocumentoNative(documentId, data);
 	}
 
 	/**
@@ -1078,7 +1183,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean archiviaDocumento(String documentId, KeyValuePair[] metadata) throws Exception {
+	private boolean archiviaDocumentoNative(String documentId, KeyValuePair[] metadata) throws Exception {
 		DocerServicesStub service = getDocerService();
 		ArchiviaDocumento request = new ArchiviaDocumento();
 		request.setToken(getLoginTicket());
@@ -1087,6 +1192,33 @@ public class DocerHelper extends AbstractDocerHelper {
 		ArchiviaDocumentoResponse response = service.archiviaDocumento(request);
 		boolean esito = response.get_return();
 		return esito;
+	}
+
+	/**
+	 * Questo metodo permette l’archiviazione (in archivio di deposito) di un
+	 * Documento e di tutti i suoi related nel DMS.
+	 * <p>
+	 * La variabile docId è l’id del Documento nel DMS.
+	 * <p>
+	 * L’oggetto metadata[] è una collezione di nodi metadata. Ogni nodo
+	 * metadata contiene una KeyValuePair ovvero due nodi, key e value, di tipo
+	 * string dove i valori ammessi per i nodi key sono i nomi dei metadati del
+	 * profilo relativi all’archivio di deposito (si veda paragrafo 4.4. Profilo
+	 * di un documento).
+	 * <p>
+	 * Il metadato STATO_ARCHIVISTICO viene impostato implicitamente a 6
+	 * (Archiviato) per tutta la catena dei correlati.
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @param metadati
+	 *            Collezione dei metadati del profilo da modificare
+	 * @return true se l’operazione è andata a buon fine
+	 * @throws Exception
+	 */
+	public boolean archiviaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
+		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
+		return archiviaDocumentoNative(documentId, data);
 	}
 
 	/** HELPER */
@@ -1280,7 +1412,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             contenente il messaggio di errore.
 	 */
 	public boolean updateUser(String userId, Map<MetadatiUtente, String> metadati) throws Exception {
-		logger.debug("updateUser {} {}", userId,  metadati);
+		logger.debug("updateUser {} {}", userId, metadati);
 		KeyValuePairFactory<MetadatiUtente> keyBuilder = new KeyValuePairFactory<>();
 		keyBuilder.add(MetadatiFolder.USER_ID_KEY, userId).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
 				.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
