@@ -19,6 +19,18 @@ import java.util.List;
 public enum MetadatiDocumento implements MetadatoDocer {
 	
 	/**
+	 * Metadati di base generici:
+	 */
+	
+    /**
+     * codice dell’Ente assegnato al documento
+     */
+    COD_ENTE(COD_ENTE_KEY),
+    /**
+     * codice della AOO assegnata al documento
+     */
+    COD_AOO(COD_AOO_KEY),
+	/**
 	 * obbligatorio, il document-type del documento. è il tipo di documento,
 	 * individua l’insieme delle proprietà del profilo
 	 */
@@ -31,7 +43,7 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	/**
 	 * non obblicatorio, descrizione del documetno
 	 */
-	ABSTRACT(ABSTRACT_KEY), COD_ENTE(COD_ENTE_KEY), COD_AOO(COD_AOO_KEY),
+	ABSTRACT(ABSTRACT_KEY),
 	/**
 	 * non obbligatorio, definisce il tipo di componente dell’unità documentaria
 	 * di protocollo
@@ -98,8 +110,100 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	 * METADATO aggiunto il 16/03/2017 per memorizzare ID VERSANTE e fare 
 	 * successive ricerche per documenti appartenenti alla stessa ENTITA' del VERSANTE
 	 */
-	EXTERNAL_ID(EXTERNAL_ID_KEY);
+	EXTERNAL_ID(EXTERNAL_ID_KEY),
 
+	
+	/*
+	 * Metadati di classificazione e fascicolazione:
+	 */
+	
+	/**
+	 * è la classifica del Titolario assegnato al documento
+	 */
+	CLASSIFICA(CLASSIFICA_KEY),
+	/**
+	 * è il numero progressivo del Fascicolo primario assegnato al documento
+	 */
+	PROGR_FASCICOLO(PROGR_FASCICOLO_KEY),
+	/**
+	 * l’anno del Fascicolo primario assegnato al documento
+	 */
+	ANNO_FASCICOLO(ANNO_FASCICOLO_KEY),
+	/**
+	 * fascicoli secondari del documento (lista dei fascicoli secondari
+	 * separarti dal carattere ‘;’. Ogni fascicolo secondario viene indicato
+	 * concatenando classifica, anno fascicolo secondario e progressivo
+	 * fascicolo secondario con il carattere ‘/’ come nel seguente esempio:
+	 * “1.3.5/2012/1/2/1/3;1.3.6/2012/3/1”).
+	 */
+	FASC_SECONDARI(FASC_SECONDARI_KEY),
+	
+	/*
+	 * Metadati di protocollazione:
+	 */
+	
+    /**
+     * numero di protocollo assegnato al documento
+     */
+    NUM_PG(NUM_PG_KEY),
+    /**
+     * anno di protocollo assegnato al documento, se assente viene ricavata da
+     * DATA_PG; se specificato deve coincidere con l’anno presente in DATA_PG
+     */
+    ANNO_PG(ANNO_PG_KEY),
+    /**
+     * oggetto del protocollo
+     */
+    OGGETTO_PG(OGGETTO_PG_KEY),
+    /**
+     * registro del protocollo
+     */
+    REGISTRO_PG(REGISTRO_PG_KEY),
+    /**
+     * data di protocollazione
+     */
+    DATA_PG(DATA_PG_KEY),
+    /**
+     * tipo protocollazione
+     * <p>
+     * <ul>
+     * <li>E (entrata)</li>
+     * <li>I (interna)</li>
+     * <li>U (uscita)</li>
+     * <li>ND (non definita)</li>
+     * </ul>
+     * </p>
+     */
+    TIPO_PROTOCOLLAZIONE(TIPO_PROTOCOLLAZIONE_KEY),
+    /**
+     * i mittenti (è anche metadato di Registrazione)
+     */
+    MITTENTI(MITTENTI_KEY),
+    /**
+     * i destinatari (è anche metadato di Registrazione)
+     */
+    DESTINATARI(DESTINATARI_KEY),
+    /**
+     * tipo firma (è anche metadato di Registrazione)
+     */
+    TIPO_FIRMA(TIPO_FIRMA_KEY),
+    /**
+     * tfirmatario : firmatario (è anche metadato di Registrazione)
+     */
+    FIRMATARIO(FIRMATARIO_KEY);
+    
+	/**
+	 * Metadati per la conservazione sostitutiva:
+	 */
+    
+    /**
+     * Metadati di Registrazione
+     */
+    
+    /**
+     * Metadati di Pubblicazione:
+     */
+    
 	private String key;
 
 	private MetadatiDocumento(final String key) {
