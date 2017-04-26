@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
@@ -37,6 +38,7 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 
 	/**
 	 * crea un oggetto {@link KeyValuePairFactory} con un metadato
+	 * 
 	 * @param key
 	 *            consulta {@link MetadatiDocumento} per vedere metadati dei
 	 *            documenti conosciuti
@@ -58,6 +60,7 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 
 	/**
 	 * aggiunge un metadato alla catena {@link KeyValuePairFactory} corrente
+	 * 
 	 * @param key
 	 *            consulta {@link MetadatiDocumento} per vedere metadati dei
 	 *            documenti conosciuti
@@ -69,7 +72,7 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 		this.list.add(createKey(key.getValue(), value.getValue()));
 		return this;
 	}
-	
+
 	public KeyValuePairFactory add(String key, T value) {
 		this.list.add(createKey(key, value.getValue()));
 		return this;
@@ -77,10 +80,12 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 
 	/**
 	 * aggiunge un metadato alla catena {@link KeyValuePairFactory} corrente
+	 * 
 	 * @param key
 	 *            consulta {@link MetadatiDocumento} per vedere metadati dei
 	 *            documenti conosciuti
-	 * @param value valore da assegnare al metadato
+	 * @param value
+	 *            valore da assegnare al metadato
 	 * @return
 	 */
 	public KeyValuePairFactory add(T key, String value) {
@@ -181,12 +186,19 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 		}
 		return metadataValues.toArray(new String[metadataValues.size()]);
 	}
-	
-	public static KeyValuePair[] toArray(List<MetadatoDocer> metadati) {
-		KeyValuePair[] res = new KeyValuePair[0];
-		if (metadati != null) {
-			res = metadati.toArray(new KeyValuePair[metadati.size()]);
+
+	public static <T extends MetadatoDocer> KeyValuePair[] toArray(List<Map<T, String>> listMetadati) {
+		List<KeyValuePair> res = new ArrayList<>();
+		if (listMetadati != null && !listMetadati.isEmpty()) {
+			for (Map<T, String> metadati : listMetadati) {
+				for (Entry<T, String> entry : metadati.entrySet()) {
+					KeyValuePair kvp = new KeyValuePair();
+					kvp.setKey(entry.getKey().getValue());
+					kvp.setValue(entry.getValue());
+					res.add(kvp);
+				}
+			}
 		}
-		return res;
+		return res.toArray(new KeyValuePair[res.size()]);
 	}
 }

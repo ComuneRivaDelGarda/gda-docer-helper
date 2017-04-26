@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.swing.plaf.metal.MetalTabbedPaneUI;
 
 import org.apache.axiom.attachments.ByteArrayDataSource;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -1097,11 +1096,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean protocollaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
-		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
-		return protocollaDocumentoNative(documentId, data);
+	public boolean protocollaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati)
+			throws Exception {
+		return protocollaDocumentoNative(documentId, KeyValuePairFactory.toArray(metadati));
 	}
-	
+
 	/**
 	 * Questo metodo permette l’assegnazione dei metadati di protocollazione ad
 	 * un Documento del DMS.
@@ -1160,8 +1159,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
-	 */	
-	public boolean protocollaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory) throws Exception {
+	 */
+	public boolean protocollaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory)
+			throws Exception {
 		return protocollaDocumentoNative(documentId, factory.get());
 	}
 
@@ -1226,11 +1226,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean classificaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
-		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
-		return classificaDocumentoNative(documentId, data);
+	public boolean classificaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati)
+			throws Exception {
+		return classificaDocumentoNative(documentId, KeyValuePairFactory.toArray(metadati));
 	}
-	
+
 	/**
 	 * Questo metodo permette la classificazione di un Documento e di tutti i
 	 * suoi related nel DMS.
@@ -1264,8 +1264,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
-	 */	
-	public boolean classificaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory) throws Exception {
+	 */
+	public boolean classificaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory)
+			throws Exception {
 		return classificaDocumentoNative(documentId, factory.get());
 	}
 
@@ -1317,11 +1318,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
 	 */
-	public boolean archiviaDocumento(String documentId, List<MetadatiDocumento> metadati) throws Exception {
-		KeyValuePair[] data = metadati.toArray(new KeyValuePair[metadati.size()]);
-		return archiviaDocumentoNative(documentId, data);
+	public boolean archiviaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati)
+			throws Exception {
+		return archiviaDocumentoNative(documentId, KeyValuePairFactory.toArray(metadati));
 	}
-	
+
 	/**
 	 * Questo metodo permette l’archiviazione (in archivio di deposito) di un
 	 * Documento e di tutti i suoi related nel DMS.
@@ -1343,8 +1344,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
-	 */	
-	public boolean archiviaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory) throws Exception {
+	 */
+	public boolean archiviaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory)
+			throws Exception {
 		return archiviaDocumentoNative(documentId, factory.get());
 	}
 
