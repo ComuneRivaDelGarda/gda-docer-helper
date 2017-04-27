@@ -33,11 +33,11 @@ import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 public enum ACL_VALUES implements MetadatoDocer {
 
 	/**
-	 * Read Only Access: corrisponde alla lettura del profilo del
-	 * documento/anagrafica e nel caso dei documenti anche la visualizzazione
-	 * del file associato al documento.
+	 * Full Access: è il permesso di livello massimo ovvero diritti di scrittura
+	 * con cancellazione del documento/anagrafica e gestione dei diritti del
+	 * documento/anagrafica.
 	 */
-	READ_ONLY_ACCESS(ACL_READ_ONLY_ACCESS),
+	FULL_ACCESS(ACL_FULL_ACCESS),
 	/**
 	 * Normal Access: corrisponde ai permessi di scrittura (modifica del profilo
 	 * dei documenti/anagrafiche, gestione delle versioni e delle correlazioni
@@ -47,13 +47,13 @@ public enum ACL_VALUES implements MetadatoDocer {
 	 * la creazione di voci di Titolario figlio e sotto-fascicoli ovvero
 	 * l’inserimento di Documenti nel fascicolo/sotto-fascicolo.
 	 */
-	NORMAL_ACCESS(ACL_NORMAL_ACCESS),
+	NORMAL_ACCESS(ACL_NORMAL_ACCESS),	
 	/**
-	 * Full Access: è il permesso di livello massimo ovvero diritti di scrittura
-	 * con cancellazione del documento/anagrafica e gestione dei diritti del
-	 * documento/anagrafica.
+	 * Read Only Access: corrisponde alla lettura del profilo del
+	 * documento/anagrafica e nel caso dei documenti anche la visualizzazione
+	 * del file associato al documento.
 	 */
-	FULL_ACCESS(ACL_FULL_ACCESS);
+	READ_ONLY_ACCESS(ACL_READ_ONLY_ACCESS);
 
 	private String value;
 
