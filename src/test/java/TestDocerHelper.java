@@ -439,7 +439,7 @@ public class TestDocerHelper {
 		logger.info("test500 setACLDocumentConvert {}");
 		init();
 		try {
-			boolean res = helper.setACLDocument("885265", ACLsFactory.create("lattisitiziano", ACL_VALUES.FULL_ACCESS));
+			boolean res = helper.setACLDocument("885265", ACLsFactory.create("lattisitiziano", ACL_VALUES.FULL_ACCESS).add("pivamichela", ACL_VALUES.READ_ONLY_ACCESS));
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
