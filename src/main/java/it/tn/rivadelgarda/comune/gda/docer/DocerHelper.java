@@ -49,12 +49,16 @@ import it.kdm.docer.webservices.DocerServicesStub.GetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.GetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocumentsResponse;
+import it.kdm.docer.webservices.DocerServicesStub.GetGroupsOfUser;
+import it.kdm.docer.webservices.DocerServicesStub.GetGroupsOfUserResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.GetProfileDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetRelatedDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.GetRelatedDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetUser;
 import it.kdm.docer.webservices.DocerServicesStub.GetUserResponse;
+import it.kdm.docer.webservices.DocerServicesStub.GetUsersOfGroup;
+import it.kdm.docer.webservices.DocerServicesStub.GetUsersOfGroupResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersions;
 import it.kdm.docer.webservices.DocerServicesStub.GetVersionsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
@@ -66,6 +70,8 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.SearchDocumentsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFolders;
 import it.kdm.docer.webservices.DocerServicesStub.SearchFoldersResponse;
+import it.kdm.docer.webservices.DocerServicesStub.SearchGroups;
+import it.kdm.docer.webservices.DocerServicesStub.SearchGroupsResponse;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.kdm.docer.webservices.DocerServicesStub.SearchUsers;
 import it.kdm.docer.webservices.DocerServicesStub.SearchUsersResponse;
@@ -100,7 +106,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * automaticamente alla chiamata di uno dei metodi)
 	 * 
 	 * <pre>
-	 * 	DocerHelper helper = new DocerHelper(url, username, password);
+	 * DocerHelper helper = new DocerHelper(url, username, password);
 	 * </pre>
 	 * 
 	 * @param docerSerivcesUrl
@@ -1739,5 +1745,100 @@ public class DocerHelper extends AbstractDocerHelper {
 		UpdateGroupsOfUserResponse response = service.updateGroupsOfUser(request);
 		boolean esito = response.get_return();
 		return esito;
+	}
+
+	/**
+	 * L’oggetto searchCriteria[] è una collezione di nodi searchCriteria. Ogni
+	 * nodo searchCriteria contiene una KeyValuePair ovvero due nodi key e value
+	 * di tipo string dove i valori ammessi per i nodi key sono (si veda
+	 * paragrafo 4.2 Profilo dei Gruppi):
+	 * <li>GROUP_ID (id del gruppo)
+	 * <li>GROUP_NAME (nome del gruppo)
+	 * <li>PARENT_GROUP_ID (l’id del gruppo padre)
+	 * <li>metadati extra
+	 * <p>
+	 * Una stessa chiave può essere ripetuta più volte nella collezione: criteri
+	 * con le stesse chiavi sono in OR logico tra loro; per chiavi diverse vale
+	 * l’operatore AND logico. La sintassi di ricerca segue le regole esposte
+	 * nel paragrafo Regole sintattiche per i metodi di ricerca. L’oggetto di
+	 * ritorno SearchItem[] è una collezione di nodi SearchItem. Ogni nodo
+	 * SearchItem rappresenta il profilo di un oggetto trovato dalla ricerca e
+	 * contiene una collezione di nodi metadata. Ogni nodo metadata contiene una
+	 * KeyValuePair ovvero i nodi key e value di tipo string dove i valori
+	 * ammessi per i nodi key sono i nomi dei metadati del profilo di un gruppo:
+	 * <li>GROUP_ID (id del gruppo)
+	 * <li>GROUP_NAME (nome del gruppo)
+	 * <li>PARENT_GROUP_ID (l’id del gruppo padre)
+	 * <li>metadati extra
+	 * <p>
+	 * Un oggetto SearchItem non contiene, quindi, la collezione degli utenti
+	 * appartenenti al gruppo trovato.
+	 * 
+	 * @param searchCriteria
+	 *            Collezione dei criteri di ricerca
+	 * @return Risultato della ricerca
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public List<Map<String, String>> searchGroups(KeyValuePairFactory<MetadatiGruppi> searchCriteria) throws Exception {
+		logger.debug("searchGroups {}", searchCriteria);
+		DocerServicesStub service = getDocerService();
+		SearchGroups request = new SearchGroups();
+		request.setToken(getLoginTicket());
+		request.setSearchCriteria(searchCriteria.get());
+		SearchGroupsResponse response = service.searchGroups(request);
+		SearchItem[] data = response.get_return();
+		return KeyValuePairFactory.asListMap(data);
+	}
+
+	/**
+	 * Questo metodo permette di recuperare la lista degli id dei gruppi di
+	 * appartenenza di un utente del DMS.
+	 * <p>
+	 * L’oggetto di ritorno string[] è una collezione di nodi di tipo string
+	 * contenente la collezione dei GROUP_ID dei gruppi assegnati all’utente.
+	 * 
+	 * @param userId
+	 *            id dell’utente di riferimento
+	 * @return collezione dei GROUP_ID dei gruppi assegnati all’utente
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public List<String> getGroupsOfUser(String userId) throws Exception {
+		logger.debug("getGroupsOfUser {}", userId);
+		DocerServicesStub service = getDocerService();
+		GetGroupsOfUser request = new GetGroupsOfUser();
+		request.setToken(getLoginTicket());
+		request.setUserId(userId);
+		GetGroupsOfUserResponse response = service.getGroupsOfUser(request);
+		String[] data = response.get_return();
+		return Arrays.asList(data);
+	}
+
+	/**
+	 * Questo metodo permette di recuperare la lista degli id degli utenti
+	 * appartenenti ad un gruppo del DMS.
+	 * <p>
+	 * L’oggetto di ritorno string[] è una collezione di nodi di tipo string
+	 * contenente la collezione dei USER_ID degli utenti appartenenti al gruppo.
+	 * 
+	 * @param groupId
+	 *            id del gruppo di riferimento
+	 * @return collezione delle USER_ID degli utenti appartenenti al gruppo
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public List<String> getUsersOfGroup(String groupId) throws Exception {
+		logger.debug("getUsersOfGroup {}", groupId);
+		DocerServicesStub service = getDocerService();
+		GetUsersOfGroup request = new GetUsersOfGroup();
+		request.setToken(getLoginTicket());
+		request.setGroupId(groupId);
+		GetUsersOfGroupResponse response = service.getUsersOfGroup(request);
+		String[] data = response.get_return();
+		return Arrays.asList(data);
 	}
 }
