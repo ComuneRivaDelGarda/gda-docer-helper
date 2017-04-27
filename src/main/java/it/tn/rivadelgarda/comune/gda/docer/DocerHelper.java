@@ -100,10 +100,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * automaticamente alla chiamata di uno dei metodi)
 	 * 
 	 * <pre>
-	 * {
-	 * 	&#64;code
 	 * 	DocerHelper helper = new DocerHelper(url, username, password);
-	 * }
 	 * </pre>
 	 * 
 	 * @param docerSerivcesUrl
