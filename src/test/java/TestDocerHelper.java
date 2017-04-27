@@ -3,6 +3,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -15,11 +16,13 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import it.tn.rivadelgarda.comune.gda.docer.ACLsFactory;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiGruppi;
+import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
 
 public class TestDocerHelper {
 
@@ -328,7 +331,7 @@ public class TestDocerHelper {
 //		 
 
 		 Assert.assertNotNull(docnums2);
-		 logger.info("{}", new Gson().toJson(docnums2));
+		 logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(docnums2));
 	}
 	
 //	@Test
@@ -430,4 +433,17 @@ public class TestDocerHelper {
 			logger.error("test200", ex.getMessage());
 		}
 	}
+	
+	@Test
+	public void test500() throws Exception {
+		logger.info("test500 setACLDocumentConvert {}");
+		init();
+		try {
+			boolean res = helper.setACLDocument("885265", ACLsFactory.create("lattisitiziano", ACL_VALUES.FULL_ACCESS));
+			Assert.assertNotNull(res);
+			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test200", ex.getMessage());
+		}
+	}	
 }
