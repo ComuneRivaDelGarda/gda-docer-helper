@@ -853,7 +853,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId
 	 *            su cui applicare le acl
 	 * @param acls
-	 *            mapps di groupId or userId come chiavi e valori interi come
+	 *            mapps di groupId or userId come chiavi e valori ACL_VALUES come
 	 *            valore acl
 	 * @return
 	 * @throws Exception
@@ -867,6 +867,10 @@ public class DocerHelper extends AbstractDocerHelper {
 		return setACLDocumentNative(documentId, keyBuilder.get());
 	}
 
+	public boolean setACLDocument(String documentId, ACLsFactory aclsFactory) throws Exception {
+		return setACLDocument(documentId, aclsFactory.get());
+	}
+	
 	/**
 	 * Sovrascrive le ACLs attuali
 	 * 
