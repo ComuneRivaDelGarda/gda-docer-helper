@@ -55,10 +55,10 @@ Ripilogo API Helper:
 
 > *non essendo ancora state usate potrebbe rivelarsi utile, come avvenuto per VERSAMENTO e VERSIONAMENTO uno strato ulteriore di incapsulamento dei parametri previsti\gestiti per semplificare ulteriormente le chiamate (basta valutare insieme se e dove può essere utile).
 
-- [x] UTENTI e GRUPPI (pronte ma non testate)
+- [x] UTENTI e GRUPPI
   - [x] Utenti
   - [x] Gruppi
-  - [x] assegnazione utenti-gruppi
+  - [x] assegnazione utenti-gruppi (ACL)
 
 ## DOCER
 ﻿
