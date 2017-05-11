@@ -49,6 +49,8 @@ import it.kdm.docer.webservices.DocerServicesStub.GetACLDocument;
 import it.kdm.docer.webservices.DocerServicesStub.GetACLDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocuments;
 import it.kdm.docer.webservices.DocerServicesStub.GetFolderDocumentsResponse;
+import it.kdm.docer.webservices.DocerServicesStub.GetGroup;
+import it.kdm.docer.webservices.DocerServicesStub.GetGroupResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetGroupsOfUser;
 import it.kdm.docer.webservices.DocerServicesStub.GetGroupsOfUserResponse;
 import it.kdm.docer.webservices.DocerServicesStub.GetProfileDocument;
@@ -853,8 +855,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId
 	 *            su cui applicare le acl
 	 * @param acls
-	 *            mapps di groupId or userId come chiavi e valori ACL_VALUES come
-	 *            valore acl
+	 *            mapps di groupId or userId come chiavi e valori ACL_VALUES
+	 *            come valore acl
 	 * @return
 	 * @throws Exception
 	 */
@@ -870,7 +872,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	public boolean setACLDocument(String documentId, ACLsFactory aclsFactory) throws Exception {
 		return setACLDocument(documentId, aclsFactory.get());
 	}
-	
+
 	/**
 	 * Sovrascrive le ACLs attuali
 	 * 
@@ -1684,6 +1686,38 @@ public class DocerHelper extends AbstractDocerHelper {
 		UpdateGroupResponse response = service.updateGroup(request);
 		boolean esito = response.get_return();
 		return esito;
+	}
+
+	/**
+	 * Questo metodo permette di recuperare il profilo di un gruppo del DMS.
+	 * <p>
+	 * L’oggetto di ritorno è una collezione di nodi KeyValuePair . Ogni
+	 * KeyValuePair contiene una coppia di nodi key e value, entrambi di tipo
+	 * string. Per ogni nodo key è specificato il nome di un metadato del
+	 * profilo dell’utente recuperato.
+	 * <p>
+	 * Il profilo del gruppo non contiene l’elenco degli utenti assegnati al
+	 * gruppo; per recuperare la lista degli utenti del gruppo si veda il metodo
+	 * getUsersOfGroup.
+	 * 
+	 * @param groupId
+	 *            id del gruppo di riferimento
+	 * @return Profilo del gruppo di riferimento
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public Map<String, String> getGroup(String groupId) throws Exception {
+		logger.debug("getUser {}", groupId);
+		Map<MetadatiUtente, String> res = new HashMap<>();
+
+		DocerServicesStub service = getDocerService();
+		GetGroup request = new GetGroup();
+		request.setToken(getLoginTicket());
+		request.setGroupId(groupId);
+		GetGroupResponse response = service.getGroup(request);
+		KeyValuePair[] metadati = response.get_return();
+		return KeyValuePairFactory.asMap(metadati);
 	}
 
 	/**

@@ -56,9 +56,20 @@ Ripilogo API Helper:
 > *non essendo ancora state usate potrebbe rivelarsi utile, come avvenuto per VERSAMENTO e VERSIONAMENTO uno strato ulteriore di incapsulamento dei parametri previsti\gestiti per semplificare ulteriormente le chiamate (basta valutare insieme se e dove può essere utile).
 
 - [x] UTENTI e GRUPPI
-  - [x] Utenti
-  - [x] Gruppi
-  - [x] assegnazione utenti-gruppi (ACL)
+  - [x] UTENTI
+    - [x] createUser
+    - [x] updateUser
+    - [x] getUser
+    - [x] searchUsers
+  - [x] GRUPPI
+    - [x] createGroup
+    - [x] updateGroup
+    - [x] searchGroups
+  - [x] UTENTI-GRUPPI
+    - [x] setGroupsOfUser
+    - [x] updateGroupsOfUser
+    - [x] getGroupsOfUser
+    - [x] getUsersOfGroup
 
 ## DOCER
 ﻿
