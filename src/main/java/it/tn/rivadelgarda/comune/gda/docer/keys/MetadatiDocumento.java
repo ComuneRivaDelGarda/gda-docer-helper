@@ -12,6 +12,42 @@ import java.util.List;
  * 
  * Indipendentemente dal tipo, i metadati di base posseduti da ogni documento
  * sono:
+ * <p>
+ * Metadati di base generici:
+ * <li>{@link #COD_ENTE}</li>
+ * <li>{@link #COD_AOO}</li>
+ * <li>{@link #TYPE_ID}</li>
+ * <li>{@link #DOCNAME}</li>
+ * <li>{@link #ABSTRACT}</li>
+ * <li>{@link #TIPO_COMPONENTE}</li>
+ * <li>{@link #DOCNUM}</li>
+ * <li>{@link #STATO_ARCHIVISTICO}</li>
+ * <li>{@link #STATO_BUSINESS}</li>
+ * <li>{@link #CREATION_DATE}</li>
+ * <li>{@link #ARCHIVE_TYPE}</li>
+ * <li>{@link #APP_VERSANTE}</li>
+ * <li>{@link #DOC_HASH}</li>
+ * <li>{@link #DOCNUM_RECORD}</li>
+ * <li>{@link #UD_VERSION}</li>
+ * <li>{@link #EXTERNAL_ID}</li>
+ * <p>
+ * Metadati di classificazione e fascicolazione:
+ * <li>{@link #CLASSIFICA}</li>
+ * <li>{@link #PROGR_FASCICOLO}</li>
+ * <li>{@link #ANNO_FASCICOLO}</li>
+ * <li>{@link #FASC_SECONDARI}</li>
+ * <p>
+ * Metadati di classificazione e fascicolazione:
+ * <li>{@link #NUM_PG}</li>
+ * <li>{@link #ANNO_PG}</li>
+ * <li>{@link #OGGETTO_PG}</li>
+ * <li>{@link #REGISTRO_PG}</li>
+ * <li>{@link #DATA_PG}</li>
+ * <li>{@link #TIPO_PROTOCOLLAZIONE}</li>
+ * <li>{@link #MITTENTI}</li>
+ * <li>{@link #DESTINATARI}</li>
+ * <li>{@link #TIPO_FIRMA}</li>
+ * <li>{@link #FIRMATARIO}</li>
  * 
  * @author mirco
  *
