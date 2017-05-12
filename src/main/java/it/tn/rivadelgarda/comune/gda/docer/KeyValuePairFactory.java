@@ -201,4 +201,12 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 		}
 		return res.toArray(new KeyValuePair[res.size()]);
 	}
+	
+	public static String[] toArrayString(List<String> aList) {
+		String[] res = null;
+		if (aList != null && !aList.isEmpty()) {
+			res  = aList.toArray(new String[aList.size()]);
+		}
+		return res;
+	}
 }
