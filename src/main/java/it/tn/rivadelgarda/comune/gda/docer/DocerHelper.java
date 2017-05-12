@@ -551,20 +551,22 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, KeyValuePair[] orderBy) throws Exception {
+	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, String[] keywords, KeyValuePair[] orderBy)
+			throws Exception {
 		logger.debug("searchDocumentNative {} {}", searchCriteria, orderBy);
 		// cerco tutti
-		SearchItem[] result = searchDocumentsNative(searchCriteria, orderBy, -1);
+		SearchItem[] result = searchDocumentsNative(searchCriteria, keywords, orderBy, -1);
 		return result;
 	}
 
-	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, KeyValuePair[] orderBy, int maxRows)
-			throws Exception {
+	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, String[] keywords, KeyValuePair[] orderBy,
+			int maxRows) throws Exception {
 		logger.debug("searchDocumentNative {} {} {}", searchCriteria, orderBy, maxRows);
 		DocerServicesStub service = getDocerService();
 		SearchDocuments request = new SearchDocuments();
 		request.setToken(getLoginTicket());
 		request.setSearchCriteria(searchCriteria);
+		request.setKeywords(keywords);
 		request.setMaxRows(maxRows);
 		request.setOrderby(orderBy);
 		SearchDocumentsResponse response = service.searchDocuments(request);
@@ -611,6 +613,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param searchCriteria
 	 *            Collezione dei criteri di ricerca.<br>
 	 *            {@link MetadatiDocumento}
+	 * @param keywords
+	 *            Collezione delle “parole chiave” da ricercare
 	 * @param orderBy
 	 *            Criteri di ordinamento dei risultati
 	 * @param maxRows
@@ -623,10 +627,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             contenente il messaggio di errore.
 	 */
 	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
-			List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws Exception {
-		logger.debug("searchDocuments {} {} {}", searchCriteria, orderBy, maxRows);
+			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws Exception {
+		logger.debug("searchDocuments {} {} {} {}", searchCriteria, keywords, orderBy, maxRows);
 		SearchItem[] result = searchDocumentsNative(KeyValuePairFactory.toArray(searchCriteria),
-				KeyValuePairFactory.toArray(orderBy), maxRows);
+				KeyValuePairFactory.toArrayString(keywords), KeyValuePairFactory.toArray(orderBy), maxRows);
 		return KeyValuePairFactory.asListMap(result);
 	}
 
@@ -644,8 +648,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
-			List<Map<MetadatiDocumento, String>> orderBy) throws Exception {
-		return searchDocuments(searchCriteria, orderBy, -1);
+			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy) throws Exception {
+		return searchDocuments(searchCriteria, keywords, orderBy, -1);
 	}
 
 	/**
@@ -664,8 +668,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
-			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy) throws Exception {
-		return searchDocuments(searchCriteria, orderBy, -1);
+			List<Map<MetadatiDocumento, String>> orderBy) throws Exception {
+		return searchDocuments(searchCriteria, null, orderBy, -1);
 	}
 
 	/**
@@ -683,8 +687,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
-			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws Exception {
-		return searchDocuments(searchCriteria, orderBy, maxRows);
+			List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws Exception {
+		return searchDocuments(searchCriteria, null, orderBy, maxRows);
 	}
 
 	/**
@@ -699,7 +703,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(MetadatiDocumento.EXTERNAL_ID, externalId).get();
 		KeyValuePair[] orderBy = KeyValuePairFactory.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC)
 				.get();
-		SearchItem[] result = searchDocumentsNative(searchCriteria, orderBy, -1);
+		SearchItem[] result = searchDocumentsNative(searchCriteria, null, orderBy, -1);
 		return KeyValuePairFactory.asListMap(result);
 	}
 
@@ -709,7 +713,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(MetadatiDocumento.EXTERNAL_ID, externalId).get();
 		KeyValuePair[] orderBy = KeyValuePairFactory.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC)
 				.get();
-		SearchItem[] result = searchDocumentsNative(searchCriteria, orderBy, 1);
+		SearchItem[] result = searchDocumentsNative(searchCriteria, null, orderBy, 1);
 		List<Map<String, String>> profiles = KeyValuePairFactory.asListMap(result);
 		if (!profiles.isEmpty())
 			profile = profiles.get(0);
