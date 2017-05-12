@@ -276,7 +276,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param TYPE_ID
 	 * @param DOCNAME
-	 * @param file
+	 * @param dataSource
 	 * @param TIPO_COMPONENTE
 	 *            uno dei TIPO_COMPONENTE validi
 	 * @return
@@ -526,7 +526,6 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * eliminare solo i Documenti che siano STATO_ARCHIVISTICO 0 (Generico
 	 * Document).
 	 * 
-	 * @param folderId
 	 * @param documentId
 	 *            id del Documento
 	 * @return
@@ -545,9 +544,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	/**
 	 * Questo metodo permette di recuperare la lista dei Documenti correlati a
 	 * uno specifico externalId
-	 * 
-	 * @param externalId
-	 *            valore del metadato EXTERNAL_ID
+	 *
+     * @param searchCriteria
+     *            criteri di ricerca
+     * @param orderBy
+     *            criteri di ordinamento
 	 * @return
 	 * @throws Exception
 	 */
@@ -643,6 +644,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param searchCriteria
 	 *            Collezione dei criteri di ricerca.<br>
 	 *            {@link MetadatiDocumento}
+     * @param keywords
+     *            Collezione delle “parole chiave” da ricercare
 	 * @param orderBy
 	 * @return
 	 * @throws Exception
@@ -661,8 +664,6 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param searchCriteria
 	 *            Collezione dei criteri di ricerca.<br>
 	 *            {@link MetadatiDocumento}
-	 * @param keywords
-	 *            Collezione delle “parole chiave” da ricercare
 	 * @param orderBy
 	 * @return
 	 * @throws Exception
@@ -680,9 +681,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param searchCriteria
 	 *            Collezione dei criteri di ricerca.<br>
 	 *            {@link MetadatiDocumento}
-	 * @param keywords
-	 *            Collezione delle “parole chiave” da ricercare
 	 * @param orderBy
+     * @param maxRows
+     *            Numero massimo di risultati da restituire
 	 * @return
 	 * @throws Exception
 	 */
@@ -1050,7 +1051,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param file
+	 * @param dataSource
 	 *            La nuova versione del file o documento elettronico
 	 * @return Il version number della versione creata
 	 * @throws Exception
@@ -1144,7 +1145,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            La variabile docId è l’id del Documento nel DMS.
-	 * @param related
+	 * @param metadata
 	 *            L’oggetto metadata[] è una collezione di nodi metadata. Ogni
 	 *            nodo metadata contiene una KeyValuePair ovvero due nodi, key e
 	 *            value, di tipo string dove i valori ammessi per i nodi key
@@ -1217,7 +1218,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param metadata
+	 * @param metadati
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
@@ -1281,7 +1282,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param metadata
+	 * @param factory
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
@@ -1386,7 +1387,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param metadati
+	 * @param factory
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
@@ -1468,7 +1469,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param metadati
+	 * @param factory
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
@@ -1510,6 +1511,19 @@ public class DocerHelper extends AbstractDocerHelper {
 		List<String> folderDocuments = getFolderDocuments(folderId);
 		return folderDocuments.size();
 	}
+
+	/**
+	 * restituisce il numero di documenti con specifico EXTERNAL_ID
+	 *
+	 * @param externalId
+	 * @return
+	 */
+	public int numberOfDocumentByExternalId(String externalId) throws Exception {
+		List<Map<String, String>> documents = searchDocumentsByExternalIdAll(externalId);
+		return documents.size();
+	}
+
+
 
 	// /**
 	// * crea un nuovo documento nella cartella
@@ -1751,7 +1765,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * deve indicare l’id del gruppo “Ente” di appartenenza (si veda paragrafo
 	 * il 4.1.1 Anagrafica Ente).
 	 * 
-	 * @param USER_ID
+	 * @param GROUP_ID
 	 * @param GROUP_NAME
 	 * @param PARENT_GROUP_ID
 	 * @return true se il metodo è andato a buon fine

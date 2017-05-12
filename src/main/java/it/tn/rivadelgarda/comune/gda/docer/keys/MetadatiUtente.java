@@ -40,7 +40,12 @@ public enum MetadatiUtente implements MetadatoDocer {
 	/**
 	 * (indirizzo email dell’utente)
 	 */
-	EMAIL_ADDRESS(EMAIL_ADDRESS_KEY);
+	EMAIL_ADDRESS(EMAIL_ADDRESS_KEY),
+	/**
+	 * (utente abilitato)
+	 */
+	USER_ENABLED(USER_ENABLED_KEY);
+
 
 	private String key;
 

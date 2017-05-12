@@ -89,6 +89,7 @@ public interface MetadatoDocer {
 	public final static String FIRST_NAME_KEY = "FIRST_NAME";
 	public final static String LAST_NAME_KEY = "LAST_NAME";
 	public final static String EMAIL_ADDRESS_KEY = "EMAIL_ADDRESS";
+	public final static String USER_ENABLED_KEY = "ENABLED";
 	/*
 	 * GRUPPO
 	 */
