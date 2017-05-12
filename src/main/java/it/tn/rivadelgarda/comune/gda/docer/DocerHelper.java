@@ -573,6 +573,121 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
+	 * Questo metodo permette di eseguire le ricerche sui Documenti del DMS.
+	 * <p>
+	 * L’oggetto searchCriteria[] è una collezione di nodi searchCriteria. Ogni
+	 * nodo searchCriteria contiene una KeyValuePair ovvero due nodi key e value
+	 * di tipo string dove i valori ammessi per i nodi key sono i nomi dei
+	 * metadati del profilo del Documento. Una stessa key può essere ripetuta
+	 * più volte nei searchCriteria: criteri con le stesse chiavi sono in OR
+	 * logico tra loro; per chiavi diverse vale l’operatore AND logico. La
+	 * sintassi di ricerca segue le regole esposte nel paragrafo 4.10 Regole
+	 * sintattiche per i metodi di ricerca. <br>
+	 * L’oggetto keywords[] è una collezione di stringhe dove ogni stringa è una
+	 * parola chiave da ricercare nel file del documento. <br>
+	 * L’oggetto maxRows è un intero che indica il massimo numero di risultati
+	 * che devono essere restituiti dalla ricerca. Se maxRows è posto a “-1” il
+	 * limite è quello implicito del DMS. L’oggetto orderby[] è una collezione
+	 * di nodi KeyValuePair ovvero una collezione di coppie di nodi key e value
+	 * di tipo string dove i valori ammessi per i nodi key corrispondono ai nomi
+	 * dei metadati del profilo con cui si desiderano ordinare i risultati e i
+	 * valori ammessi per i nodi value sono ASC o DESC se si vuole un
+	 * ordinamento crescente o decrescente rispettivamente. <br>
+	 * L’oggetto di ritorno SearchItem[] è una collezione di nodi SearchItem.
+	 * Ogni nodo SearchItem è un sottoinsieme del profilo del Documento trovato
+	 * dalla ricerca e contiene una collezione di nodi metadata. Ogni nodo
+	 * metadata contiene una KeyValuePair ovvero i nodi key e value di tipo
+	 * string dove i valori ammessi per i nodi key sono i nomi dei metadati del
+	 * profilo di ogni document- type.
+	 * <p>
+	 * 4.10 Regole sintattiche per i metodi di ricerca.<br>
+	 * Regole sintattiche per i metodi di ricerca <br>
+	 * Tutti i metodi di ricerca adottano la seguente sintassi:
+	 * <li>Il carattere “*” è la wildcard per le ricerche (applicabile ai tipi
+	 * stringa),
+	 * <li>il range, o intervallo di ricerca, è nel formato case sensitive "[min
+	 * TO max]" con gli estremi inclusi nei risultati.
+	 * 
+	 * @param searchCriteria
+	 *            Collezione dei criteri di ricerca.<br>
+	 *            {@link MetadatiDocumento}
+	 * @param orderBy
+	 *            Criteri di ordinamento dei risultati
+	 * @param maxRows
+	 *            Numero massimo di risultati da restituire
+	 * @return Collezione di SearchItem. Ogni SearchItem è una collezione di
+	 *         coppie chiave-valore (KeyValuePair) contenente il profilo comune
+	 *         di ogni documento trovato dalla ricerca
+	 * @throws Exception
+	 *             In tutti i casi di errore il metodo solleva una SOAPException
+	 *             contenente il messaggio di errore.
+	 */
+	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
+			List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws Exception {
+		logger.debug("searchDocuments {} {} {}", searchCriteria, orderBy, maxRows);
+		SearchItem[] result = searchDocumentsNative(KeyValuePairFactory.toArray(searchCriteria),
+				KeyValuePairFactory.toArray(orderBy), maxRows);
+		return KeyValuePairFactory.asListMap(result);
+	}
+
+	/**
+	 * Questo metodo permette di eseguire le ricerche sui Documenti del DMS
+	 * (maxRows è posto a “-1” il limite è quello implicito del DMS).<br>
+	 * Vedi documentazione {@link DocerHelper#searchDocuments}.
+	 * 
+	 * @see DocerHelper#searchDocuments(List, List, int)
+	 * @param searchCriteria
+	 *            Collezione dei criteri di ricerca.<br>
+	 *            {@link MetadatiDocumento}
+	 * @param orderBy
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
+			List<Map<MetadatiDocumento, String>> orderBy) throws Exception {
+		return searchDocuments(searchCriteria, orderBy, -1);
+	}
+
+	/**
+	 * Questo metodo permette di eseguire le ricerche sui Documenti del DMS
+	 * (maxRows è posto a “-1” il limite è quello implicito del DMS).<br>
+	 * Vedi documentazione {@link DocerHelper#searchDocuments}.
+	 * 
+	 * @see DocerHelper#searchDocuments(List, List, int)
+	 * @param searchCriteria
+	 *            Collezione dei criteri di ricerca.<br>
+	 *            {@link MetadatiDocumento}
+	 * @param keywords
+	 *            Collezione delle “parole chiave” da ricercare
+	 * @param orderBy
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
+			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy) throws Exception {
+		return searchDocuments(searchCriteria, orderBy, -1);
+	}
+
+	/**
+	 * Questo metodo permette di eseguire le ricerche sui Documenti del DMS <br>
+	 * Vedi documentazione {@link DocerHelper#searchDocuments}.
+	 * 
+	 * @see DocerHelper#searchDocuments(List, List, int)
+	 * @param searchCriteria
+	 *            Collezione dei criteri di ricerca.<br>
+	 *            {@link MetadatiDocumento}
+	 * @param keywords
+	 *            Collezione delle “parole chiave” da ricercare
+	 * @param orderBy
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
+			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws Exception {
+		return searchDocuments(searchCriteria, orderBy, maxRows);
+	}
+
+	/**
 	 * effettua una ricera per EXTERNAL_ID ordinata per CREATION_DATE
 	 * 
 	 * @param externalId
