@@ -288,8 +288,28 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	 *
 	 */
 	public enum TIPO_COMPONENTE_VALUES implements MetadatoDocer {
-		PRINCIPALE(TIPO_COMPONENTE_PRINCIPALE), ALLEGATO(TIPO_COMPONENTE_ALLEGATO), ANNESSO(
-				TIPO_COMPONENTE_ANNESSO), ANNOTAZIONE(TIPO_COMPONENTE_ANNOTAZIONE);
+		/**
+		 * Documento che deve essere obbligatoriamente presente nell’Unità
+		 * Documentaria
+		 */
+		PRINCIPALE(TIPO_COMPONENTE_PRINCIPALE),
+		/**
+		 * Documento facoltativamente unito al documento principale per
+		 * integrarne le informazioni registrato contestualmente o
+		 * precedentemente al documento principale.
+		 */
+		ALLEGATO(TIPO_COMPONENTE_ALLEGATO),
+		/**
+		 * Documento facoltativamente unito al documento principale per
+		 * integrarne le informazioni. E’ registrato in un momento successivo a
+		 * quello di redazione del documento principale.
+		 */
+		ANNESSO(TIPO_COMPONENTE_ANNESSO),
+		/**
+		 * File detached riferiti all’intera unità documentaria (un tipico
+		 * esempio di annotazione è rappresentato dalla segnatura di protocollo)
+		 */
+		ANNOTAZIONE(TIPO_COMPONENTE_ANNOTAZIONE);
 		private String value;
 
 		private TIPO_COMPONENTE_VALUES(String value) {
