@@ -1499,6 +1499,19 @@ public class DocerHelper extends AbstractDocerHelper {
 		return folderDocuments.size();
 	}
 
+	/**
+	 * restituisce il numero di documenti con specifico EXTERNAL_ID
+	 *
+	 * @param externalId
+	 * @return
+	 */
+	public int numberOfDocumentByExternalId(String externalId) throws Exception {
+		List<Map<String, String>> documents = searchDocumentsByExternalIdAll(externalId);
+		return documents.size();
+	}
+
+
+
 	// /**
 	// * crea un nuovo documento nella cartella
 	// *
