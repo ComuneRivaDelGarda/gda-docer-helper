@@ -10,9 +10,9 @@ import java.util.TreeSet;
 
 import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
 
-public class ACLsFactory {
+public class ACLFactory {
 
-	protected ACLsFactory() {
+	protected ACLFactory() {
 		super();
 	}
 	//
@@ -36,13 +36,13 @@ public class ACLsFactory {
 	// return factory;
 	// }
 
-	public static ACLsFactory create(String subject, ACL_VALUES access) {
-		ACLsFactory factory = new ACLsFactory();
+	public static ACLFactory create(String subject, ACL_VALUES access) {
+		ACLFactory factory = new ACLFactory();
 		factory.acls.put(subject, access);
 		return factory;
 	}
 
-	public ACLsFactory add(String subject, ACL_VALUES access) {
+	public ACLFactory add(String subject, ACL_VALUES access) {
 		this.acls.put(subject, access);
 		return this;
 	}

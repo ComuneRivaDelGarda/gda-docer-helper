@@ -915,8 +915,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param acls
-	 *            L’oggetto acls[] è una collezione di nodi acls. Ogni nodo acls
+	 * @param acl
+	 *            L’oggetto acl[] è una collezione di nodi acl. Ogni nodo acl
 	 *            contiene una KeyValuePair ovvero due nodi, key e value, di
 	 *            tipo string dove un nodo key contiene un GROUP_ID di un Gruppo
 	 *            o la USER_ID di un Utente del DMS ed il relativo value
@@ -929,13 +929,13 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	private boolean setACLDocumentNative(String documentId, KeyValuePair[] acls) throws Exception {
-		logger.debug("setACLDocument {} {}", documentId, acls);
+	private boolean setACLDocumentNative(String documentId, KeyValuePair[] acl) throws Exception {
+		logger.debug("setACLDocument {} {}", documentId, acl);
 		DocerServicesStub service = getDocerService();
 		SetACLDocument request = new SetACLDocument();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
-		request.setAcls(acls);
+		request.setAcls(acl);
 		SetACLDocumentResponse response = service.setACLDocument(request);
 		boolean esito = response.get_return();
 		return esito;
@@ -957,43 +957,43 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Sovrascrive le ACLs attuali
+	 * Sovrascrive le ACL attuali
 	 * 
 	 * @param documentId
 	 *            su cui applicare le acl
-	 * @param acls
+	 * @param acl
 	 *            mapps di groupId or userId come chiavi e valori ACL_VALUES
 	 *            come valore acl
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean setACLDocument(String documentId, Map<String, ACL_VALUES> acls) throws Exception {
+	public boolean setACLDocument(String documentId, Map<String, ACL_VALUES> acl) throws Exception {
 		// KeyValuePairFactory.build(GROUP_USER_ID, acl.getValue()).get();
 		KeyValuePairFactory<ACL_VALUES> keyBuilder = new KeyValuePairFactory<>();
-		for (Entry<String, ACL_VALUES> entry : acls.entrySet()) {
+		for (Entry<String, ACL_VALUES> entry : acl.entrySet()) {
 			keyBuilder.add(entry.getKey(), entry.getValue());
 		}
 		return setACLDocumentNative(documentId, keyBuilder.get());
 	}
 
-	public boolean setACLDocument(String documentId, ACLsFactory aclsFactory) throws Exception {
-		return setACLDocument(documentId, aclsFactory.get());
+	public boolean setACLDocument(String documentId, ACLFactory aclFactory) throws Exception {
+		return setACLDocument(documentId, aclFactory.get());
 	}
 
 	/**
-	 * Sovrascrive le ACLs attuali
+	 * Sovrascrive le ACL attuali
 	 * 
 	 * @param documentId
 	 *            su cui applicare le acl
-	 * @param acls
+	 * @param acl
 	 *            mapps di groupId or userId come chiavi e valori interi come
 	 *            valore acl
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acls) throws Exception {
+	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acl) throws Exception {
 		KeyValuePairFactory<ACL_VALUES> keyBuilder = new KeyValuePairFactory<>();
-		for (Entry<String, Integer> entry : acls.entrySet()) {
+		for (Entry<String, Integer> entry : acl.entrySet()) {
 			keyBuilder.add(entry.getKey(), ACL_VALUES.values()[entry.getValue()]);
 		}
 		return setACLDocumentNative(documentId, keyBuilder.get());
