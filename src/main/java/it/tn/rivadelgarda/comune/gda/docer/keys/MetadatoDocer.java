@@ -24,33 +24,51 @@ public interface MetadatoDocer {
 	public final static String DOCNUM_RECORD_KEY = "DOCNUM_RECORD";
 	public final static String UD_VERSION_KEY = "UD_VERSION";
 	public final static String EXTERNAL_ID_KEY = "EXTERNAL_ID";
-	
-    public final static String FOLDER_NAME_KEY = "FOLDER_NAME";
-    public final static String FOLDER_OWNER_KEY = "FOLDER_OWNER";
-    public final static String DES_FOLDER_KEY = "DES_FOLDER";
-    public final static String ENABLED_KEY = "ENABLED";
-    public final static String PARENT_FOLDER_NAME_KEY = "PARENT_FOLDER_NAME";
-    public final static String FOLDER_ID_KEY = "FOLDER_ID";
-    public final static String PARENT_FOLDER_ID_KEY = "PARENT_FOLDER_ID";
 
-    public final static String TYPE_ID_DOCUMENTO = "DOCUMENTO";
-    
-    public final static String TIPO_COMPONENTE_PRINCIPALE = "PRINCIPALE";
-    public final static String TIPO_COMPONENTE_ALLEGATO = "ALLEGATO";
-    public final static String TIPO_COMPONENTE_ANNESSO = "ANNESSO";
-    public final static String TIPO_COMPONENTE_ANNOTAZIONE = "ANNOTAZIONE";
-    
-    public final static String ARCHIVE_TYPE_ARCHIVE = "ARCHIVE";
-    public final static String ARCHIVE_TYPE_URL = "URL";
+	public final static String FOLDER_NAME_KEY = "FOLDER_NAME";
+	public final static String FOLDER_OWNER_KEY = "FOLDER_OWNER";
+	public final static String DES_FOLDER_KEY = "DES_FOLDER";
+	public final static String ENABLED_KEY = "ENABLED";
+	public final static String PARENT_FOLDER_NAME_KEY = "PARENT_FOLDER_NAME";
+	public final static String FOLDER_ID_KEY = "FOLDER_ID";
+	public final static String PARENT_FOLDER_ID_KEY = "PARENT_FOLDER_ID";
+
+	public final static String TYPE_ID_DOCUMENTO = "DOCUMENTO";
+
+	/**
+	 * Documento che deve essere obbligatoriamente presente nell’Unità
+	 * Documentaria
+	 */
+	public final static String TIPO_COMPONENTE_PRINCIPALE = "PRINCIPALE";
+	/**
+	 * Documento facoltativamente unito al documento principale per integrarne
+	 * le informazioni registrato contestualmente o precedentemente al documento
+	 * principale.
+	 */
+	public final static String TIPO_COMPONENTE_ALLEGATO = "ALLEGATO";
+	/**
+	 * Documento facoltativamente unito al documento principale per integrarne
+	 * le informazioni. E’ registrato in un momento successivo a quello di
+	 * redazione del documento principale.
+	 */
+	public final static String TIPO_COMPONENTE_ANNESSO = "ANNESSO";
+	/**
+	 * File detached riferiti all’intera unità documentaria (un tipico esempio
+	 * di annotazione è rappresentato dalla segnatura di protocollo)
+	 */
+	public final static String TIPO_COMPONENTE_ANNOTAZIONE = "ANNOTAZIONE";
+
+	public final static String ARCHIVE_TYPE_ARCHIVE = "ARCHIVE";
+	public final static String ARCHIVE_TYPE_URL = "URL";
 
 	public final static String SORT_ASC = "ASC";
 	public final static String SORT_DESC = "DESC";
-	
+
 	public final static String CLASSIFICA_KEY = "CLASSIFICA";
 	public final static String PROGR_FASCICOLO_KEY = "PROGR_FASCICOLO";
 	public final static String ANNO_FASCICOLO_KEY = "ANNO_FASCICOLO";
 	public final static String FASC_SECONDARI_KEY = "FASC_SECONDARI";
-	
+
 	public static final String NUM_PG_KEY = "NUM_PG";
 	public static final String ANNO_PG_KEY = "ANNO_PG";
 	public static final String OGGETTO_PG_KEY = "OGGETTO_PG";
@@ -63,9 +81,9 @@ public interface MetadatoDocer {
 	public static final String FIRMATARIO_KEY = "FIRMATARIO";
 
 	public final static String ACL_FULL_ACCESS = "0";
-    public final static String ACL_NORMAL_ACCESS = "1";
-    public final static String ACL_READ_ONLY_ACCESS = "2";
-    
+	public final static String ACL_NORMAL_ACCESS = "1";
+	public final static String ACL_READ_ONLY_ACCESS = "2";
+
 	public final static String STATO_ARCHIVISTICO_GENERICO_DOCUMENT = "0";
 	public final static String STATO_ARCHIVISTICO_GENERICO_DEFINITIVO = "2";
 	public final static String STATO_ARCHIVISTICO_REGISTRATO = "2";
@@ -73,28 +91,29 @@ public interface MetadatoDocer {
 	public final static String STATO_ARCHIVISTICO_CLASSIFICATO = "4";
 	public final static String STATO_ARCHIVISTICO_FASCICOLATO = "5";
 	public final static String STATO_ARCHIVISTICO_IN_ARCHIVIO_DI_DEPOSITO = "6";
-	
+
 	public final static String STATO_BUSINESS_NON_DEFINITO = "0";
 	public final static String STATO_BUSINESS_DA_PROTOCOLLARE = "2";
 	public final static String STATO_BUSINESS_DA_FASCICOLARE = "2";
 	public final static String STATO_BUSINESS_DA_REGISTRARE = "3";
 	public final static String STATO_BUSINESS_DA_FIRMARE = "4";
-	
-    /*
-     * UTENTE
-     */
+
+	/*
+	 * UTENTE
+	 */
 	public final static String USER_ID_KEY = "USER_ID";
 	public final static String FULL_NAME_KEY = "FULL_NAME";
 	public final static String USER_PASSWORD_KEY = "USER_PASSWORD";
 	public final static String FIRST_NAME_KEY = "FIRST_NAME";
 	public final static String LAST_NAME_KEY = "LAST_NAME";
 	public final static String EMAIL_ADDRESS_KEY = "EMAIL_ADDRESS";
+	public final static String USER_ENABLED_KEY = "ENABLED";
 	/*
 	 * GRUPPO
 	 */
 	public final static String GROUP_ID_KEY = "GROUP_ID";
 	public final static String GROUP_NAME_KEY = "GROUP_NAME";
 	public final static String PARENT_GROUP_ID_KEY = "PARENT_GROUP_ID";
-	
-    String getValue();
+
+	String getValue();
 }

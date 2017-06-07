@@ -276,9 +276,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param TYPE_ID
 	 * @param DOCNAME
-	 * @param file
+	 * @param dataSource
 	 * @param TIPO_COMPONENTE
 	 *            uno dei TIPO_COMPONENTE validi
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws Exception
 	 */
@@ -526,7 +528,6 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * eliminare solo i Documenti che siano STATO_ARCHIVISTICO 0 (Generico
 	 * Document).
 	 * 
-	 * @param folderId
 	 * @param documentId
 	 *            id del Documento
 	 * @return
@@ -542,15 +543,6 @@ public class DocerHelper extends AbstractDocerHelper {
 		return esito;
 	}
 
-	/**
-	 * Questo metodo permette di recuperare la lista dei Documenti correlati a
-	 * uno specifico externalId
-	 * 
-	 * @param externalId
-	 *            valore del metadato EXTERNAL_ID
-	 * @return
-	 * @throws Exception
-	 */
 	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, String[] keywords, KeyValuePair[] orderBy)
 			throws Exception {
 		logger.debug("searchDocumentNative {} {}", searchCriteria, orderBy);
@@ -661,8 +653,6 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param searchCriteria
 	 *            Collezione dei criteri di ricerca.<br>
 	 *            {@link MetadatiDocumento}
-	 * @param keywords
-	 *            Collezione delle “parole chiave” da ricercare
 	 * @param orderBy
 	 * @return
 	 * @throws Exception
@@ -680,8 +670,6 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param searchCriteria
 	 *            Collezione dei criteri di ricerca.<br>
 	 *            {@link MetadatiDocumento}
-	 * @param keywords
-	 *            Collezione delle “parole chiave” da ricercare
 	 * @param orderBy
 	 * @return
 	 * @throws Exception
@@ -927,8 +915,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param acls
-	 *            L’oggetto acls[] è una collezione di nodi acls. Ogni nodo acls
+	 * @param acl
+	 *            L’oggetto acl[] è una collezione di nodi acl. Ogni nodo acl
 	 *            contiene una KeyValuePair ovvero due nodi, key e value, di
 	 *            tipo string dove un nodo key contiene un GROUP_ID di un Gruppo
 	 *            o la USER_ID di un Utente del DMS ed il relativo value
@@ -941,13 +929,13 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	private boolean setACLDocumentNative(String documentId, KeyValuePair[] acls) throws Exception {
-		logger.debug("setACLDocument {} {}", documentId, acls);
+	private boolean setACLDocumentNative(String documentId, KeyValuePair[] acl) throws Exception {
+		logger.debug("setACLDocument {} {}", documentId, acl);
 		DocerServicesStub service = getDocerService();
 		SetACLDocument request = new SetACLDocument();
 		request.setToken(getLoginTicket());
 		request.setDocId(documentId);
-		request.setAcls(acls);
+		request.setAcls(acl);
 		SetACLDocumentResponse response = service.setACLDocument(request);
 		boolean esito = response.get_return();
 		return esito;
@@ -969,43 +957,43 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Sovrascrive le ACLs attuali
+	 * Sovrascrive le ACL attuali
 	 * 
 	 * @param documentId
 	 *            su cui applicare le acl
-	 * @param acls
+	 * @param acl
 	 *            mapps di groupId or userId come chiavi e valori ACL_VALUES
 	 *            come valore acl
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean setACLDocument(String documentId, Map<String, ACL_VALUES> acls) throws Exception {
+	public boolean setACLDocument(String documentId, Map<String, ACL_VALUES> acl) throws Exception {
 		// KeyValuePairFactory.build(GROUP_USER_ID, acl.getValue()).get();
 		KeyValuePairFactory<ACL_VALUES> keyBuilder = new KeyValuePairFactory<>();
-		for (Entry<String, ACL_VALUES> entry : acls.entrySet()) {
+		for (Entry<String, ACL_VALUES> entry : acl.entrySet()) {
 			keyBuilder.add(entry.getKey(), entry.getValue());
 		}
 		return setACLDocumentNative(documentId, keyBuilder.get());
 	}
 
-	public boolean setACLDocument(String documentId, ACLsFactory aclsFactory) throws Exception {
-		return setACLDocument(documentId, aclsFactory.get());
+	public boolean setACLDocument(String documentId, ACLFactory aclFactory) throws Exception {
+		return setACLDocument(documentId, aclFactory.get());
 	}
 
 	/**
-	 * Sovrascrive le ACLs attuali
+	 * Sovrascrive le ACL attuali
 	 * 
 	 * @param documentId
 	 *            su cui applicare le acl
-	 * @param acls
+	 * @param acl
 	 *            mapps di groupId or userId come chiavi e valori interi come
 	 *            valore acl
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acls) throws Exception {
+	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acl) throws Exception {
 		KeyValuePairFactory<ACL_VALUES> keyBuilder = new KeyValuePairFactory<>();
-		for (Entry<String, Integer> entry : acls.entrySet()) {
+		for (Entry<String, Integer> entry : acl.entrySet()) {
 			keyBuilder.add(entry.getKey(), ACL_VALUES.values()[entry.getValue()]);
 		}
 		return setACLDocumentNative(documentId, keyBuilder.get());
@@ -1050,7 +1038,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param file
+	 * @param dataSource
 	 *            La nuova versione del file o documento elettronico
 	 * @return Il version number della versione creata
 	 * @throws Exception
@@ -1144,7 +1132,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            La variabile docId è l’id del Documento nel DMS.
-	 * @param related
+	 * @param metadata
 	 *            L’oggetto metadata[] è una collezione di nodi metadata. Ogni
 	 *            nodo metadata contiene una KeyValuePair ovvero due nodi, key e
 	 *            value, di tipo string dove i valori ammessi per i nodi key
@@ -1217,7 +1205,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param metadata
+	 * @param metadati
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
@@ -1281,7 +1269,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param metadata
+	 * @param factory
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
@@ -1386,7 +1374,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param metadati
+	 * @param factory
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
@@ -1468,7 +1456,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 *            id del Documento
-	 * @param metadati
+	 * @param factory
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
@@ -1510,6 +1498,19 @@ public class DocerHelper extends AbstractDocerHelper {
 		List<String> folderDocuments = getFolderDocuments(folderId);
 		return folderDocuments.size();
 	}
+
+	/**
+	 * restituisce il numero di documenti con specifico EXTERNAL_ID
+	 *
+	 * @param externalId
+	 * @return
+	 */
+	public int numberOfDocumentByExternalId(String externalId) throws Exception {
+		List<Map<String, String>> documents = searchDocumentsByExternalIdAll(externalId);
+		return documents.size();
+	}
+
+
 
 	// /**
 	// * crea un nuovo documento nella cartella
@@ -1751,7 +1752,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * deve indicare l’id del gruppo “Ente” di appartenenza (si veda paragrafo
 	 * il 4.1.1 Anagrafica Ente).
 	 * 
-	 * @param USER_ID
+	 * @param GROUP_ID
 	 * @param GROUP_NAME
 	 * @param PARENT_GROUP_ID
 	 * @return true se il metodo è andato a buon fine

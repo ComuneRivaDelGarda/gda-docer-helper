@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import it.tn.rivadelgarda.comune.gda.docer.ACLsFactory;
+import it.tn.rivadelgarda.comune.gda.docer.ACLFactory;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
@@ -439,7 +439,7 @@ public class TestDocerHelper {
 		logger.info("test500 setACLDocumentConvert {}");
 		init();
 		try {
-			boolean res = helper.setACLDocument("885265", ACLsFactory.create("lattisitiziano", ACL_VALUES.FULL_ACCESS).add("pivamichela", ACL_VALUES.READ_ONLY_ACCESS));
+			boolean res = helper.setACLDocument("885265", ACLFactory.create("lattisitiziano", ACL_VALUES.FULL_ACCESS).add("pivamichela", ACL_VALUES.READ_ONLY_ACCESS));
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
