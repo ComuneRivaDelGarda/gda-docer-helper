@@ -1726,7 +1726,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("searchUsers {}", userId);
 		KeyValuePairFactory<MetadatiUtente> searchCriteria = new KeyValuePairFactory<>();
 		if (StringUtils.isNotEmpty(userId)) {
-			KeyValuePairFactory.build(MetadatiUtente.USER_ID_KEY, userId).get();
+			searchCriteria.add(MetadatiUtente.USER_ID_KEY, userId);
 		}
 		DocerServicesStub service = getDocerService();
 		SearchUsers request = new SearchUsers();

@@ -51,32 +51,32 @@ public class TestDocerHelper {
 		}
 	}
 
-	@Test
-	public void test10() throws Exception {
-		// // AuthenticationServiceStub service = new
-		// // AuthenticationServiceStub(url);
-		// // Login login = new Login();
-		// // login.setUsername("admin");
-		// // login.setPassword("admin");
-		// // login.setCodiceEnte("");
-		// // login.setApplication("GDA");
-		// // LoginResponse response = service.login(login);
-		// // Assert.assertNotNull(response);
-		// // Assert.assertNotNull(response.get_return());
-		// // logger.info(response.get_return());
-		// init();
-		// //token = helper.login();
-		// Assert.assertNotNull(token);
-		// logger.info(token);
-	}
+//	@Test
+//	public void test10() throws Exception {
+//		// // AuthenticationServiceStub service = new
+//		// // AuthenticationServiceStub(url);
+//		// // Login login = new Login();
+//		// // login.setUsername("admin");
+//		// // login.setPassword("admin");
+//		// // login.setCodiceEnte("");
+//		// // login.setApplication("GDA");
+//		// // LoginResponse response = service.login(login);
+//		// // Assert.assertNotNull(response);
+//		// // Assert.assertNotNull(response.get_return());
+//		// // logger.info(response.get_return());
+//		// init();
+//		// //token = helper.login();
+//		// Assert.assertNotNull(token);
+//		// logger.info(token);
+//	}
 
-	@Test
-	public void test22() throws Exception {
-		// test1();
-		// String versione = helper.getVersion();
-		// Assert.assertNotNull(versione);
-		// logger.info(versione);
-	}
+//	@Test
+//	public void test22() throws Exception {
+//		// test1();
+//		// String versione = helper.getVersion();
+//		// Assert.assertNotNull(versione);
+//		// logger.info(versione);
+//	}
 
 //	/**
 //	 * crea una foder
@@ -144,26 +144,26 @@ public class TestDocerHelper {
 //		logger.info(subFolderId);
 //	}	
 
-	@Test
-	public void test40() throws Exception {
-		String criteria = "test*";
-		logger.info("searchFolders {}", criteria);
-		init();
-		// token = helper.login();
-		List<Map<String, String>> res = helper.searchFolders(criteria);
-		Assert.assertNotNull(res);
-		logger.info(res.toString());
-	}
+//	@Test
+//	public void test40() throws Exception {
+//		String criteria = "test*";
+//		logger.info("searchFolders {}", criteria);
+//		init();
+//		// token = helper.login();
+//		List<Map<String, String>> res = helper.searchFolders(criteria);
+//		Assert.assertNotNull(res);
+//		logger.info(res.toString());
+//	}
 
-	@Test
-	public void test50() throws Exception {
-		logger.info("searchFolders");
-		init();
-		// token = helper.login();
-		List<Map<String, String>> res = helper.searchFolders(null);
-		Assert.assertNotNull(res);
-		logger.info("{}", res);
-	}
+//	@Test
+//	public void test50() throws Exception {
+//		logger.info("searchFolders");
+//		init();
+//		// token = helper.login();
+//		List<Map<String, String>> res = helper.searchFolders(null);
+//		Assert.assertNotNull(res);
+//		logger.info("{}", res);
+//	}
 
 //	@Test
 //	public void test60() throws Exception {
@@ -183,22 +183,22 @@ public class TestDocerHelper {
 //		logger.info("{}", res);
 //	}
 	
-	@Test
-	public void test61() throws Exception {
-		// String typeId = "DOCUMENTO";
-//		String timestamp = String.valueOf(new Date().getTime());
-//		String fileName = "test" + timestamp + ".pdf";
-//		String file = "stuff/Integrazione DOCER 1.1.pdf";
-
-		String criteria = "test*";
-		// logger.info("createDocument {} {} - {}", typeId, fileName, file);
-
-		init();
-		// token = helper.login();
-		List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll("TEST");
-		Assert.assertNotNull(res);
-		logger.info("{}", res);
-	}	
+//	@Test
+//	public void test61() throws Exception {
+//		// String typeId = "DOCUMENTO";
+////		String timestamp = String.valueOf(new Date().getTime());
+////		String fileName = "test" + timestamp + ".pdf";
+////		String file = "stuff/Integrazione DOCER 1.1.pdf";
+//
+//		String criteria = "test*";
+//		// logger.info("createDocument {} {} - {}", typeId, fileName, file);
+//
+//		init();
+//		// token = helper.login();
+//		List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll("TEST");
+//		Assert.assertNotNull(res);
+//		logger.info("{}", res);
+//	}	
 
 //	@Test
 //	public void test70() throws Exception {
@@ -311,28 +311,28 @@ public class TestDocerHelper {
 		// logger.info("{}", new Gson().toJson(res));
 //	}
 	
-	@Test
-	public void test110() throws Exception {
-		 init();
-		 //token = helper.login();
-		 boolean changed = false;
-		 
-//		 List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll("TEST");
-//		 for (Map<String, String> metadata : res) {
-//			 String[] docnums = KeyValuePairFactory.joinMetadata(res, MetadatiDocumento.DOCNUM);
-//			 for (String docnum : docnums) {
-//				 changed = helper.updateProfileDocumentExternalId(docnum, "TEST2");
-				 
-				 List<Map<String, String>> res2 = helper.searchDocumentsByExternalIdAll("TEST2");
-				 String[] docnums2 = KeyValuePairFactory.joinMetadata(res2, MetadatiDocumento.DOCNUM);
-				 
-//			 }
-//		 }
+//	@Test
+//	public void test110() throws Exception {
+//		 init();
+//		 //token = helper.login();
+//		 boolean changed = false;
 //		 
-
-		 Assert.assertNotNull(docnums2);
-		 logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(docnums2));
-	}
+////		 List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll("TEST");
+////		 for (Map<String, String> metadata : res) {
+////			 String[] docnums = KeyValuePairFactory.joinMetadata(res, MetadatiDocumento.DOCNUM);
+////			 for (String docnum : docnums) {
+////				 changed = helper.updateProfileDocumentExternalId(docnum, "TEST2");
+//				 
+//				 List<Map<String, String>> res2 = helper.searchDocumentsByExternalIdAll("TEST2");
+//				 String[] docnums2 = KeyValuePairFactory.joinMetadata(res2, MetadatiDocumento.DOCNUM);
+//				 
+////			 }
+////		 }
+////		 
+//
+//		 Assert.assertNotNull(docnums2);
+//		 logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(docnums2));
+//	}
 	
 //	@Test
 //	public void test200() throws Exception {
@@ -360,18 +360,29 @@ public class TestDocerHelper {
 	}
 	
 	@Test
-	public void test300() throws Exception {
-		logger.info("test300 searchGroups {}");
+	public void test211() throws Exception {
+		logger.info("test200 searchUsers {}");
 		init();
-		try {
-			KeyValuePairFactory criteri = new KeyValuePairFactory<MetadatiGruppi>().add(MetadatiGruppi.GROUP_NAME, "*");
-			List<Map<String, String>> res = helper.searchGroups(criteri);
-			Assert.assertNotNull(res);
-			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
-		} catch (Exception ex) {
-			logger.error("test200", ex.getMessage());
-		}
-	}
+				 
+		List<Map<String, String>> res = helper.searchUsers("pivamichela3");
+				 
+		Assert.assertNotNull(res);
+		logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+	}	
+	
+//	@Test
+//	public void test300() throws Exception {
+//		logger.info("test300 searchGroups {}");
+//		init();
+//		try {
+//			KeyValuePairFactory criteri = new KeyValuePairFactory<MetadatiGruppi>().add(MetadatiGruppi.GROUP_NAME, "*");
+//			List<Map<String, String>> res = helper.searchGroups(criteri);
+//			Assert.assertNotNull(res);
+//			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+//		} catch (Exception ex) {
+//			logger.error("test200", ex.getMessage());
+//		}
+//	}
 	
 //	@Test
 //	public void test310() throws Exception {
@@ -407,43 +418,43 @@ public class TestDocerHelper {
 //		}
 //	}	
 
-	@Test
-	public void test410() throws Exception {
-		logger.info("test410 getGroupsOfUser {}");
-		init();
-		try {
-//			List<String> res = helper.getGroupsOfUser("pivamichela");
-			List<String> res = helper.getGroupsOfUser("lattisitiziano");
-			Assert.assertNotNull(res);
-			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
-		} catch (Exception ex) {
-			logger.error("test200", ex.getMessage());
-		}
-	}
-	
-	@Test
-	public void test420() throws Exception {
-		logger.info("test420 getUsersOfGroup {}");
-		init();
-		try {
-			List<String> res = helper.getUsersOfGroup("10021");
-			Assert.assertNotNull(res);
-			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
-		} catch (Exception ex) {
-			logger.error("test200", ex.getMessage());
-		}
-	}
-	
-	@Test
-	public void test500() throws Exception {
-		logger.info("test500 setACLDocumentConvert {}");
-		init();
-		try {
-			boolean res = helper.setACLDocument("885265", ACLFactory.create("lattisitiziano", ACL_VALUES.FULL_ACCESS).add("pivamichela", ACL_VALUES.READ_ONLY_ACCESS));
-			Assert.assertNotNull(res);
-			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
-		} catch (Exception ex) {
-			logger.error("test200", ex.getMessage());
-		}
-	}	
+//	@Test
+//	public void test410() throws Exception {
+//		logger.info("test410 getGroupsOfUser {}");
+//		init();
+//		try {
+////			List<String> res = helper.getGroupsOfUser("pivamichela");
+//			List<String> res = helper.getGroupsOfUser("lattisitiziano");
+//			Assert.assertNotNull(res);
+//			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+//		} catch (Exception ex) {
+//			logger.error("test200", ex.getMessage());
+//		}
+//	}
+//	
+//	@Test
+//	public void test420() throws Exception {
+//		logger.info("test420 getUsersOfGroup {}");
+//		init();
+//		try {
+//			List<String> res = helper.getUsersOfGroup("10021");
+//			Assert.assertNotNull(res);
+//			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+//		} catch (Exception ex) {
+//			logger.error("test200", ex.getMessage());
+//		}
+//	}
+//	
+//	@Test
+//	public void test500() throws Exception {
+//		logger.info("test500 setACLDocumentConvert {}");
+//		init();
+//		try {
+//			boolean res = helper.setACLDocument("885265", ACLFactory.create("lattisitiziano", ACL_VALUES.FULL_ACCESS).add("pivamichela", ACL_VALUES.READ_ONLY_ACCESS));
+//			Assert.assertNotNull(res);
+//			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+//		} catch (Exception ex) {
+//			logger.error("test200", ex.getMessage());
+//		}
+//	}	
 }
