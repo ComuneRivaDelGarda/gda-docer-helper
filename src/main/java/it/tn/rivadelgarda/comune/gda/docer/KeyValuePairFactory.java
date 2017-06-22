@@ -131,7 +131,7 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 			}
 		return res;
 	}
-
+	
 	/**
 	 * Converte in una lista di mappe un array di SearchItem
 	 * 
@@ -170,6 +170,12 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 		return metadataValue;
 	}
 
+	/**
+	 * ritorna il valore del metadato con chiave key
+	 * @param metadata metadati del documento
+	 * @param key nome del metadato
+	 * @return valore del metadato o null se non presente key
+	 */
 	public static <F extends MetadatoDocer> String getMetadata(Map<String, String> metadata, F key) {
 		String metadataValue = null;
 		if (metadata.containsKey(key.getValue())) {
@@ -178,6 +184,12 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 		return metadataValue;
 	}
 
+	/**
+	 * crea una lista di valori di metadati con chiave key dalla lista di metadati
+	 * @param metadataList lista di metadati documenti
+	 * @param key chiave del metadato da estrarre
+	 * @return array di valori del metadato 
+	 */
 	public static <F extends MetadatoDocer> String[] joinMetadata(List<Map<String, String>> metadataList, F key) {
 		List<String> metadataValues = new ArrayList<>();
 		for (Map<String, String> metadata : metadataList) {
