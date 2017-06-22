@@ -926,7 +926,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            <li>2 se si vuole assegnare “Read Only Access”
 	 *            <li>1 se si vuole assegnare “Normal Access”
 	 *            <li>0 se si vuole assegnare “Full Access”
-	 * @return
+	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
 	 */
 	private boolean setACLDocumentNative(String documentId, KeyValuePair[] acl) throws Exception {
@@ -949,7 +949,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param GROUP_USER_ID
 	 *            groupId or userId
 	 * @param acl
-	 * @return
+	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
 	 */
 	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACL_VALUES acl) throws Exception {
@@ -964,7 +964,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param acl
 	 *            mapps di groupId or userId come chiavi e valori ACL_VALUES
 	 *            come valore acl
-	 * @return
+	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
 	 */
 	public boolean setACLDocument(String documentId, Map<String, ACL_VALUES> acl) throws Exception {
@@ -986,9 +986,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId
 	 *            su cui applicare le acl
 	 * @param acl
-	 *            mapps di groupId or userId come chiavi e valori interi come
+	 *            mappa di groupId or userId come chiavi e valori interi come
 	 *            valore acl
-	 * @return
+	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
 	 */
 	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acl) throws Exception {
@@ -997,6 +997,27 @@ public class DocerHelper extends AbstractDocerHelper {
 			keyBuilder.add(entry.getKey(), ACL_VALUES.values()[entry.getValue()]);
 		}
 		return setACLDocumentNative(documentId, keyBuilder.get());
+	}
+
+	/**
+	 * Sovrascrive la ACL per tutti i documents con EXTERNAL_ID specifico
+	 * 
+	 * @param externalId
+	 *            su cui applicare le acl
+	 * @param aclmappa
+	 *            di groupId or userId come chiavi e valori interi come valore
+	 *            acl
+	 * @return lista dei documentId a cui è stata sovrascritta la ACL 
+	 * @throws Exception
+	 */
+	public List<String> setACLDocumentsByExternalId(String externalId, Map<String, Integer> acl) throws Exception {
+		List<Map<String, String>> metadatiDocumentiDaExternalId = searchDocumentsByExternalIdAll(externalId);
+		String[] listaDocumentId = KeyValuePairFactory.joinMetadata(metadatiDocumentiDaExternalId,
+				MetadatiDocumento.DOCNUM);
+		for (String documentId : listaDocumentId) {
+			setACLDocumentConvert(documentId, acl);
+		}
+		return Arrays.asList(listaDocumentId);
 	}
 
 	/**
@@ -1509,8 +1530,6 @@ public class DocerHelper extends AbstractDocerHelper {
 		List<Map<String, String>> documents = searchDocumentsByExternalIdAll(externalId);
 		return documents.size();
 	}
-
-
 
 	// /**
 	// * crea un nuovo documento nella cartella
