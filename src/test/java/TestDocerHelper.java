@@ -52,22 +52,22 @@ public class TestDocerHelper {
 	}
 
 //	@Test
-//	public void test10() throws Exception {
-//		// // AuthenticationServiceStub service = new
-//		// // AuthenticationServiceStub(url);
-//		// // Login login = new Login();
-//		// // login.setUsername("admin");
-//		// // login.setPassword("admin");
-//		// // login.setCodiceEnte("");
-//		// // login.setApplication("GDA");
-//		// // LoginResponse response = service.login(login);
-//		// // Assert.assertNotNull(response);
-//		// // Assert.assertNotNull(response.get_return());
-//		// // logger.info(response.get_return());
-//		// init();
-//		// //token = helper.login();
-//		// Assert.assertNotNull(token);
-//		// logger.info(token);
+//	public void test10Login() throws Exception {
+//		 // AuthenticationServiceStub service = new
+//		 // AuthenticationServiceStub(url);
+//		 // Login login = new Login();
+//		 // login.setUsername("admin");
+//		 // login.setPassword("admin");
+//		 // login.setCodiceEnte("");
+//		 // login.setApplication("GDA");
+//		 // LoginResponse response = service.login(login);
+//		 // Assert.assertNotNull(response);
+//		 // Assert.assertNotNull(response.get_return());
+//		 // logger.info(response.get_return());
+//		 init();
+//		 token = helper.login();
+//		 Assert.assertNotNull(token);
+//		 logger.info(token);
 //	}
 
 //	@Test
@@ -348,27 +348,27 @@ public class TestDocerHelper {
 //		}
 //	}	
 	
-	@Test
-	public void test210() throws Exception {
-		logger.info("test200 searchUsers {}");
-		init();
-				 
-		List<Map<String, String>> res = helper.searchUsers(null);
-				 
-		Assert.assertNotNull(res);
-		logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
-	}
-	
-	@Test
-	public void test211() throws Exception {
-		logger.info("test200 searchUsers {}");
-		init();
-				 
-		List<Map<String, String>> res = helper.searchUsers("pivamichela3");
-				 
-		Assert.assertNotNull(res);
-		logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
-	}	
+//	@Test
+//	public void test210() throws Exception {
+//		logger.info("test200 searchUsers {}");
+//		init();
+//				 
+//		List<Map<String, String>> res = helper.searchUsers(null);
+//				 
+//		Assert.assertNotNull(res);
+//		logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+//	}
+//	
+//	@Test
+//	public void test211() throws Exception {
+//		logger.info("test200 searchUsers {}");
+//		init();
+//				 
+//		List<Map<String, String>> res = helper.searchUsers("pivamichela3");
+//				 
+//		Assert.assertNotNull(res);
+//		logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+//	}	
 	
 //	@Test
 //	public void test300() throws Exception {
