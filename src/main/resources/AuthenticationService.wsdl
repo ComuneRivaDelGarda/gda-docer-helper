@@ -33,6 +33,22 @@
                <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string"/>
             </xs:sequence>
          </xs:complexType>
+         <xs:element name="loginOnDemand">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"/>
+                  <xs:element minOccurs="0" name="serviceUrl" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="loginOnDemandResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
          <xs:element name="loginSSO">
             <xs:complexType>
                <xs:sequence>
@@ -57,22 +73,6 @@
             </xs:complexType>
          </xs:element>
          <xs:element name="getRealUserResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="loginOnDemand">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"/>
-                  <xs:element minOccurs="0" name="serviceUrl" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="loginOnDemandResponse">
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
@@ -107,6 +107,20 @@
                </xs:sequence>
             </xs:complexType>
          </xs:element>
+         <xs:element name="getUserInfo">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="getUserInfoResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:DefaultKeyValue"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
          <xs:element name="login">
             <xs:complexType>
                <xs:sequence>
@@ -135,20 +149,6 @@
             <xs:complexType>
                <xs:sequence>
                   <xs:element minOccurs="0" name="return" type="xs:boolean"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getUserInfo">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element minOccurs="0" name="token" nillable="true" type="xs:string"/>
-               </xs:sequence>
-            </xs:complexType>
-         </xs:element>
-         <xs:element name="getUserInfoResponse">
-            <xs:complexType>
-               <xs:sequence>
-                  <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax23:DefaultKeyValue"/>
                </xs:sequence>
             </xs:complexType>
          </xs:element>
