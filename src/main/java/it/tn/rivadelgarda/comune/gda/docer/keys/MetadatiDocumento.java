@@ -327,7 +327,7 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	 *
 	 */
 	public enum ARCHIVE_TYPE_VALUES implements MetadatoDocer {
-		ARCHIVE(ARCHIVE_TYPE_ARCHIVE), URL(ARCHIVE_TYPE_URL);
+		ARCHIVE(ARCHIVE_TYPE_ARCHIVE), URL(ARCHIVE_TYPE_URL), PAPER(ARCHIVE_TYPE_PAPER);
 		private String value;
 
 		private ARCHIVE_TYPE_VALUES(String value) {

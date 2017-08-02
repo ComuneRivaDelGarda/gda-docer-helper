@@ -58,8 +58,19 @@ public interface MetadatoDocer {
 	 */
 	public final static String TIPO_COMPONENTE_ANNOTAZIONE = "ANNOTAZIONE";
 
+	/**
+	 * Archive=Documento Digitale;
+	 */
 	public final static String ARCHIVE_TYPE_ARCHIVE = "ARCHIVE";
+	/**
+	 * Url=Documento di tipo link ad una Url Esterna)
+	 */
 	public final static String ARCHIVE_TYPE_URL = "URL";
+	/**
+	 * Paper=Documento copia elettronica dell'originale cartaceo quale ad esempio
+	 * una scansione di un documento cartaceo;
+	 */
+	public final static String ARCHIVE_TYPE_PAPER = "PAPER";
 
 	public final static String SORT_ASC = "ASC";
 	public final static String SORT_DESC = "DESC";
