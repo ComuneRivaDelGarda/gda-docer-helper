@@ -102,6 +102,10 @@ public class KeyValuePairFactory<T extends MetadatoDocer> {
 		return this.list.toArray(new KeyValuePair[list.size()]);
 	}
 
+	public Map<String, String> getAsMap() {
+		return asMap(this.get());
+	}
+	
 	/**
 	 * 
 	 * @param TYPE_ID
