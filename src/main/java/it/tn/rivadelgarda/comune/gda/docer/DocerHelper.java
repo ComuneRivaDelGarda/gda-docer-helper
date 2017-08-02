@@ -695,6 +695,28 @@ public class DocerHelper extends AbstractDocerHelper {
 		return KeyValuePairFactory.asListMap(result);
 	}
 
+	/**
+	 * Ricerca per EXTERNAL_ID, ritorna tutti i metadati dei documenti trovati
+	 * @param externalId valore di EXTERNAL_ID da cercare nei metadati
+	 * @return lista dei profili documento
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchDocumentsByExternalIdAllProfiles(String externalId) throws Exception {
+		List<Map<String, String>> data =  searchDocumentsByExternalIdAll(externalId);
+		return data;
+	}
+	
+	/**
+	 * Ricerca per EXTERNAL_ID, ritorna solo id DOCNUM trovati 
+	 * @param externalId valore di EXTERNAL_ID da cercare nei metadati
+	 * @return lista dei DOCNUM
+	 * @throws Exception
+	 */
+	public List<String> searchDocumentsByExternalIdAllIds(String externalId) throws Exception {
+		List<Map<String, String>> data =  searchDocumentsByExternalIdAll(externalId);
+		return Arrays.asList(KeyValuePairFactory.joinMetadata(data, MetadatiDocumento.DOCNUM));
+	}
+	
 	public Map<String, String> searchDocumentsByExternalIdFirst(String externalId) throws Exception {
 		Map<String, String> profile = new HashMap<>();
 		logger.debug("searchDocumentsByExternalIdFirst {}", externalId);
