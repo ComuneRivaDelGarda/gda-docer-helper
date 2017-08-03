@@ -51,24 +51,24 @@ public class TestDocerHelper {
 		}
 	}
 
-//	@Test
-//	public void test10Login() throws Exception {
-//		 // AuthenticationServiceStub service = new
-//		 // AuthenticationServiceStub(url);
-//		 // Login login = new Login();
-//		 // login.setUsername("admin");
-//		 // login.setPassword("admin");
-//		 // login.setCodiceEnte("");
-//		 // login.setApplication("GDA");
-//		 // LoginResponse response = service.login(login);
-//		 // Assert.assertNotNull(response);
-//		 // Assert.assertNotNull(response.get_return());
-//		 // logger.info(response.get_return());
-//		 init();
-//		 token = helper.login();
-//		 Assert.assertNotNull(token);
-//		 logger.info(token);
-//	}
+	@Test
+	public void test10Login() throws Exception {
+		 // AuthenticationServiceStub service = new
+		 // AuthenticationServiceStub(url);
+		 // Login login = new Login();
+		 // login.setUsername("admin");
+		 // login.setPassword("admin");
+		 // login.setCodiceEnte("");
+		 // login.setApplication("GDA");
+		 // LoginResponse response = service.login(login);
+		 // Assert.assertNotNull(response);
+		 // Assert.assertNotNull(response.get_return());
+		 // logger.info(response.get_return());
+		 init();
+		 token = helper.login();
+		 Assert.assertNotNull(token);
+		 logger.info(token);
+	}
 
 //	@Test
 //	public void test22() throws Exception {
