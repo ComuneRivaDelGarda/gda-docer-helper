@@ -1036,7 +1036,9 @@ public class DocerHelper extends AbstractDocerHelper {
 		List<Map<String, String>> metadatiDocumentiDaExternalId = searchDocumentsByExternalIdAll(externalId);
 		String[] listaDocumentId = KeyValuePairFactory.joinMetadata(metadatiDocumentiDaExternalId,
 				MetadatiDocumento.DOCNUM);
+		logger.debug("trovati {} documenti da externalId={}", listaDocumentId.length, externalId);
 		for (String documentId : listaDocumentId) {
+			logger.debug("imposto ACL {} per documento {}", acl, documentId);
 			setACLDocumentConvert(documentId, acl);
 		}
 		return Arrays.asList(listaDocumentId);
