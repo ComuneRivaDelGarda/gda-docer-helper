@@ -48,6 +48,26 @@ import java.util.List;
  * <li>{@link #DESTINATARI}</li>
  * <li>{@link #TIPO_FIRMA}</li>
  * <li>{@link #FIRMATARIO}</li>
+ * <p>
+ * Metadati di Pubblicazione:
+ * <li>{@link #REGISTRO_PUB}</li>
+ * <li>{@link #NUMERO_PUB}</li>
+ * <li>{@link #DATA_INIZIO_PUB}</li>
+ * <li>{@link #DATA_FINE_PUB}</li>
+ * <li>{@link #PUBBLICATO}</li>
+ * <li>{@link #OGGETTO_PUB}</li>
+ * <li>{@link #ANNO_PUB}</li>
+ * <p>
+ * Metadati di Conservazione:
+ * <li>{@link #STATO_CONSERV}</li>
+ * <li>{@link #FORZA_COLL}</li>
+ * <li>{@link #FORZA_ACCETTAZ}</li>
+ * <li>{@link #FORZA_CONSERV}</li>
+ * <li>{@link #FLAG_CONSERV}</li>
+ * <li>{@link #T_CONSERV}</li>
+ * <li>{@link #D_CO_CER}</li>
+ * <li>{@link #USA_D_CO_CER}</li>
+ * <li>{@link #T_D_CONTR_CER}</li>
  * 
  * @author mirco
  *
