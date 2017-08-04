@@ -90,7 +90,20 @@ public interface MetadatoDocer {
 	public static final String DESTINATARI_KEY = "DESTINATARI";
 	public static final String TIPO_FIRMA_KEY = "TIPO_FIRMA";
 	public static final String FIRMATARIO_KEY = "FIRMATARIO";
-
+	
+	/*
+	 * Metadati di Protocollazione
+	 */
+	public static final String ID_REGISTRO_KEY="ID_REGISTRO";
+	public static final String N_REGISTRAZ_KEY="N_REGISTRAZ";
+	public static final String D_REGISTRAZ_KEY="D_REGISTRAZ";
+	public static final String ANNULL_REGISTRAZ_KEY="ANNULL_REGISTRAZ";
+	public static final String D_ANNULL_REGISTRAZ_KEY="D_ANNULL_REGISTRAZ";
+	public static final String M_ANNULL_REGISTRAZ_KEY="M_ANNULL_REGISTRAZ";
+	public static final String P_ANNULL_REGISTRAZ_KEY="P_ANNULL_REGISTRAZ";
+	public static final String A_REGISTRAZ_KEY="A_REGISTRAZ";
+	public static final String O_REGISTRAZ_KEY= "O_REGISTRAZ";	
+	
 	public final static String ACL_FULL_ACCESS = "0";
 	public final static String ACL_NORMAL_ACCESS = "1";
 	public final static String ACL_READ_ONLY_ACCESS = "2";

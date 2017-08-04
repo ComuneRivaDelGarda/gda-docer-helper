@@ -226,12 +226,18 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	DESTINATARI(DESTINATARI_KEY),
 	/**
 	 * tipo firma (è anche metadato di Registrazione)
+	 * 
+	 * REGISTRAZIONE: *OBBLIGATORIO
 	 */
 	TIPO_FIRMA(TIPO_FIRMA_KEY),
 	/**
-	 * tfirmatario : firmatario (è anche metadato di Registrazione)
+	 * firmatario : firmatario (è anche metadato di Registrazione)
+	 * REGISTRAZIONE:
+	 * Firmatari del documento (applicabile per i soli documenti da avviare alla firma o per i documenti firmati)
+	 * obbligatorio se TIPO_FIRMA=F
+	 * "formato XML con specifico XSD"
 	 */
-	FIRMATARIO(FIRMATARIO_KEY);
+	FIRMATARIO(FIRMATARIO_KEY),
 
 	/**
 	 * Metadati per la conservazione sostitutiva:
@@ -240,6 +246,56 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	/**
 	 * Metadati di Registrazione
 	 */
+	/**
+	 * identificativo del registro particolare
+	 * *OBBLIGATORIO
+	 */
+	ID_REGISTRO(ID_REGISTRO_KEY),
+	/**
+	 * numero di registrazione
+	 * *OBBLIGATORIO
+	 */
+	N_REGISTRAZ(N_REGISTRAZ_KEY),
+	/**
+	 * data di registrazione
+	 * *OBBLIGATORIO
+	 */
+	D_REGISTRAZ(D_REGISTRAZ_KEY),
+	/**
+	 * tipo di firma
+	 * <li>FD (firmato digitalmente)
+	*<li>FE (firmato non digitalmente)
+	*<li>F (da inoltrare alla firma)
+	*<li>NF (non firmato)
+	 */
+	//TIPO_FIRMA(TIPO_FIRMA_KEY),
+	//FIRMATARIO(FIRMATARIO),
+	/**
+	 * registrazione annullata
+	 */
+	ANNULL_REGISTRAZ(ANNULL_REGISTRAZ_KEY),
+	/**
+	 * data annullamento della registrazione
+	 */
+	D_ANNULL_REGISTRAZ(D_ANNULL_REGISTRAZ_KEY),
+	/**
+	 * motivo annullamento della registrazione
+	 */
+	M_ANNULL_REGISTRAZ(M_ANNULL_REGISTRAZ_KEY),
+	/**
+	 * provvedimento di annullamento della registrazione
+	 */
+	P_ANNULL_REGISTRAZ(P_ANNULL_REGISTRAZ_KEY),
+	/**
+	 * anno di registrazione
+	 */
+	A_REGISTRAZ(A_REGISTRAZ_KEY),
+	/**
+	 * oggetto della registrazione
+	 */
+	O_REGISTRAZ(O_REGISTRAZ_KEY);
+	//MITTENTI(MITTENTI_KEY),
+	//DESTINATARI(DESTINATARI_KEY),
 
 	/**
 	 * Metadati di Pubblicazione:
