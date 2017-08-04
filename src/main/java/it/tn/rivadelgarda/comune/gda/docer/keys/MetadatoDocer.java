@@ -114,6 +114,16 @@ public interface MetadatoDocer {
 	public static final String OGGETTO_PUB_KEY="OGGETTO_PUB";
 	public static final String ANNO_PUB_KEY="ANNO_PUB";
 	
+	public static final String STATO_CONSERV_KEY = "STATO_CONSERV";
+	public static final String FORZA_COLL_KEY = "FORZA_COLL";
+	public static final String FORZA_ACCETTAZ_KEY = "FORZA_ACCETTAZ";	
+	public static final String FORZA_CONSERV_KEY = "FORZA_CONSERV";
+	public static final String FLAG_CONSERV_KEY = "FLAG_CONSERV";
+	public static final String T_CONSERV_KEY = "T_CONSERV";
+	public static final String D_CO_CER_KEY = "D_CO_CER";
+	public static final String USA_D_CO_CER_KEY = "USA_D_CO_CER";
+	public static final String T_D_CONTR_CER_KEY="T_D_CONTR_CER";	
+	
 	public final static String ACL_FULL_ACCESS = "0";
 	public final static String ACL_NORMAL_ACCESS = "1";
 	public final static String ACL_READ_ONLY_ACCESS = "2";

@@ -14,19 +14,19 @@ import java.util.List;
  * sono:
  * <p>
  * Metadati di base generici:
+ * <li>{@link #TYPE_ID}</li>
  * <li>{@link #COD_ENTE}</li>
  * <li>{@link #COD_AOO}</li>
- * <li>{@link #TYPE_ID}</li>
  * <li>{@link #DOCNAME}</li>
  * <li>{@link #ABSTRACT}</li>
- * <li>{@link #TIPO_COMPONENTE}</li>
- * <li>{@link #DOCNUM}</li>
- * <li>{@link #STATO_ARCHIVISTICO}</li>
- * <li>{@link #STATO_BUSINESS}</li>
  * <li>{@link #CREATION_DATE}</li>
+ * <li>{@link #TIPO_COMPONENTE}</li>
  * <li>{@link #ARCHIVE_TYPE}</li>
  * <li>{@link #APP_VERSANTE}</li>
  * <li>{@link #DOC_HASH}</li>
+ * <li>{@link #STATO_BUSINESS}</li>
+ * <li>{@link #STATO_ARCHIVISTICO}</li>
+ * <li>{@link #DOCNUM}</li>
  * <li>{@link #DOCNUM_RECORD}</li>
  * <li>{@link #UD_VERSION}</li>
  * <li>{@link #EXTERNAL_ID}</li>
@@ -37,7 +37,7 @@ import java.util.List;
  * <li>{@link #ANNO_FASCICOLO}</li>
  * <li>{@link #FASC_SECONDARI}</li>
  * <p>
- * Metadati di classificazione e fascicolazione:
+ * Metadati di Protocollazione:
  * <li>{@link #NUM_PG}</li>
  * <li>{@link #ANNO_PG}</li>
  * <li>{@link #OGGETTO_PG}</li>
@@ -238,11 +238,7 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	 * "formato XML con specifico XSD"
 	 */
 	FIRMATARIO(FIRMATARIO_KEY),
-
-	/*
-	 * Metadati per la conservazione sostitutiva:
-	 */
-
+	
 	/**
 	 * Metadati di Registrazione
 	 */
@@ -332,9 +328,56 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	/**
 	 * anno di pubblicazione
 	 */
-	ANNO_PUB(ANNO_PUB_KEY);
+	ANNO_PUB(ANNO_PUB_KEY),
 
+	/*
+	 * Metadati per la conservazione sostitutiva:
+	 */
 	
+	/**
+	 * "deve essere impostato a 1 se si vuole mandare il documento in conservazione,
+	 * altrimenti si imposta a 0" "Stato Conservazione: 0 --> da non conservare 1
+	 * --> da conservare 2 --> inviato in conservazione 3 --> conservato 4 --> in
+	 * errore"
+	 * 
+	 */
+	STATO_CONSERV(STATO_CONSERV_KEY),
+	/**
+	 * forza collegamento
+	 */
+	FORZA_COLL(FORZA_COLL_KEY),
+	/**
+	 * forza accettazione
+	 */
+	FORZA_ACCETTAZ(FORZA_ACCETTAZ_KEY),
+	/**
+	 * forza conservazione
+	 */
+	FORZA_CONSERV(FORZA_CONSERV_KEY),
+	/**
+	 * flag conservazione. Per alcune tipologie documentarie per le quali non tutti
+	 * i documenti vanno inviati in conservazione, indica quali di essi devono
+	 * essere o meno inviati "vuoto S N
+	 */
+	FLAG_CONSERV(FLAG_CONSERV_KEY),
+	/**
+	 * tipo di conservazione sostitutiva da applicare al documento "vuoto
+	 * SOSTITUTIVA FISCALE
+	 */
+	T_CONSERV(T_CONSERV_KEY),
+	/**
+	 * data controllo certificato
+	 */
+	D_CO_CER(D_CO_CER_KEY),
+	/**
+	 * usa data controllo certificato "vuoto SI NO
+	 */
+	USA_D_CO_CER(USA_D_CO_CER_KEY),
+	/**
+	 * tipo data controllo certificato
+	 */
+	T_D_CONTR_CER(T_D_CONTR_CER_KEY);
+
 	private String key;
 
 	private MetadatiDocumento(final String key) {
