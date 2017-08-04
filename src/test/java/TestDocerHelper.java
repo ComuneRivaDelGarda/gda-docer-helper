@@ -311,28 +311,28 @@ public class TestDocerHelper {
 		// logger.info("{}", new Gson().toJson(res));
 //	}
 	
-//	@Test
-//	public void test110() throws Exception {
-//		 init();
-//		 //token = helper.login();
-//		 boolean changed = false;
+	@Test
+	public void test110() throws Exception {
+		 init();
+		 //token = helper.login();
+		 boolean changed = false;
+		 
+//		 List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll("TEST");
+//		 for (Map<String, String> metadata : res) {
+//			 String[] docnums = KeyValuePairFactory.joinMetadata(res, MetadatiDocumento.DOCNUM);
+//			 for (String docnum : docnums) {
+//				 changed = helper.updateProfileDocumentExternalId(docnum, "TEST2");
+				 
+				 List<Map<String, String>> res2 = helper.searchDocumentsByExternalIdAll("protocollo_808737");
+				 String[] docnums2 = KeyValuePairFactory.joinMetadata(res2, MetadatiDocumento.DOCNUM);
+				 
+//			 }
+//		 }
 //		 
-////		 List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll("TEST");
-////		 for (Map<String, String> metadata : res) {
-////			 String[] docnums = KeyValuePairFactory.joinMetadata(res, MetadatiDocumento.DOCNUM);
-////			 for (String docnum : docnums) {
-////				 changed = helper.updateProfileDocumentExternalId(docnum, "TEST2");
-//				 
-//				 List<Map<String, String>> res2 = helper.searchDocumentsByExternalIdAll("TEST2");
-//				 String[] docnums2 = KeyValuePairFactory.joinMetadata(res2, MetadatiDocumento.DOCNUM);
-//				 
-////			 }
-////		 }
-////		 
-//
-//		 Assert.assertNotNull(docnums2);
-//		 logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(docnums2));
-//	}
+
+		 Assert.assertNotNull(docnums2);
+		 logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(docnums2));
+	}
 	
 //	@Test
 //	public void test200() throws Exception {
@@ -456,5 +456,5 @@ public class TestDocerHelper {
 //		} catch (Exception ex) {
 //			logger.error("test200", ex.getMessage());
 //		}
-//	}	
+//	}
 }
