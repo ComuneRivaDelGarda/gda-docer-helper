@@ -103,6 +103,16 @@ public interface MetadatoDocer {
 	public static final String P_ANNULL_REGISTRAZ_KEY="P_ANNULL_REGISTRAZ";
 	public static final String A_REGISTRAZ_KEY="A_REGISTRAZ";
 	public static final String O_REGISTRAZ_KEY= "O_REGISTRAZ";	
+	/*
+	 * Metadati di Pubblicazione
+	 */
+	public static final String REGISTRO_PUB_KEY="REGISTRO_PUB";
+	public static final String NUMERO_PUB_KEY="NUMERO_PUB";
+	public static final String DATA_INIZIO_PUB_KEY="DATA_INIZIO_PUB";
+	public static final String DATA_FINE_PUB_KEY="DATA_FINE_PUB";
+	public static final String PUBBLICATO_KEY="PUBBLICATO";
+	public static final String OGGETTO_PUB_KEY="OGGETTO_PUB";
+	public static final String ANNO_PUB_KEY="ANNO_PUB";
 	
 	public final static String ACL_FULL_ACCESS = "0";
 	public final static String ACL_NORMAL_ACCESS = "1";

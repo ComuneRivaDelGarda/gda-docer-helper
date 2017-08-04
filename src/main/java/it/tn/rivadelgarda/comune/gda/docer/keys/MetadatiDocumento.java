@@ -239,7 +239,7 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	 */
 	FIRMATARIO(FIRMATARIO_KEY),
 
-	/**
+	/*
 	 * Metadati per la conservazione sostitutiva:
 	 */
 
@@ -293,14 +293,48 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	/**
 	 * oggetto della registrazione
 	 */
-	O_REGISTRAZ(O_REGISTRAZ_KEY);
+	O_REGISTRAZ(O_REGISTRAZ_KEY),
 	//MITTENTI(MITTENTI_KEY),
 	//DESTINATARI(DESTINATARI_KEY),
 
-	/**
+	/*
 	 * Metadati di Pubblicazione:
 	 */
+	/**
+	 * identificativo del registro di pubblicazione
+	 * *OBBLIGATORIO
+	 */
+	REGISTRO_PUB(REGISTRO_PUB_KEY),
+	/**
+	 * numero pubblicazione
+	 * *OBBLIGATORIO
+	 */
+	NUMERO_PUB(NUMERO_PUB_KEY),
+	/**
+	 * data inizio pubblicazione
+	 * *OBBLIGATORIO
+	 */
+	DATA_INIZIO_PUB(DATA_INIZIO_PUB_KEY),
+	/**
+	 * data fine pubblicazione
+	 * *OBBLIGATORIO
+	 */
+	DATA_FINE_PUB(DATA_FINE_PUB_KEY),
+	/**
+	 * documento pubblicato
+	 * *OBBLIGATORIO
+	 */
+	PUBBLICATO(PUBBLICATO_KEY),
+	/**
+	 * oggetto pubblicazione
+	 */
+	OGGETTO_PUB(OGGETTO_PUB_KEY),
+	/**
+	 * anno di pubblicazione
+	 */
+	ANNO_PUB(ANNO_PUB_KEY);
 
+	
 	private String key;
 
 	private MetadatiDocumento(final String key) {
