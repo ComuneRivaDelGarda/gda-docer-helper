@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,8 @@ import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
 
 public class TestDocerHelper {
 
+	private static final String CONFIG_PROPERTIES = "config.properties";
+
 	final static Logger logger = LoggerFactory.getLogger(TestDocerHelper.class);
 
 	private String url;
@@ -39,15 +42,20 @@ public class TestDocerHelper {
 		if (helper == null) {
 			Properties p = new Properties();
 			// p.load(new FileReader(new File("config.properties")));
-			p.load(getClass().getResourceAsStream("config.properties"));
+			InputStream is = this.getClass().getResourceAsStream(CONFIG_PROPERTIES);
+			if (is != null) {
+				p.load(is);
 
-			// String url =
-			// "http://192.168.64.22:8080/docersystem/services/AuthenticationService";
-			url = p.getProperty("url");
-			username = p.getProperty("username");
-			password = p.getProperty("password");
-
-			helper = new DocerHelper(url, username, password);
+				// String url =
+				// "http://192.168.64.22:8080/docersystem/services/AuthenticationService";
+				url = p.getProperty("url");
+				username = p.getProperty("username");
+				password = p.getProperty("password");
+	
+				helper = new DocerHelper(url, username, password);
+			} else {
+				throw new Exception("impossibile carcare configurazione da " + CONFIG_PROPERTIES);
+			}
 		}
 	}
 
