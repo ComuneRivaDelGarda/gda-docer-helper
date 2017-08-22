@@ -1587,14 +1587,25 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
+	 * restituisce il file del documento come InputStream;
 	 * 
-	 * @param documentId
-	 * @param versionNumber
+	 * @param documentId id del documento
+	 * @param versionNumber versione del documento, se vuoto prende ultima versione in automatico
 	 * @return
 	 * @throws Exception
 	 */
 	public InputStream getDocumentStream(String documentId, String versionNumber) throws Exception {
 		logger.debug("getDocumentStream {} {}", documentId, versionNumber);
+		
+		if (StringUtils.isBlank(versionNumber)) {
+			List<String> versioni = getVersions(documentId);
+			for (String v : versioni) {
+				versionNumber = v;
+				logger.debug("getDocumentStream on last version {}", versionNumber);
+				break;
+			}
+		}
+		
 		StreamDescriptor data = downloadVersion(documentId, versionNumber);
 		long size = data.getByteSize();
 		DataHandler dh = data.getHandler();
@@ -1602,10 +1613,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * restituisce il file del documento come binario;
+	 * restituisce il file del documento come byte[]
 	 * 
-	 * @param documentId
-	 * @param versionNumber
+	 * @param documentId id del documento
+	 * @param versionNumber versione del documento, se vuoto prende ultima versione in automatico
 	 * @return
 	 * @throws Exception
 	 */
