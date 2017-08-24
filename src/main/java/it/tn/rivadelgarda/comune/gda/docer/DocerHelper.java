@@ -428,6 +428,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
 			String ABSTRACT, String EXTERNAL_ID) throws Exception {
+		logger.debug("createDocumentTypeDocumento DOCNAME={} TIPO_COMPONENTE={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, EXTERNAL_ID);
 		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
 
@@ -443,6 +444,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes,
 			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
+		logger.debug("createDocumentTypeDocumentoAndRelateToExternalId {}", EXTERNAL_ID);
 		String DOCNUM = createDocumentTypeDocumento(DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 		// ricerco documenti per EXTERNAL_ID
 		Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
@@ -453,6 +455,8 @@ public class DocerHelper extends AbstractDocerHelper {
 				// EXTERNAL_ID
 				addRelated(documentToRelateTo, DOCNUM);
 			}
+		} else {
+			logger.debug("nessun risultato");
 		}
 		return DOCNUM;
 	}
@@ -1060,6 +1064,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean addRelated(String documentId, String[] related) throws Exception {
+		logger.debug("addRelated documentId={} related={}", documentId, related);
 		DocerServicesStub service = getDocerService();
 		AddRelated request = new AddRelated();
 		request.setToken(getLoginTicket());
@@ -1071,6 +1076,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	public boolean addRelated(String documentId, String related) throws Exception {
+		logger.debug("addRelated documentId={} related={}", documentId, related);
 		return addRelated(documentId, new String[] { related });
 	}
 
