@@ -465,4 +465,18 @@ public class TestDocerHelper {
 //			logger.error("test200", ex.getMessage());
 //		}
 //	}
+	
+	@Test
+	public void test600() throws Exception {
+		String test = "protocollo_808775";
+		logger.info("test600 searchDocumentsByExternalIdFirst {}", test);
+		init();
+		try {
+			Map<String, String> res = helper.searchDocumentsByExternalIdFirst(test);
+			Assert.assertNotNull(res);
+			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test600", ex.getMessage());
+		}
+	}	
 }
