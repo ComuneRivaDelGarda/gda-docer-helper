@@ -445,18 +445,24 @@ public class DocerHelper extends AbstractDocerHelper {
 	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes,
 			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
 		logger.debug("createDocumentTypeDocumentoAndRelateToExternalId {}", EXTERNAL_ID);
+		logger.debug("creting document DOCNAME={} TIPO_COMPONENTE={} ABSTRACT={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 		String DOCNUM = createDocumentTypeDocumento(DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+		logger.debug("document created DOCNUM={}", DOCNUM);
 		// ricerco documenti per EXTERNAL_ID
+		logger.debug("searching document EXTERNAL_ID={}", EXTERNAL_ID);
 		Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
 		if (documentByExternalId != null) {
 			String documentToRelateTo = KeyValuePairFactory.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
 			if (StringUtils.isNotBlank(documentToRelateTo)) {
+				logger.debug("founded documentToRelateTo={}", documentToRelateTo);
 				// relaziono il documento appena creato al con altro con stesso
 				// EXTERNAL_ID
 				addRelated(documentToRelateTo, DOCNUM);
+			} else {
+				logger.warn("no document DOCNUM on results");
 			}
 		} else {
-			logger.debug("nessun risultato");
+			logger.warn("no document founded");
 		}
 		return DOCNUM;
 	}
