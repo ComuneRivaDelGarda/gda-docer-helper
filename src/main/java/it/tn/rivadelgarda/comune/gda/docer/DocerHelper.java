@@ -101,6 +101,19 @@ import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
 
 public class DocerHelper extends AbstractDocerHelper {
 
+    public class InputStreamAndSize{
+        private InputStream stream;
+        private Long size;
+
+        public InputStream getStream() {
+            return stream;
+        }
+
+        public Long getSize() {
+            return size;
+        }
+    }
+
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
@@ -467,7 +480,33 @@ public class DocerHelper extends AbstractDocerHelper {
 		return DOCNUM;
 	}
 
-	/**
+    /**
+     *
+     * @param DOCNAME
+     * @param file
+     * @param TIPO_COMPONENTE
+     * @param ABSTRACT
+     * @param EXTERNAL_ID
+     * @return
+     * @throws Exception
+     */
+    public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, File file,
+                                                                   TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
+        String DOCNUM = createDocumentTypeDocumento(DOCNAME, file, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+        // ricerco documenti per EXTERNAL_ID
+        Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
+        if (documentByExternalId != null) {
+            String documentToRelateTo = KeyValuePairFactory.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
+            if (StringUtils.isNotBlank(documentToRelateTo)) {
+                // relaziono il documento appena creato al con altro con stesso
+                // EXTERNAL_ID
+                addRelated(documentToRelateTo, DOCNUM);
+            }
+        }
+        return DOCNUM;
+    }
+
+    /**
 	 * Questo metodo permette di aggiungere Documenti ad una Folder del DMS.
 	 * 
 	 * @param folderId
@@ -1036,7 +1075,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param externalId
 	 *            su cui applicare le acl
-	 * @param aclmappa
+	 * @param acl
 	 *            di groupId or userId come chiavi e valori interi come valore
 	 *            acl
 	 * @return lista dei documentId a cui è stata sovrascritta la ACL 
@@ -1624,8 +1663,35 @@ public class DocerHelper extends AbstractDocerHelper {
 		return dh.getInputStream();
 	}
 
-	/**
-	 * restituisce il file del documento come byte[]
+    /**
+     * restituisce il file del documento come InputStream e la dimensione del file
+     *
+     * @param documentId id del documento
+     * @param versionNumber versione del documento, se vuoto prende ultima versione in automatico
+     * @return
+     * @throws Exception
+     */
+    public InputStreamAndSize getDocumentStreamAndSize(String documentId, String versionNumber) throws Exception {
+        logger.debug("getDocumentStreamAndSize {} {}", documentId, versionNumber);
+
+        if (StringUtils.isBlank(versionNumber)) {
+            List<String> versioni = getVersions(documentId);
+            for (String v : versioni) {
+                versionNumber = v;
+                logger.debug("getDocumentStream on last version {}", versionNumber);
+                break;
+            }
+        }
+
+        StreamDescriptor data = downloadVersion(documentId, versionNumber);
+        InputStreamAndSize document=new InputStreamAndSize();
+        document.size = data.getByteSize();
+        document.stream = data.getHandler().getInputStream();
+        return document;
+    }
+
+    /**
+     * restituisce il file del documento come byte[]
 	 * 
 	 * @param documentId id del documento
 	 * @param versionNumber versione del documento, se vuoto prende ultima versione in automatico
