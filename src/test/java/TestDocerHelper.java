@@ -222,40 +222,39 @@ public class TestDocerHelper {
 //	}
 
 	/**
-	 * crea una foder, e carica un documento
+	 * crea una foder, carica un documento ed elimina
 	 */
-//	@Test(expected = it.kdm.docer.webservices.DocerServicesDocerExceptionException0.class)
-//	public void test71() throws Exception {
-//		String folderName = "test" + new Date().getTime();
-//		logger.info("test71 {}", folderName);
-//
-//		init();
-//		String folderId = helper.createFolder(folderName);
-//		Assert.assertNotNull(folderId);
-//		logger.info(folderId);
-//
-//		String typeId = "DOCUMENTO";
-//		String timestamp = String.valueOf(new Date().getTime());
-//		String fileName = "test" + timestamp + ".pdf";
-//		String file = "stuff/Integrazione DOCER 1.1.pdf";
-//
-//		String criteria = "test*";
-//		logger.info("createDocument {} {} - {}", typeId, fileName, file);
-//
-//		init();
-//		// token = helper.login();
-//		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
-//				"descrizione con spazi", "");
-//
-//		try {
-//			boolean res = helper.addToFolderDocument(folderId, documentId);
-//		} catch (it.kdm.docer.webservices.DocerServicesDocerExceptionException0 ex) {
-//			
-//			helper.deleteDocument(documentId);
-//			
-//			throw ex;
-//		}
-//	}
+	@Test(expected = it.kdm.docer.webservices.DocerServicesDocerExceptionException0.class)
+	public void test71() throws Exception {
+		String folderName = "test" + new Date().getTime();
+		logger.info("test71 {}", folderName);
+
+		init();
+		String folderId = helper.createFolder(folderName);
+		Assert.assertNotNull(folderId);
+		logger.info(folderId);
+
+		String typeId = "DOCUMENTO";
+		String timestamp = String.valueOf(new Date().getTime());
+		String fileName = "test" + timestamp + ".pdf";
+		String file = "stuff/Integrazione DOCER 1.1.pdf";
+
+		String criteria = "test*";
+		logger.info("createDocument {} {} - {}", typeId, fileName, file);
+
+		init();
+		// token = helper.login();
+		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
+				"descrizione con spazi", "");
+
+		try {
+			boolean res = helper.addToFolderDocument(folderId, documentId);
+			helper.deleteDocument(documentId);
+		} catch (it.kdm.docer.webservices.DocerServicesDocerExceptionException0 ex) {
+			// helper.deleteDocument(documentId);
+			throw ex;
+		}
+	}
 
 	/**
 	 * crea una foder, crea una subfolder e carica un documento
