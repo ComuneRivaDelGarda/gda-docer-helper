@@ -245,18 +245,22 @@ public class TestDocerHelper {
 	// @Test(expected = it.kdm.docer.webservices.DocerServicesDocerExceptionException0.class)
 	@Test
 	public void test71() throws Exception {
-		String folderName = "test-carica-e-cancella-" + getTimeStamp();
-		logger.info("test71 {}", folderName);
 
 		init();
-		// String folderId = helper.createFolder(folderName, "885221");
-		String folderId = helper.createFolderOwner(folderName, "885221");
+		
+		String folderName = "test-carica-e-cancella-" + getTimeStamp();
+		logger.info("test71 {}", folderName);
+		String folderId = helper.createFolder(folderName, "885221");
+		
+//		 String folderName = "test-personale-carica-e-cancella-" + getTimeStamp();
+//		 logger.info("test71 {}", folderName);
+//		 String folderId = helper.createFolderOwner(folderName, "885221");
+		 
 		Assert.assertNotNull(folderId);
 		logger.info(folderId);
 
 		String typeId = "DOCUMENTO";
-		String timestamp = String.valueOf(new Date().getTime());
-		String fileName = "test" + timestamp + ".pdf";
+		String fileName = "test-" + getTimeStamp() + ".pdf";
 		String file = "stuff/Integrazione DOCER 1.1.pdf";
 
 		String criteria = "test*";
@@ -265,7 +269,7 @@ public class TestDocerHelper {
 		init();
 		// token = helper.login();
 		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
-				"descrizione con spazi", "");
+				"file su folder " + folderName, "");
 
 		try {
 			boolean res = helper.addToFolderDocument(folderId, documentId);
