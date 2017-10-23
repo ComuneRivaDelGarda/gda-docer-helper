@@ -17,6 +17,7 @@ import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
+import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
 
 public class TestDocerHelper {
 
@@ -89,9 +90,7 @@ public class TestDocerHelper {
 	public void test30() throws Exception {
 		String folderName = "test-root-" + getTimeStamp();
 		logger.info("createFolder {}", folderName);
-		//
 		init();
-		// //token = helper.login();
 		String folderId = helper.createFolder(folderName);
 		Assert.assertNotNull(folderId);
 		logger.info(folderId);
@@ -105,7 +104,6 @@ public class TestDocerHelper {
 		String folderName = "test-root-owner-" + getTimeStamp();
 		logger.info("createFolderOwner {}", folderName);
 		init();
-		// //token = helper.login();
 		String folderId = helper.createFolderOwner(folderName);
 		Assert.assertNotNull(folderId);
 		logger.info(folderId);
@@ -118,11 +116,9 @@ public class TestDocerHelper {
 	public void test32() throws Exception {
 		logger.info("test32 {}", "crea una foder e crea una subfolder");
 		String folderName = "test-root-" + getTimeStamp();
-
 		init();
 		logger.info("createFolder {}", folderName);
 		String folderId = helper.createFolder(folderName);
-
 		folderName = "test-sub-" + getTimeStamp();
 		logger.info("SUBFOLDER createFolder {}", folderName);
 		String subFolderId = helper.createFolder(folderName, folderId);
@@ -133,41 +129,57 @@ public class TestDocerHelper {
 	/*
 	 * crea una folder e crea una subfolder con owner utente loggato
 	 */	
-//	@Test
-//	public void test33() throws Exception {
-//		logger.info("test33 {}", "crea una foder e crea una subfolder con owner utente loggato");
-//		String folderName = "test-root-" + new Date().getTime();
-//
-//		init();
-//		String folderId = helper.createFolder(folderName);
-//
-//		folderName = "test-sub-owner-" + new Date().getTime();
-//		logger.info("SUBFOLDER createFolderOwner {}", folderName);
-//		String subFolderId = helper.createFolderOwner(folderName, folderId);
-//		Assert.assertNotNull(subFolderId);
-//		logger.info(subFolderId);
-//	}	
+	@Test
+	public void test33() throws Exception {
+		logger.info("test33 {}", "crea una foder e crea una subfolder con owner utente loggato");
+		String folderName = "test-root-" + new Date().getTime();
+		init();
+		String folderId = helper.createFolder(folderName);
+		folderName = "test-sub-owner-" + new Date().getTime();
+		logger.info("SUBFOLDER createFolderOwner {}", folderName);
+		String subFolderId = helper.createFolderOwner(folderName, folderId);
+		Assert.assertNotNull(subFolderId);
+		logger.info(subFolderId);
+	}	
 
-//	@Test
-//	public void test40() throws Exception {
-//		String criteria = "test*";
-//		logger.info("searchFolders {}", criteria);
-//		init();
-//		// token = helper.login();
-//		List<Map<String, String>> res = helper.searchFolders(criteria);
-//		Assert.assertNotNull(res);
-//		logger.info(res.toString());
-//	}
+	/**
+	 * cerca tutte le cartelle che corrispondo al criterio test*
+	 * @throws Exception
+	 */
+	@Test
+	public void test40() throws Exception {
+		String criteria = "test*";
+		logger.info("searchFolders {}", criteria);
+		init();
+		List<Map<String, String>> res = helper.searchFolders(criteria);
+		Assert.assertNotNull(res);
+		logger.info("searchFolders {}", res.size());
+		logger.info(res.toString());
+		int count = 0;
+		for (Map<String, String> folder : res) {
+			count++;
+			logger.info("{}) {}", count, KeyValuePairFactory.getMetadata(folder, MetadatiFolder.FOLDER_NAME));
+		}
+	}
 
-//	@Test
-//	public void test50() throws Exception {
-//		logger.info("searchFolders");
-//		init();
-//		// token = helper.login();
-//		List<Map<String, String>> res = helper.searchFolders(null);
-//		Assert.assertNotNull(res);
-//		logger.info("{}", res);
-//	}
+	/**
+	 * cerca tutte le cartelle 
+	 * @throws Exception
+	 */
+	@Test
+	public void test50() throws Exception {
+		logger.info("searchFolders");
+		init();
+		List<Map<String, String>> res = helper.searchFolders(null);
+		Assert.assertNotNull(res);
+		logger.info("searchFolders {}", res.size());
+		logger.info("{}", res);
+		int count = 0;
+		for (Map<String, String> folder : res) {
+			count++;
+			logger.info("{}) {}", count, KeyValuePairFactory.getMetadata(folder, MetadatiFolder.FOLDER_NAME));
+		}
+	}
 
 //	@Test
 //	public void test60() throws Exception {
