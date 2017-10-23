@@ -111,8 +111,8 @@ public class TestDocerHelper {
 		logger.info(folderId);
 	}
 
-	/*
-	 * crea una foder e crea una subfolder
+	/**
+	 * crea una folder e crea una subfolder
 	 */
 	@Test
 	public void test32() throws Exception {
@@ -131,7 +131,7 @@ public class TestDocerHelper {
 	}
 	
 	/*
-	 * crea una foder e crea una subfolder con owner utente loggato
+	 * crea una folder e crea una subfolder con owner utente loggato
 	 */	
 //	@Test
 //	public void test33() throws Exception {
