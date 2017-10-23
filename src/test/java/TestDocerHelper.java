@@ -132,10 +132,10 @@ public class TestDocerHelper {
 	@Test
 	public void test33() throws Exception {
 		logger.info("test33 {}", "crea una foder e crea una subfolder con owner utente loggato");
-		String folderName = "test-root-" + new Date().getTime();
+		String folderName = "test-root-" + getTimeStamp();
 		init();
 		String folderId = helper.createFolder(folderName);
-		folderName = "test-sub-owner-" + new Date().getTime();
+		folderName = "test-sub-owner-" + getTimeStamp();
 		logger.info("SUBFOLDER createFolderOwner {}", folderName);
 		String subFolderId = helper.createFolderOwner(folderName, folderId);
 		Assert.assertNotNull(subFolderId);
