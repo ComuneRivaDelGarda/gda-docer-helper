@@ -483,13 +483,16 @@ public class TestDocerHelper {
 //		}
 //	}
 	
+	/**
+	 * ricerca un file per externalId
+	 */
 	@Test
 	public void test600() throws Exception {
-		String test = "protocollo_808775";
-		logger.info("test600 searchDocumentsByExternalIdFirst {}", test);
+		String externalId = "protocollo_808775";
+		logger.info("test600 searchDocumentsByExternalIdFirst {}", externalId);
 		init();
 		try {
-			Map<String, String> res = helper.searchDocumentsByExternalIdFirst(test);
+			Map<String, String> res = helper.searchDocumentsByExternalIdFirst(externalId);
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
