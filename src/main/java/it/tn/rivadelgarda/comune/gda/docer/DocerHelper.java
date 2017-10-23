@@ -187,7 +187,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		CreateFolder request = new CreateFolder();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setFolderInfo(folderinfo);
 		CreateFolderResponse response = service.createFolder(request);
 		String folderId = response.get_return();
@@ -222,7 +222,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		SearchFolders request = new SearchFolders();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setSearchCriteria(param);
 		request.setMaxRows(-1);
 		request.setOrderby(search);
@@ -316,7 +316,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		CreateDocument request = new CreateDocument();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setMetadata(params.get());
 		request.setFile(dataHandler);
 		CreateDocumentResponse response = service.createDocument(request);
@@ -334,7 +334,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	private boolean updateProfileDocumentNative(String docId, KeyValuePair[] metadata) throws Exception {
 		DocerServicesStub service = getDocerService();
 		UpdateProfileDocument request = new UpdateProfileDocument();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(docId);
 		request.setMetadata(metadata);
 		UpdateProfileDocumentResponse response = service.updateProfileDocument(request);
@@ -517,7 +517,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	public boolean addToFolderDocuments(String folderId, List<String> documentsIds) throws Exception {
 		DocerServicesStub service = getDocerService();
 		AddToFolderDocuments request = new AddToFolderDocuments();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setFolderId(folderId);
 		request.setDocument(documentsIds.toArray(new String[documentsIds.size()]));
 		AddToFolderDocumentsResponse response = service.addToFolderDocuments(request);
@@ -551,7 +551,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	public boolean removeFromFolderDocuments(String folderId, List<String> documentsIds) throws Exception {
 		DocerServicesStub service = getDocerService();
 		RemoveFromFolderDocuments request = new RemoveFromFolderDocuments();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setFolderId(folderId);
 		request.setDocument(documentsIds.toArray(new String[documentsIds.size()]));
 		RemoveFromFolderDocumentsResponse response = service.removeFromFolderDocuments(request);
@@ -585,7 +585,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	public boolean deleteDocument(String documentId) throws Exception {
 		DocerServicesStub service = getDocerService();
 		DeleteDocument request = new DeleteDocument();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		DeleteDocumentResponse response = service.deleteDocument(request);
 		boolean esito = response.get_return();
@@ -605,7 +605,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("searchDocumentNative {} {} {}", searchCriteria, orderBy, maxRows);
 		DocerServicesStub service = getDocerService();
 		SearchDocuments request = new SearchDocuments();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setSearchCriteria(searchCriteria);
 		request.setKeywords(keywords);
 		request.setMaxRows(maxRows);
@@ -866,7 +866,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("getRelated {}", DOCNUM);
 		DocerServicesStub service = getDocerService();
 		GetRelatedDocuments request = new GetRelatedDocuments();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(DOCNUM);
 		GetRelatedDocumentsResponse response = service.getRelatedDocuments(request);
 		String[] result = response.get_return();
@@ -902,7 +902,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		List<String> res = new ArrayList<>();
 		DocerServicesStub service = getDocerService();
 		GetFolderDocuments request = new GetFolderDocuments();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setFolderId(folderId);
 		GetFolderDocumentsResponse response = service.getFolderDocuments(request);
 		if (response.get_return() != null) {
@@ -922,7 +922,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("getProfileDocument {}", documentId);
 		DocerServicesStub service = getDocerService();
 		GetProfileDocument request = new GetProfileDocument();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		GetProfileDocumentResponse response = service.getProfileDocument(request);
 		KeyValuePair[] res = response.get_return();
@@ -972,7 +972,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("getACLDocument {}", documentId);
 		DocerServicesStub service = getDocerService();
 		GetACLDocument request = new GetACLDocument();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		GetACLDocumentResponse response = service.getACLDocument(request);
 		KeyValuePair[] res = response.get_return();
@@ -1004,7 +1004,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("setACLDocument {} {}", documentId, acl);
 		DocerServicesStub service = getDocerService();
 		SetACLDocument request = new SetACLDocument();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		request.setAcls(acl);
 		SetACLDocumentResponse response = service.setACLDocument(request);
@@ -1112,7 +1112,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("addRelated documentId={} related={}", documentId, related);
 		DocerServicesStub service = getDocerService();
 		AddRelated request = new AddRelated();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		request.setRelated(related);
 		AddRelatedResponse response = service.addRelated(request);
@@ -1145,7 +1145,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		AddNewVersion request = new AddNewVersion();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		request.setFile(dataHandler);
 		AddNewVersionResponse response = service.addNewVersion(request);
@@ -1168,7 +1168,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		List<String> versions = new ArrayList<>();
 		DocerServicesStub service = getDocerService();
 		GetVersions request = new GetVersions();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		GetVersionsResponse response = service.getVersions(request);
 		if (response.get_return() != null)
@@ -1195,7 +1195,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	public StreamDescriptor downloadVersion(String documentId, String versionNumber) throws Exception {
 		DocerServicesStub service = getDocerService();
 		DownloadVersion request = new DownloadVersion();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		request.setVersionNumber(versionNumber);
 		DownloadVersionResponse response = service.downloadVersion(request);
@@ -1241,7 +1241,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	private boolean protocollaDocumentoNative(String documentId, KeyValuePair[] metadata) throws Exception {
 		DocerServicesStub service = getDocerService();
 		ProtocollaDocumento request = new ProtocollaDocumento();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		request.setMetadata(metadata);
 		ProtocollaDocumentoResponse response = service.protocollaDocumento(request);
@@ -1396,7 +1396,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	private boolean classificaDocumentoNative(String documentId, KeyValuePair[] metadata) throws Exception {
 		DocerServicesStub service = getDocerService();
 		ClassificaDocumento request = new ClassificaDocumento();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		request.setMetadata(metadata);
 		ClassificaDocumentoResponse response = service.classificaDocumento(request);
@@ -1500,7 +1500,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	private boolean archiviaDocumentoNative(String documentId, KeyValuePair[] metadata) throws Exception {
 		DocerServicesStub service = getDocerService();
 		ArchiviaDocumento request = new ArchiviaDocumento();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setDocId(documentId);
 		request.setMetadata(metadata);
 		ArchiviaDocumentoResponse response = service.archiviaDocumento(request);
@@ -1780,7 +1780,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		CreateUser request = new CreateUser();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setUserInfo(userInfo);
 		CreateUserResponse response = service.createUser(request);
 		boolean esito = response.get_return();
@@ -1817,7 +1817,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		UpdateUser request = new UpdateUser();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setUserId(userId);
 		request.setUserInfo(userInfo);
 		UpdateUserResponse response = service.updateUser(request);
@@ -1839,7 +1839,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		GetUser request = new GetUser();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setUserId(userId);
 		GetUserResponse response = service.getUser(request);
 		KeyValuePair[] metadati = response.get_return();
@@ -1862,7 +1862,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		}
 		DocerServicesStub service = getDocerService();
 		SearchUsers request = new SearchUsers();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setSearchCriteria(searchCriteria.get());
 		SearchUsersResponse response = service.searchUsers(request);
 		SearchItem[] data = response.get_return();
@@ -1902,7 +1902,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		CreateGroup request = new CreateGroup();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setGroupInfo(userInfo);
 		CreateGroupResponse response = service.createGroup(request);
 		boolean esito = response.get_return();
@@ -1932,7 +1932,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		UpdateGroup request = new UpdateGroup();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setGroupId(groupId);
 		request.setGroupInfo(groupInfo);
 		UpdateGroupResponse response = service.updateGroup(request);
@@ -1965,7 +1965,7 @@ public class DocerHelper extends AbstractDocerHelper {
 
 		DocerServicesStub service = getDocerService();
 		GetGroup request = new GetGroup();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setGroupId(groupId);
 		GetGroupResponse response = service.getGroup(request);
 		KeyValuePair[] metadati = response.get_return();
@@ -1992,7 +1992,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("setGroupsOfUser {} {}", userId, groups);
 		DocerServicesStub service = getDocerService();
 		SetGroupsOfUser request = new SetGroupsOfUser();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setUserId(userId);
 		if (groups != null)
 			request.setGroups(groups.toArray(new String[groups.size()]));
@@ -2026,7 +2026,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("updateGroupsOfUser {} {} {}", userId, groupsToAdd, groupsToRemove);
 		DocerServicesStub service = getDocerService();
 		UpdateGroupsOfUser request = new UpdateGroupsOfUser();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setUserId(userId);
 		if (groupsToAdd != null)
 			request.setGroupsToAdd(groupsToAdd.toArray(new String[groupsToAdd.size()]));
@@ -2075,7 +2075,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("searchGroups {}", searchCriteria);
 		DocerServicesStub service = getDocerService();
 		SearchGroups request = new SearchGroups();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setSearchCriteria(searchCriteria.get());
 		SearchGroupsResponse response = service.searchGroups(request);
 		SearchItem[] data = response.get_return();
@@ -2100,7 +2100,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("getGroupsOfUser {}", userId);
 		DocerServicesStub service = getDocerService();
 		GetGroupsOfUser request = new GetGroupsOfUser();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setUserId(userId);
 		GetGroupsOfUserResponse response = service.getGroupsOfUser(request);
 		String[] data = response.get_return();
@@ -2125,7 +2125,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("getUsersOfGroup {}", groupId);
 		DocerServicesStub service = getDocerService();
 		GetUsersOfGroup request = new GetUsersOfGroup();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		request.setGroupId(groupId);
 		GetUsersOfGroupResponse response = service.getUsersOfGroup(request);
 		String[] data = response.get_return();

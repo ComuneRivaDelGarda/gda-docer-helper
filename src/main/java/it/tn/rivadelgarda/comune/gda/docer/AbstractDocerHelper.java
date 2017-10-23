@@ -58,7 +58,7 @@ public abstract class AbstractDocerHelper implements Closeable {
 	protected final String docerApplication = "GDA";
 
 	private String loginResponse;
-	private String tockenSessione;
+	private String tokenSessione;
 
 	DocerServicesStub docerService;
 
@@ -108,7 +108,7 @@ public abstract class AbstractDocerHelper implements Closeable {
 
 	/**
 	 * Effettua il login a Docer per ottenere il token di sessione (da utilizzare nelle chiamate ai web services)
-	 * @return tocken di sessione
+	 * @return token di sessione
 	 * @throws Exception
 	 */
 	public String login() throws Exception {
@@ -120,8 +120,8 @@ public abstract class AbstractDocerHelper implements Closeable {
 		login.setApplication(docerApplication);
 		LoginResponse response = service.login(login);
 		loginResponse = response.get_return();
-		tockenSessione = loginResponse; // parse(loginResponse).get("ticketDocerServices");
-		return tockenSessione;
+		tokenSessione = loginResponse; // parse(loginResponse).get("ticketDocerServices");
+		return tokenSessione;
 	}
 
 	/**
@@ -132,7 +132,7 @@ public abstract class AbstractDocerHelper implements Closeable {
 	public boolean logout() throws Exception {
 		AuthenticationServiceStub service = new AuthenticationServiceStub(docerSerivcesUrl + AuthenticationService);
 		Logout request = new Logout();
-		request.setToken(getLoginTicket());
+		request.setToken(getLoginToken());
 		LogoutResponse response = service.logout(request);
 		boolean res = response.get_return();
 		return res;
@@ -147,16 +147,22 @@ public abstract class AbstractDocerHelper implements Closeable {
 	}
 
 	/**
-	 * ritorna il tocken di sessione corrente, oppure effettua login se non presente
+	 * ritorna il token di sessione corrente, oppure effettua login se non presente
 	 */
-	public String getLoginTicket() throws Exception {
-		if (!isLoggedIn())
+	public String getLoginToken() throws Exception {
+		if (!isLoggedIn()) {
 			login();
-		return tockenSessione;
+		}
+		return tokenSessione;
 	}
 
+//	@Deprecated
+//	public String getLoginTicket() throws Exception {
+//		return getLoginToken();
+//	}
+	
 	private boolean isLoggedIn() {
-		return StringUtils.isNotBlank(tockenSessione);
+		return StringUtils.isNotBlank(tokenSessione);
 	}
 
 	protected DocerServicesStub getDocerService() throws Exception {
