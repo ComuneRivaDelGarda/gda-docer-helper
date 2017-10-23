@@ -14,7 +14,7 @@ public enum MetadatiFolder implements MetadatoDocer {
     /**
      * (Nome del folder; p.e. “cartella1”)
      */
-    FOLDER_NAME(PARENT_FOLDER_NAME_KEY),
+    FOLDER_NAME(FOLDER_NAME_KEY),
     /**
      * Utente proprietario del folder
      * 
