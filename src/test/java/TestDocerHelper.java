@@ -114,21 +114,21 @@ public class TestDocerHelper {
 	/*
 	 * crea una foder e crea una subfolder
 	 */
-//	@Test
-//	public void test32() throws Exception {
-//		logger.info("test32 {}", "crea una foder e crea una subfolder");
-//		String folderName = "test-root-" + new Date().getTime();
-//
-//		init();
-//		logger.info("createFolder {}", folderName);
-//		String folderId = helper.createFolder(folderName);
-//
-//		folderName = "test-sub-" + new Date().getTime();
-//		logger.info("SUBFOLDER createFolder {}", folderName);
-//		String subFolderId = helper.createFolder(folderName, folderId);
-//		Assert.assertNotNull(subFolderId);
-//		logger.info(subFolderId);
-//	}
+	@Test
+	public void test32() throws Exception {
+		logger.info("test32 {}", "crea una foder e crea una subfolder");
+		String folderName = "test-root-" + getTimeStamp();
+
+		init();
+		logger.info("createFolder {}", folderName);
+		String folderId = helper.createFolder(folderName);
+
+		folderName = "test-sub-" + getTimeStamp();
+		logger.info("SUBFOLDER createFolder {}", folderName);
+		String subFolderId = helper.createFolder(folderName, folderId);
+		Assert.assertNotNull(subFolderId);
+		logger.info(subFolderId);
+	}
 	
 	/*
 	 * crea una foder e crea una subfolder con owner utente loggato
