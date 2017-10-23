@@ -1,10 +1,7 @@
 import java.io.File;
 import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -14,16 +11,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import it.tn.rivadelgarda.comune.gda.docer.ACLFactory;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiGruppi;
-import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
 
 public class TestDocerHelper {
 
@@ -42,7 +35,10 @@ public class TestDocerHelper {
 		if (helper == null) {
 			Properties p = new Properties();
 			// p.load(new FileReader(new File("config.properties")));
+			
 			InputStream is = this.getClass().getResourceAsStream(CONFIG_PROPERTIES);
+			// org.apache.commons.io.FileUtils.toFile(this.getClass().getResource("resourceFile.txt")‌​);
+
 			if (is != null) {
 				p.load(is);
 
@@ -86,34 +82,34 @@ public class TestDocerHelper {
 //		// logger.info(versione);
 //	}
 
-//	/**
-//	 * crea una foder
-//	 */
-//	@Test
-//	public void test30() throws Exception {
-//		String folderName = "test-root-" + new Date().getTime();
-//		logger.info("createFolder {}", folderName);
-//		//
-//		init();
-//		// //token = helper.login();
-//		String folderId = helper.createFolder(folderName);
-//		Assert.assertNotNull(folderId);
-//		logger.info(folderId);
-//	}
+	/**
+	 * crea una foder
+	 */
+	@Test
+	public void test30() throws Exception {
+		String folderName = "test-root-" + getTimeStamp();
+		logger.info("createFolder {}", folderName);
+		//
+		init();
+		// //token = helper.login();
+		String folderId = helper.createFolder(folderName);
+		Assert.assertNotNull(folderId);
+		logger.info(folderId);
+	}
 
-//	/**
-//	 * Crea una folder con owner utente loggato
-//	 */
-//	@Test
-//	public void test31() throws Exception {
-//		String folderName = "test-root-owner-" + new Date().getTime();
-//		logger.info("createFolderOwner {}", folderName);
-//		init();
-//		// //token = helper.login();
-//		String folderId = helper.createFolderOwner(folderName);
-//		Assert.assertNotNull(folderId);
-//		logger.info(folderId);
-//	}
+	/**
+	 * Crea una folder con owner utente loggato
+	 */
+	@Test
+	public void test31() throws Exception {
+		String folderName = "test-root-owner-" + getTimeStamp();
+		logger.info("createFolderOwner {}", folderName);
+		init();
+		// //token = helper.login();
+		String folderId = helper.createFolderOwner(folderName);
+		Assert.assertNotNull(folderId);
+		logger.info(folderId);
+	}
 
 	/*
 	 * crea una foder e crea una subfolder
@@ -224,9 +220,10 @@ public class TestDocerHelper {
 	/**
 	 * crea una foder, carica un documento ed elimina
 	 */
-	@Test(expected = it.kdm.docer.webservices.DocerServicesDocerExceptionException0.class)
+	// @Test(expected = it.kdm.docer.webservices.DocerServicesDocerExceptionException0.class)
+	@Test
 	public void test71() throws Exception {
-		String folderName = "test" + new Date().getTime();
+		String folderName = "test" + getTimeStamp();
 		logger.info("test71 {}", folderName);
 
 		init();
@@ -477,5 +474,9 @@ public class TestDocerHelper {
 		} catch (Exception ex) {
 			logger.error("test600", ex.getMessage());
 		}
-	}	
+	}
+	
+	private String getTimeStamp() {
+		return new SimpleDateFormat("yyMMddHHmm").format(new Date());
+	}
 }
