@@ -85,28 +85,35 @@ public class TestDocerHelper {
 
 	/**
 	 * crea una foder
+	 * NOTA: un utente NON admin non può creare folder di primo livello
 	 */
 	@Test
 	public void test30() throws Exception {
 		String folderName = "test-root-" + getTimeStamp();
 		logger.info("createFolder {}", folderName);
 		init();
+		// test utente admin di primo livello
 		String folderId = helper.createFolder(folderName);
+		// test utente non admin 
+		// String folderId = helper.createFolder(folderName, "885221");
 		Assert.assertNotNull(folderId);
-		logger.info(folderId);
+		logger.info("creata {}", folderId);
 	}
 
 	/**
 	 * Crea una folder con owner utente loggato
+	 * NOTA: un utente NON admin non può creare folder di primo livello
 	 */
 	@Test
 	public void test31() throws Exception {
 		String folderName = "test-root-owner-" + getTimeStamp();
 		logger.info("createFolderOwner {}", folderName);
 		init();
+		
 		String folderId = helper.createFolderOwner(folderName);
+		String folderId = helper.createFolderOwner(folderName, "885221");
 		Assert.assertNotNull(folderId);
-		logger.info(folderId);
+		logger.info("creata {}", folderId);
 	}
 
 	/**
@@ -119,6 +126,8 @@ public class TestDocerHelper {
 		init();
 		logger.info("createFolder {}", folderName);
 		String folderId = helper.createFolder(folderName);
+		Assert.assertNotNull(folderId);
+		logger.info("creata {}", folderId);
 		folderName = "test-sub-" + getTimeStamp();
 		logger.info("SUBFOLDER createFolder {}", folderName);
 		String subFolderId = helper.createFolder(folderName, folderId);
@@ -489,6 +498,6 @@ public class TestDocerHelper {
 	}
 	
 	private String getTimeStamp() {
-		return new SimpleDateFormat("yyMMddHHmm").format(new Date());
+		return new SimpleDateFormat("yyMMddHHmmss").format(new Date());
 	}
 }
