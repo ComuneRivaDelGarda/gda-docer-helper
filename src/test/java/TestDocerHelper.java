@@ -270,7 +270,8 @@ public class TestDocerHelper {
 		// token = helper.login();
 		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
 				"file su folder " + folderName, "");
-
+		logger.info("creatoo {}", documentId);
+				
 		try {
 			boolean res = helper.addToFolderDocument(folderId, documentId);
 			helper.deleteDocument(documentId);
@@ -488,6 +489,20 @@ public class TestDocerHelper {
 //			logger.error("test200", ex.getMessage());
 //		}
 //	}
+
+	@Test
+	public void test501() throws Exception {
+		logger.info("test501 getACLDocument {}");
+		init();
+		try {
+			Map<String, String> res = helper.getACLDocumentMap("886442");
+			Assert.assertNotNull(res);
+			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test200", ex.getMessage());
+		}
+	}
+
 	
 	/**
 	 * ricerca un file per externalId
