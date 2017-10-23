@@ -998,6 +998,17 @@ public class DocerHelper extends AbstractDocerHelper {
 		KeyValuePair[] res = response.get_return();
 		return res;
 	}
+	
+	/**
+	 * Questo metodo permette di recuperare i diritti di un Documento del DMS.
+	 * 
+	 * @param documentId
+	 * @return ACL sottoforma di Map<String, String> 
+	 * @throws Exception
+	 */
+	public Map<String, String> getACLDocumentMap(String documentId) throws Exception {
+		return KeyValuePairFactory.asMap(getACLDocument(documentId));
+	}
 
 	/**
 	 * Questo metodo permette di assegnare le ACL di un Documento del DMS, nel
