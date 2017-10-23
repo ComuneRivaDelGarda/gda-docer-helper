@@ -109,9 +109,10 @@ public class TestDocerHelper {
 		String folderName = "test-root-owner-" + getTimeStamp();
 		logger.info("createFolderOwner {}", folderName);
 		init();
-		
+		// test utente admin di primo livello
 		String folderId = helper.createFolderOwner(folderName);
-		String folderId = helper.createFolderOwner(folderName, "885221");
+		// test utente non admin 
+		// String folderId = helper.createFolderOwner(folderName, "885221");
 		Assert.assertNotNull(folderId);
 		logger.info("creata {}", folderId);
 	}
