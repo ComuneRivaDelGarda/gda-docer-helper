@@ -11,6 +11,15 @@ import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
 
+/**
+ * Classe per costruzione delle chiavi-valori per docer e metodi di utilità per
+ * elaborazione in lettura o creazione delle liste di metadati
+ * 
+ * @author mirco
+ *
+ * @param <T>
+ *            MetadatoDocer
+ */
 public class KeyValuePairFactory<T extends MetadatoDocer> {
 
 	public static KeyValuePair createKey(String key, String value) {
