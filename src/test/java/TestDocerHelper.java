@@ -245,11 +245,12 @@ public class TestDocerHelper {
 	// @Test(expected = it.kdm.docer.webservices.DocerServicesDocerExceptionException0.class)
 	@Test
 	public void test71() throws Exception {
-		String folderName = "test" + getTimeStamp();
+		String folderName = "test-carica-e-cancella-" + getTimeStamp();
 		logger.info("test71 {}", folderName);
 
 		init();
-		String folderId = helper.createFolder(folderName);
+		// String folderId = helper.createFolder(folderName, "885221");
+		String folderId = helper.createFolderOwner(folderName, "885221");
 		Assert.assertNotNull(folderId);
 		logger.info(folderId);
 
