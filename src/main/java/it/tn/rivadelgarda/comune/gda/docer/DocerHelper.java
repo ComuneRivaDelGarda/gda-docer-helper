@@ -139,24 +139,44 @@ public class DocerHelper extends AbstractDocerHelper {
 	/** VERSAMENTO */
 
 	/**
-	 * Questo metodo permette la creazione di una Folder nel DMS.
+	 * Crea una cartella condivisa (senza owner specificato)
 	 * 
-	 * @param folderName
-	 * @return
+	 * @param folderName nome della folder
+	 * @return id della cartella creata
 	 * @throws Exception
 	 */
 	public String createFolder(String folderName) throws Exception {
 		return createFolder(folderName, "", false);
 	}
 
+	/**
+	 * Crea una cartella privata
+	 * @param folderName
+	 * @return id della cartella creata
+	 * @throws Exception
+	 */
 	public String createFolderOwner(String folderName) throws Exception {
 		return createFolder(folderName, "", true);
 	}
 
+	/**
+	 * Crea una sotto cartella 
+	 * @param folderName nome della cartella
+	 * @param parentFolderId id della cartella di livello superiore
+	 * @return id della cartella creata
+	 * @throws Exception
+	 */
 	public String createFolderOwner(String folderName, String parentFolderId) throws Exception {
 		return createFolder(folderName, parentFolderId, true);
 	}
 
+	/**
+	 * Crea una sotto cartella condivisa
+	 * @param folderName nome della cartella
+	 * @param parentFolderId id della cartella di livello superiore
+	 * @return id della cartella creata
+	 * @throws Exception
+	 */
 	public String createFolder(String folderName, String parentFolderId) throws Exception {
 		return createFolder(folderName, parentFolderId, false);
 	}
