@@ -18,6 +18,7 @@ import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
+import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
 
 public class TestDocerHelper {
 
@@ -270,10 +271,17 @@ public class TestDocerHelper {
 		// token = helper.login();
 		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
 				"file su folder " + folderName, "");
-		logger.info("creatoo {}", documentId);
+		logger.info("creato {}", documentId);
 				
 		try {
 			boolean res = helper.addToFolderDocument(folderId, documentId);
+			logger.info("aggiunto {} a folder {}", documentId, folderId);
+			
+			// SET ACL to USER
+			String userID = username;
+			boolean acl = helper.setACLDocument(documentId, userID, ACL_VALUES.FULL_ACCESS);
+			logger.info("acl {} con {} = {}", userID, ACL_VALUES.FULL_ACCESS, acl);
+			
 			helper.deleteDocument(documentId);
 		} catch (it.kdm.docer.webservices.DocerServicesDocerExceptionException0 ex) {
 			// helper.deleteDocument(documentId);
