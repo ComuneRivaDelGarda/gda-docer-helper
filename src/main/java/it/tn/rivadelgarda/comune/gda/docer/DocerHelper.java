@@ -193,7 +193,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public String createFolder(String folderName, String parentFolderId, boolean owner) throws Exception {
-		KeyValuePairFactory<MetadatiFolder> keyBuilder = KeyValuePairFactory
+		MetadatiHelper<MetadatiFolder> keyBuilder = MetadatiHelper
 				.build(MetadatiFolder.FOLDER_NAME, folderName).add(MetadatiFolder.COD_ENTE, docerCodiceENTE)
 				.add(MetadatiFolder.COD_AOO, docerCodiceAOO);
 		if (StringUtils.isNotBlank(parentFolderId)) {
@@ -227,18 +227,18 @@ public class DocerHelper extends AbstractDocerHelper {
 	private SearchItem[] searchFoldersNative(String folderName, String PARENT_FOLDER_ID) throws Exception {
 		List<KeyValuePair> builder = new ArrayList<>();
 		if (StringUtils.isNoneEmpty(folderName))
-			builder.add(KeyValuePairFactory.createKey(MetadatoDocer.FOLDER_NAME_KEY, folderName));
+			builder.add(MetadatiHelper.createKey(MetadatoDocer.FOLDER_NAME_KEY, folderName));
 		else
-			builder.add(KeyValuePairFactory.createKey(MetadatoDocer.FOLDER_NAME_KEY, "*"));
-		builder.add(KeyValuePairFactory.createKey(MetadatoDocer.COD_ENTE_KEY, docerCodiceENTE));
-		builder.add(KeyValuePairFactory.createKey(MetadatoDocer.COD_AOO_KEY, docerCodiceAOO));
+			builder.add(MetadatiHelper.createKey(MetadatoDocer.FOLDER_NAME_KEY, "*"));
+		builder.add(MetadatiHelper.createKey(MetadatoDocer.COD_ENTE_KEY, docerCodiceENTE));
+		builder.add(MetadatiHelper.createKey(MetadatoDocer.COD_AOO_KEY, docerCodiceAOO));
 		if (StringUtils.isNoneEmpty(PARENT_FOLDER_ID)) {
-			builder.add(KeyValuePairFactory.createKey(MetadatoDocer.PARENT_FOLDER_ID_KEY, PARENT_FOLDER_ID));
+			builder.add(MetadatiHelper.createKey(MetadatoDocer.PARENT_FOLDER_ID_KEY, PARENT_FOLDER_ID));
 		}
 		KeyValuePair[] param = builder.toArray(new KeyValuePair[builder.size()]);
 
 		KeyValuePair[] search = new KeyValuePair[1];
-		search[0] = KeyValuePairFactory.createKeyOrderByAsc(MetadatoDocer.FOLDER_NAME_KEY);
+		search[0] = MetadatiHelper.createKeyOrderByAsc(MetadatoDocer.FOLDER_NAME_KEY);
 
 		DocerServicesStub service = getDocerService();
 		SearchFolders request = new SearchFolders();
@@ -256,15 +256,15 @@ public class DocerHelper extends AbstractDocerHelper {
 	// throws Exception {
 	// /*
 	// * KeyValuePair[] param = new KeyValuePair[4]; param[0] =
-	// * KeyValuePairFactory.createKey(DocerKey.FOLDER_NAME, "*"); param[1] =
-	// * KeyValuePairFactory.createKey(DocerKey.COD_ENTE, docerCodiceENTE);
-	// * param[2] = KeyValuePairFactory.createKey(DocerKey.COD_AOO,
+	// * MetadatiHelper.createKey(DocerKey.FOLDER_NAME, "*"); param[1] =
+	// * MetadatiHelper.createKey(DocerKey.COD_ENTE, docerCodiceENTE);
+	// * param[2] = MetadatiHelper.createKey(DocerKey.COD_AOO,
 	// * docerCodiceAOO); param[3] =
-	// * KeyValuePairFactory.createKey(DocerKey.PARENT_FOLDER_ID,
+	// * MetadatiHelper.createKey(DocerKey.PARENT_FOLDER_ID,
 	// * PARENT_FOLDER_ID);
 	// *
 	// * KeyValuePair[] search = new KeyValuePair[1]; search[0] =
-	// * KeyValuePairFactory.createKeyOrderByAsc(DocerKey.FOLDER_NAME);
+	// * MetadatiHelper.createKeyOrderByAsc(DocerKey.FOLDER_NAME);
 	// *
 	// * DocerServicesStub service = getDocerService(); SearchFolders request
 	// * = new SearchFolders(); request.setToken(getLoginTicket());
@@ -290,7 +290,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public List<Map<String, String>> searchFolders(String folderName, String PARENT_FOLDER_ID) throws Exception {
 		SearchItem[] data = searchFoldersNative(folderName, PARENT_FOLDER_ID);
-		return KeyValuePairFactory.asListMap(data);
+		return MetadatiHelper.asListMap(data);
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource,
 			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
-		KeyValuePairFactory<MetadatiDocumento> params = KeyValuePairFactory.createDocumentKeys(TYPE_ID, DOCNAME,
+		MetadatiHelper<MetadatiDocumento> params = MetadatiHelper.createDocumentKeys(TYPE_ID, DOCNAME,
 				docerCodiceENTE, docerCodiceAOO);
 
 		DataHandler dataHandler = new DataHandler(dataSource);
@@ -372,7 +372,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public <F extends MetadatoDocer> boolean updateProfileDocument(String docId, KeyValuePairFactory<F> metadata)
+	public <F extends MetadatoDocer> boolean updateProfileDocument(String docId, MetadatiHelper<F> metadata)
 			throws Exception {
 		return updateProfileDocumentNative(docId, metadata.get());
 	}
@@ -389,7 +389,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean updateProfileDocumentExternalId(String docId, String externalId) throws Exception {
-		KeyValuePairFactory<MetadatiDocumento> metadata = KeyValuePairFactory.build(MetadatiDocumento.EXTERNAL_ID,
+		MetadatiHelper<MetadatiDocumento> metadata = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID,
 				externalId);
 		return updateProfileDocument(docId, metadata);
 	}
@@ -485,7 +485,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("searching document EXTERNAL_ID={}", EXTERNAL_ID);
 		Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
 		if (documentByExternalId != null) {
-			String documentToRelateTo = KeyValuePairFactory.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
+			String documentToRelateTo = MetadatiHelper.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
 			if (StringUtils.isNotBlank(documentToRelateTo)) {
 				logger.debug("founded documentToRelateTo={}", documentToRelateTo);
 				// relaziono il documento appena creato al con altro con stesso
@@ -516,7 +516,7 @@ public class DocerHelper extends AbstractDocerHelper {
         // ricerco documenti per EXTERNAL_ID
         Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
         if (documentByExternalId != null) {
-            String documentToRelateTo = KeyValuePairFactory.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
+            String documentToRelateTo = MetadatiHelper.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
             if (StringUtils.isNotBlank(documentToRelateTo)) {
                 // relaziono il documento appena creato al con altro con stesso
                 // EXTERNAL_ID
@@ -690,9 +690,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
 			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws Exception {
 		logger.debug("searchDocuments {} {} {} {}", searchCriteria, keywords, orderBy, maxRows);
-		SearchItem[] result = searchDocumentsNative(KeyValuePairFactory.toArray(searchCriteria),
-				KeyValuePairFactory.toArrayString(keywords), KeyValuePairFactory.toArray(orderBy), maxRows);
-		return KeyValuePairFactory.asListMap(result);
+		SearchItem[] result = searchDocumentsNative(MetadatiHelper.toArray(searchCriteria),
+				MetadatiHelper.toArrayString(keywords), MetadatiHelper.toArray(orderBy), maxRows);
+		return MetadatiHelper.asListMap(result);
 	}
 
 	/**
@@ -757,11 +757,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public List<Map<String, String>> searchDocumentsByExternalIdAll(String externalId) throws Exception {
 		logger.debug("searchDocumentsByExternalIdAll {}", externalId);
-		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(MetadatiDocumento.EXTERNAL_ID, externalId).get();
-		KeyValuePair[] orderBy = KeyValuePairFactory.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC)
+		KeyValuePair[] searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalId).get();
+		KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC)
 				.get();
 		SearchItem[] result = searchDocumentsNative(searchCriteria, null, orderBy, -1);
-		return KeyValuePairFactory.asListMap(result);
+		return MetadatiHelper.asListMap(result);
 	}
 
 	/**
@@ -769,7 +769,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param externalId valore di EXTERNAL_ID da cercare nei metadati
 	 * @return lista dei profili documento
 	 * @throws Exception
+	 * @deprecated use {@link #searchDocumentsByExternalIdAll()} instead.  
 	 */
+	@Deprecated
 	public List<Map<String, String>> searchDocumentsByExternalIdAllProfiles(String externalId) throws Exception {
 		List<Map<String, String>> data =  searchDocumentsByExternalIdAll(externalId);
 		return data;
@@ -783,17 +785,17 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public List<String> searchDocumentsByExternalIdAllIds(String externalId) throws Exception {
 		List<Map<String, String>> data =  searchDocumentsByExternalIdAll(externalId);
-		return Arrays.asList(KeyValuePairFactory.joinMetadata(data, MetadatiDocumento.DOCNUM));
+		return Arrays.asList(MetadatiHelper.joinMetadata(data, MetadatiDocumento.DOCNUM));
 	}
 	
 	public Map<String, String> searchDocumentsByExternalIdFirst(String externalId) throws Exception {
 		Map<String, String> profile = new HashMap<>();
 		logger.debug("searchDocumentsByExternalIdFirst {}", externalId);
-		KeyValuePair[] searchCriteria = KeyValuePairFactory.build(MetadatiDocumento.EXTERNAL_ID, externalId).get();
-		KeyValuePair[] orderBy = KeyValuePairFactory.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC)
+		KeyValuePair[] searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalId).get();
+		KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC)
 				.get();
 		SearchItem[] result = searchDocumentsNative(searchCriteria, null, orderBy, 1);
-		List<Map<String, String>> profiles = KeyValuePairFactory.asListMap(result);
+		List<Map<String, String>> profiles = MetadatiHelper.asListMap(result);
 		if (!profiles.isEmpty())
 			profile = profiles.get(0);
 		return profile;
@@ -819,7 +821,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		List<Map<String, String>> relatedMetadata = new ArrayList<>();
 
 		Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(externalId);
-		String firstDocNum = KeyValuePairFactory.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
+		String firstDocNum = MetadatiHelper.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
 		if (firstDocNum != null && !"".equals(firstDocNum)) {
 			// carico i related al primo docnum
 			List<String> relatedDocuments = getRelatedDocuments(firstDocNum);
@@ -854,7 +856,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	// searchDocumentsByExternalIdAll(externalId);
 	// // lista dei DOCNUM risultati dalla ricerca
 	// String[] firstDocNum =
-	// KeyValuePairFactory.joinMetadata(documentsByExternalId,
+	// MetadatiHelper.joinMetadata(documentsByExternalId,
 	// DocumentoMetadatiGenericiEnum.DOCNUM);
 	//
 	// // carico i metadati di tutti i documenti risultati ricerca + documenti
@@ -1007,7 +1009,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public Map<String, String> getACLDocumentMap(String documentId) throws Exception {
-		return KeyValuePairFactory.asMap(getACLDocument(documentId));
+		return MetadatiHelper.asMap(getACLDocument(documentId));
 	}
 
 	/**
@@ -1055,7 +1057,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACL_VALUES acl) throws Exception {
-		return setACLDocumentNative(documentId, KeyValuePairFactory.build(GROUP_USER_ID, acl.getValue()).get());
+		return setACLDocumentNative(documentId, MetadatiHelper.build(GROUP_USER_ID, acl.getValue()).get());
 	}
 
 	/**
@@ -1070,8 +1072,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean setACLDocument(String documentId, Map<String, ACL_VALUES> acl) throws Exception {
-		// KeyValuePairFactory.build(GROUP_USER_ID, acl.getValue()).get();
-		KeyValuePairFactory<ACL_VALUES> keyBuilder = new KeyValuePairFactory<>();
+		// MetadatiHelper.build(GROUP_USER_ID, acl.getValue()).get();
+		MetadatiHelper<ACL_VALUES> keyBuilder = new MetadatiHelper<>();
 		for (Entry<String, ACL_VALUES> entry : acl.entrySet()) {
 			keyBuilder.add(entry.getKey(), entry.getValue());
 		}
@@ -1094,7 +1096,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws Exception
 	 */
 	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acl) throws Exception {
-		KeyValuePairFactory<ACL_VALUES> keyBuilder = new KeyValuePairFactory<>();
+		MetadatiHelper<ACL_VALUES> keyBuilder = new MetadatiHelper<>();
 		for (Entry<String, Integer> entry : acl.entrySet()) {
 			keyBuilder.add(entry.getKey(), ACL_VALUES.values()[entry.getValue()]);
 		}
@@ -1114,7 +1116,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public List<String> setACLDocumentsByExternalId(String externalId, Map<String, Integer> acl) throws Exception {
 		List<Map<String, String>> metadatiDocumentiDaExternalId = searchDocumentsByExternalIdAll(externalId);
-		String[] listaDocumentId = KeyValuePairFactory.joinMetadata(metadatiDocumentiDaExternalId,
+		String[] listaDocumentId = MetadatiHelper.joinMetadata(metadatiDocumentiDaExternalId,
 				MetadatiDocumento.DOCNUM);
 		logger.debug("trovati {} documenti da externalId={}", listaDocumentId.length, externalId);
 		for (String documentId : listaDocumentId) {
@@ -1341,7 +1343,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public boolean protocollaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati)
 			throws Exception {
-		return protocollaDocumentoNative(documentId, KeyValuePairFactory.toArray(metadati));
+		return protocollaDocumentoNative(documentId, MetadatiHelper.toArray(metadati));
 	}
 
 	/**
@@ -1403,7 +1405,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean protocollaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory)
+	public boolean protocollaDocumento(String documentId, MetadatiHelper<MetadatiDocumento> factory)
 			throws Exception {
 		return protocollaDocumentoNative(documentId, factory.get());
 	}
@@ -1471,7 +1473,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public boolean classificaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati)
 			throws Exception {
-		return classificaDocumentoNative(documentId, KeyValuePairFactory.toArray(metadati));
+		return classificaDocumentoNative(documentId, MetadatiHelper.toArray(metadati));
 	}
 
 	/**
@@ -1508,7 +1510,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean classificaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory)
+	public boolean classificaDocumento(String documentId, MetadatiHelper<MetadatiDocumento> factory)
 			throws Exception {
 		return classificaDocumentoNative(documentId, factory.get());
 	}
@@ -1563,7 +1565,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public boolean archiviaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati)
 			throws Exception {
-		return archiviaDocumentoNative(documentId, KeyValuePairFactory.toArray(metadati));
+		return archiviaDocumentoNative(documentId, MetadatiHelper.toArray(metadati));
 	}
 
 	/**
@@ -1588,7 +1590,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws Exception
 	 */
-	public boolean archiviaDocumento(String documentId, KeyValuePairFactory<MetadatiDocumento> factory)
+	public boolean archiviaDocumento(String documentId, MetadatiHelper<MetadatiDocumento> factory)
 			throws Exception {
 		return archiviaDocumentoNative(documentId, factory.get());
 	}
@@ -1792,7 +1794,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	public boolean createUser(String USER_ID, String password, String nome, String cognome, String fullName,
 			String email) throws Exception {
 		logger.debug("createUser {} {} {} {} {} {}", USER_ID, password, nome, cognome, fullName, email);
-		KeyValuePairFactory<MetadatiUtente> keyBuilder = new KeyValuePairFactory<>();
+		MetadatiHelper<MetadatiUtente> keyBuilder = new MetadatiHelper<>();
 		keyBuilder.add(MetadatiUtente.USER_ID, USER_ID).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
 				.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
 		if (StringUtils.isNotEmpty(fullName))
@@ -1834,7 +1836,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public boolean updateUser(String userId, Map<MetadatiUtente, String> metadati) throws Exception {
 		logger.debug("updateUser {} {}", userId, metadati);
-		KeyValuePairFactory<MetadatiUtente> keyBuilder = new KeyValuePairFactory<>();
+		MetadatiHelper<MetadatiUtente> keyBuilder = new MetadatiHelper<>();
 		keyBuilder.add(MetadatiFolder.USER_ID_KEY, userId).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
 				.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
 
@@ -1874,7 +1876,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		request.setUserId(userId);
 		GetUserResponse response = service.getUser(request);
 		KeyValuePair[] metadati = response.get_return();
-		return KeyValuePairFactory.asMap(metadati);
+		return MetadatiHelper.asMap(metadati);
 	}
 
 	/**
@@ -1887,7 +1889,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public List<Map<String, String>> searchUsers(String userId) throws Exception {
 		logger.debug("searchUsers {}", userId);
-		KeyValuePairFactory<MetadatiUtente> searchCriteria = new KeyValuePairFactory<>();
+		MetadatiHelper<MetadatiUtente> searchCriteria = new MetadatiHelper<>();
 		if (StringUtils.isNotEmpty(userId)) {
 			searchCriteria.add(MetadatiUtente.USER_ID_KEY, userId);
 		}
@@ -1897,7 +1899,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		request.setSearchCriteria(searchCriteria.get());
 		SearchUsersResponse response = service.searchUsers(request);
 		SearchItem[] data = response.get_return();
-		return KeyValuePairFactory.asListMap(data);
+		return MetadatiHelper.asListMap(data);
 	}
 
 	/**
@@ -1925,7 +1927,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public boolean createGroup(String GROUP_ID, String GROUP_NAME, String PARENT_GROUP_ID) throws Exception {
 		logger.debug("createGroup {} {} {}", GROUP_ID, GROUP_NAME, PARENT_GROUP_ID);
-		KeyValuePairFactory<MetadatiGruppi> keyBuilder = new KeyValuePairFactory<>();
+		MetadatiHelper<MetadatiGruppi> keyBuilder = new MetadatiHelper<>();
 		keyBuilder.add(MetadatiGruppi.GROUP_ID, GROUP_ID).add(MetadatiGruppi.GROUP_NAME, GROUP_NAME)
 				.add(MetadatiGruppi.PARENT_GROUP_ID, PARENT_GROUP_ID);
 
@@ -1952,7 +1954,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public boolean updateGroup(String groupId, Map<MetadatiGruppi, String> metadati) throws Exception {
 		logger.debug("updateGroup {} {}", groupId, metadati);
-		KeyValuePairFactory<MetadatiGruppi> keyBuilder = new KeyValuePairFactory<>();
+		MetadatiHelper<MetadatiGruppi> keyBuilder = new MetadatiHelper<>();
 		if (metadati != null && !metadati.isEmpty()) {
 			for (Entry<MetadatiGruppi, String> metadato : metadati.entrySet()) {
 				keyBuilder.add(metadato.getKey(), metadato.getValue());
@@ -2000,7 +2002,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		request.setGroupId(groupId);
 		GetGroupResponse response = service.getGroup(request);
 		KeyValuePair[] metadati = response.get_return();
-		return KeyValuePairFactory.asMap(metadati);
+		return MetadatiHelper.asMap(metadati);
 	}
 
 	/**
@@ -2102,7 +2104,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public List<Map<String, String>> searchGroups(KeyValuePairFactory<MetadatiGruppi> searchCriteria) throws Exception {
+	public List<Map<String, String>> searchGroups(MetadatiHelper<MetadatiGruppi> searchCriteria) throws Exception {
 		logger.debug("searchGroups {}", searchCriteria);
 		DocerServicesStub service = getDocerService();
 		SearchGroups request = new SearchGroups();
@@ -2110,7 +2112,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		request.setSearchCriteria(searchCriteria.get());
 		SearchGroupsResponse response = service.searchGroups(request);
 		SearchItem[] data = response.get_return();
-		return KeyValuePairFactory.asListMap(data);
+		return MetadatiHelper.asListMap(data);
 	}
 
 	/**
@@ -2161,5 +2163,30 @@ public class DocerHelper extends AbstractDocerHelper {
 		GetUsersOfGroupResponse response = service.getUsersOfGroup(request);
 		String[] data = response.get_return();
 		return Arrays.asList(data);
+	}
+
+	/**
+	 * REGISTRO GIORNALIERO (chiamato a mezzanotte, riferito al giorno appena concluso)
+	 * @param x da EXT_ID X
+	 * @param y a EXT_ID Y
+	 * @param data sono quelli registrati nel giorno DATA, il giorno appena trascorso
+	 * @return
+	 */
+	public List<Map<String, String>> searchDocumentsRegistroProtocollo(String x, String y, String data) {
+		logger.debug("searchDocumentsRegistroProtocollo x={}, y={}, data={}", x, y, data);
+		
+		return null;
+	}
+
+	/**
+	 * REGISTRO GIORNALIERO MODIFICHE (chiamato a mezzanotte, riferito al giorno appena concluso)
+	 * @param externalId X primo EXT_ID 
+	 * @param data del giorno DATA
+	 * @return
+	 */
+	public List<Map<String, String>> searchDocumentsRegistroModifiche(String externalId, String data) {
+		logger.debug("searchDocumentsRegistroModifiche externalId={}, data={}", externalId, data);
+		
+		return null;
 	}
 }
