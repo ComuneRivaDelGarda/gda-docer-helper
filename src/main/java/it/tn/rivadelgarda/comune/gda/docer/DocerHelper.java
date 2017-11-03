@@ -2,13 +2,17 @@ package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.io.File;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TimeZone;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -21,6 +25,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
 
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersion;
@@ -333,7 +339,10 @@ public class DocerHelper extends AbstractDocerHelper {
 		params.add(MetadatiDocumento.ARCHIVE_TYPE_KEY, ARCHIVE_TYPE_VALUES.ARCHIVE_TYPE_ARCHIVE);
 		if (StringUtils.isNotBlank(EXTERNAL_ID))
 			params.add(MetadatiDocumento.EXTERNAL_ID_KEY, EXTERNAL_ID);
-
+		// Aggiunto data Creazione Documento
+//		String data = String.format("%tFT%<tRZ", Calendar.getInstance(TimeZone.getTimeZone("Z")));
+//		params.add(MetadatiDocumento.CREATION_DATE, data);
+		
 		DocerServicesStub service = getDocerService();
 		CreateDocument request = new CreateDocument();
 		request.setToken(getLoginToken());
@@ -2166,27 +2175,36 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * REGISTRO GIORNALIERO (chiamato a mezzanotte, riferito al giorno appena concluso)
-	 * @param x da EXT_ID X
-	 * @param y a EXT_ID Y
-	 * @param data sono quelli registrati nel giorno DATA, il giorno appena trascorso
+	 * Ricerca per
+	 * - REGISTRO GIORNALIERO (chiamato a mezzanotte, riferito al giorno appena concluso)
+	 * - REGISTRO GIORNALIERO MODIFICHE (chiamato a mezzanotte, riferito al giorno appena concluso)
+	 * @param externalIdMin da EXT_ID X ({@link MetadatiDocumento.EXTERNAL_ID})
+	 * @param externalIdMax a EXT_ID Y ({@link MetadatiDocumento.EXTERNAL_ID})
+	 * @param data sono quelli registrati nel giorno DATA, il giorno appena trascorso ({@link MetadatiDocumento.CREATION_DATE})
 	 * @return
 	 */
-	public List<Map<String, String>> searchDocumentsRegistroProtocollo(String x, String y, String data) {
-		logger.debug("searchDocumentsRegistroProtocollo x={}, y={}, data={}", x, y, data);
-		
-		return null;
+	public List<Map<String, String>> searchDocumentsByExternalIdRangeAndDate(String externalIdMin, String externalIdMax, Date data) throws Exception {
+		logger.debug("searchDocumentsRegistroProtocollo externalIdMin={}, externalIdMax={}, data={}", externalIdMin, externalIdMax, data);
+		MetadatiHelper searchCriteria = null;
+		if (StringUtils.isNotBlank(externalIdMin) && StringUtils.isNotBlank(externalIdMax)) {
+//			if (externalIdMin.equals(externalIdMax)) {
+//				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdMin);
+//			} else {
+				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdMin, externalIdMax);
+//			}
+		} else if (StringUtils.isNotBlank(externalIdMin)) {
+			searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdMin, null);
+		} else {
+			searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, null, externalIdMax);
+		}
+		if (data != null) {
+			searchCriteria.add(MetadatiDocumento.CREATION_DATE, data);
+		}
+		logger.debug("searchCriteria={}", new Gson().toJson(searchCriteria));
+		KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC).get();
+		logger.debug("orderBy={}", new Gson().toJson(orderBy));
+		SearchItem[] result = searchDocumentsNative(searchCriteria.get(), null, orderBy, -1);
+		return MetadatiHelper.asListMap(result);
 	}
 
-	/**
-	 * REGISTRO GIORNALIERO MODIFICHE (chiamato a mezzanotte, riferito al giorno appena concluso)
-	 * @param externalId X primo EXT_ID 
-	 * @param data del giorno DATA
-	 * @return
-	 */
-	public List<Map<String, String>> searchDocumentsRegistroModifiche(String externalId, String data) {
-		logger.debug("searchDocumentsRegistroModifiche externalId={}, data={}", externalId, data);
-		
-		return null;
-	}
 }

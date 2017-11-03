@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
+import it.tn.rivadelgarda.comune.gda.docer.MetadatiHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
@@ -200,10 +201,7 @@ public class TestDocerHelper {
 //		String file = "stuff/Integrazione DOCER 1.1.pdf";
 //
 //		String criteria = "test*";
-//		// logger.info("createDocument {} {} - {}", typeId, fileName, file);
-//
 //		init();
-//		// token = helper.login();
 //		String res = helper.createDocumentTypeDocumento(fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
 //				"descrizione con spazi", "TEST");
 //		Assert.assertNotNull(res);
@@ -261,7 +259,8 @@ public class TestDocerHelper {
 		logger.info(folderId);
 
 		String typeId = "DOCUMENTO";
-		String fileName = "test-" + getTimeStamp() + ".pdf";
+		String externalId = "test-" + getTimeStamp();
+		String fileName = externalId + ".pdf";
 		String file = "stuff/Integrazione DOCER 1.1.pdf";
 
 		String criteria = "test*";
@@ -270,7 +269,7 @@ public class TestDocerHelper {
 		init();
 		// token = helper.login();
 		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
-				"file su folder " + folderName, "");
+				"file su folder " + folderName, externalId);
 		logger.info("creato {}", documentId);
 				
 		try {
@@ -282,7 +281,8 @@ public class TestDocerHelper {
 			boolean acl = helper.setACLDocument(documentId, userID, ACL_VALUES.FULL_ACCESS);
 			logger.info("acl {} con {} = {}", userID, ACL_VALUES.FULL_ACCESS, acl);
 			
-			helper.deleteDocument(documentId);
+//			helper.deleteDocument(documentId);
+//			logger.info("documento cancellato {}", documentId);
 		} catch (it.kdm.docer.webservices.DocerServicesDocerExceptionException0 ex) {
 			// helper.deleteDocument(documentId);
 			throw ex;
@@ -529,7 +529,84 @@ public class TestDocerHelper {
 		}
 	}
 	
+	/**
+	 * ricerca un file per externalId e riduce la mappa di metadati trovata
+	 * @throws Exception
+	 */
+	@Test
+	public void test601() throws Exception {
+		String externalId = "test-171103190244"; // "protocollo_808737"; // protocollo_808775
+		logger.info("test601 searchDocumentsByExternalIdAll and reduce {}", externalId);
+		init();
+		try {
+			List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll(externalId);
+			logger.info("pre-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME);
+			Assert.assertNotNull(res);
+			logger.info("post-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test601", ex.getMessage());
+		}
+	}
+	
+	@Test
+	public void test602() throws Exception {
+		String externalId = "test-*"; // protocollo_808775
+		logger.info("test602 searchDocumentsByExternalIdAll and reduce {}", externalId);
+		init();
+		try {
+			List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll(externalId);
+			logger.info("pre-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNAME, MetadatiDocumento.CREATION_DATE);
+			Assert.assertNotNull(res);
+			logger.info("post-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test602", ex.getMessage());
+		}
+	}	
+	
+	
 	private String getTimeStamp() {
 		return new SimpleDateFormat("yyMMddHHmmss").format(new Date());
 	}
+	
+	/**
+	 * rest
+	 */
+	@Test
+	public void test700() throws Exception {
+		String externalIdMin = "test-171103190437";
+		String externalIdMax = "test-171103190437";
+//		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("03/11/2017");
+		Date data = null;
+		logger.info("test700 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, externalIdMax, data);
+		init();
+		try {
+			List<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, data);
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
+			Assert.assertNotNull(res);
+			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test600", ex.getMessage());
+		}
+	}
+	
+	/**
+	 * ricerca un file per externalId
+	 */
+	@Test
+	public void test710() throws Exception {
+		String externalIdMin = "protocollo_808737";
+		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("07/06/2017");
+		logger.info("test710 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
+		init();
+		try {
+			List<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, null, data);
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
+			Assert.assertNotNull(res);
+			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test600", ex.getMessage());
+		}
+	}	
 }

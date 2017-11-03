@@ -1,10 +1,14 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang3.StringUtils;
 
 import it.kdm.docer.webservices.DocerServicesStub.KeyValuePair;
 import it.kdm.docer.webservices.DocerServicesStub.SearchItem;
@@ -29,6 +33,27 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 		return res;
 	}
 
+	public static KeyValuePair createKey(String key, String min, String max) {
+		KeyValuePair res = new KeyValuePair();
+		res.setKey(key);
+		if (StringUtils.isNotBlank(min) && StringUtils.isNotBlank(max)) {
+			res.setValue("[" + min + " TO " + max + "]");
+//			res.setValue("" + min + " TO " + max + "");
+		} else if (StringUtils.isNotBlank(min)) {
+			res.setValue("[" + min + " TO ]");
+		} else {
+			res.setValue("[ TO " + max + "]");
+		}
+		return res;
+	}
+	
+	public static KeyValuePair createKey(String key, Date value) {
+		KeyValuePair res = new KeyValuePair();
+		res.setKey(key);
+		res.setValue(new SimpleDateFormat("yyyy-MM-dd").format(value));
+		return res;
+	}
+	
 	public static KeyValuePair createKeyOrderByAsc(String key) {
 		KeyValuePair res = new KeyValuePair();
 		res.setKey(key);
@@ -60,13 +85,32 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 		res.add(key, value);
 		return res;
 	}
-
+	
+	/**
+	 * 
+	 * @param key
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public static <F extends MetadatoDocer> MetadatiHelper<F> build(F key, String min, String max) {
+		MetadatiHelper<F> res = new MetadatiHelper<F>();
+		res.add(key, min, max);
+		return res;
+	}
+	
+	public static <F extends MetadatoDocer> MetadatiHelper<F> build(F key, Date value) {
+		MetadatiHelper<F> res = new MetadatiHelper<F>();
+		res.add(key, value);
+		return res;
+	}
+	
 	public static <F extends MetadatoDocer> MetadatiHelper<F> build(String key, String value) {
 		MetadatiHelper<F> res = new MetadatiHelper<F>();
 		res.add(key, value);
 		return res;
 	}
-
+	
 	/**
 	 * aggiunge un metadato alla catena {@link MetadatiHelper} corrente
 	 * 
@@ -98,6 +142,16 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 * @return
 	 */
 	public MetadatiHelper add(T key, String value) {
+		this.list.add(createKey(key.getValue(), value));
+		return this;
+	}
+	
+	public MetadatiHelper add(T key, String min, String max) {
+		this.list.add(createKey(key.getValue(), min, max));
+		return this;
+	}
+	
+	public MetadatiHelper add(T key, Date value) {
 		this.list.add(createKey(key.getValue(), value));
 		return this;
 	}
@@ -231,6 +285,41 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 		String[] res = null;
 		if (aList != null && !aList.isEmpty()) {
 			res  = aList.toArray(new String[aList.size()]);
+		}
+		return res;
+	}
+
+	/**
+	 * riduce la lista di mappe di metadati ai soli metadati specificati
+	 * @param listaDiMedatadi la lista di mappe di metadati che si desidera ridurre
+	 * @param keys le chiavi di metadati che si desidera conservare
+	 * @return
+	 */
+	public static List<Map<String, String>> mapReduce(List<Map<String, String>> listaDiMedatadi, MetadatiDocumento... keys) {
+		List<Map<String, String>> res = new ArrayList<>();
+		if (listaDiMedatadi != null && !listaDiMedatadi.isEmpty() && keys != null && keys.length > 0) {
+			for (Map<String, String> medatadi : listaDiMedatadi) {
+				res.add(mapReduce(medatadi, keys));
+			}
+		}
+		return res;
+	}
+	
+	/**
+	 * riduce la mappa di metadati ai soli metadati specificati
+	 * @param metadati i metadati da ridurre
+	 * @param keys le chiavi di metadati che si desidera conservare
+	 * @return
+	 */
+	public static Map<String, String> mapReduce(Map<String, String> metadati, MetadatiDocumento... keys) {
+		Map<String, String> res = new HashMap<>();
+		if (metadati != null && !metadati.isEmpty() && keys != null && keys.length > 0) {
+			for (MetadatiDocumento metadatoMatch : keys) {
+				final String keyMatch = metadatoMatch.getValue();
+				if (metadati.containsKey(keyMatch)) {
+					res.put(keyMatch, metadati.get(keyMatch));
+				}				
+			}
 		}
 		return res;
 	}
