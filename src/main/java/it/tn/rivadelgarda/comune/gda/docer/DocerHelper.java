@@ -2183,19 +2183,26 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param data sono quelli registrati nel giorno DATA, il giorno appena trascorso ({@link MetadatiDocumento.CREATION_DATE})
 	 * @return
 	 */
-	public List<Map<String, String>> searchDocumentsByExternalIdRangeAndDate(String externalIdMin, String externalIdMax, Date data) throws Exception {
-		logger.debug("searchDocumentsRegistroProtocollo externalIdMin={}, externalIdMax={}, data={}", externalIdMin, externalIdMax, data);
+	public List<Map<String, String>> searchDocumentsByExternalIdRangeAndDate(Date data, String... externalIds) throws Exception {
+		// logger.debug("searchDocumentsRegistroProtocollo externalIdMin={}, externalIdMax={}, data={}", externalIdMin, externalIdMax, data);
+		logger.debug("searchDocumentsRegistroProtocollo data={}, externalIds={}", data, externalIds);
 		MetadatiHelper searchCriteria = null;
-		if (StringUtils.isNotBlank(externalIdMin) && StringUtils.isNotBlank(externalIdMax)) {
-//			if (externalIdMin.equals(externalIdMax)) {
-//				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdMin);
-//			} else {
-				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdMin, externalIdMax);
-//			}
-		} else if (StringUtils.isNotBlank(externalIdMin)) {
-			searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdMin, null);
-		} else {
-			searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, null, externalIdMax);
+		
+//		if (StringUtils.isNotBlank(externalIdMin) && StringUtils.isNotBlank(externalIdMax)) {
+////			if (externalIdMin.equals(externalIdMax)) {
+////				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdMin);
+////			} else {
+//				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdMin, externalIdMax);
+////			}
+//		} else if (StringUtils.isNotBlank(externalIdMin)) {
+//			searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdMin, null);
+//		} else {
+//			searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, null, externalIdMax);
+//		}
+		
+		if (externalIds != null) {
+			String values = StringUtils.join(externalIds, ",");
+			searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, values);
 		}
 		if (data != null) {
 			searchCriteria.add(MetadatiDocumento.CREATION_DATE, data);
@@ -2204,6 +2211,8 @@ public class DocerHelper extends AbstractDocerHelper {
 		KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC).get();
 		logger.debug("orderBy={}", new Gson().toJson(orderBy));
 		SearchItem[] result = searchDocumentsNative(searchCriteria.get(), null, orderBy, -1);
+		
+		
 		return MetadatiHelper.asListMap(result);
 	}
 

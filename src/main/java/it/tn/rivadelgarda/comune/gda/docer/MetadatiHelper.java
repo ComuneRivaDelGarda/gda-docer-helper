@@ -33,13 +33,33 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 		return res;
 	}
 
-	public static KeyValuePair createKey(String key, String min, String max) {
+//	public static KeyValuePair createKey(String key, String min, String max) {
+//		KeyValuePair res = new KeyValuePair();
+//		res.setKey(key);
+//		if (StringUtils.isNotBlank(min) && StringUtils.isNotBlank(max)) {
+//			res.setValue("[" + min + " TO " + max + "]");
+////			res.setValue("" + min + " TO " + max + "");
+//		} else if (StringUtils.isNotBlank(min)) {
+//			res.setValue("[" + min + " TO *]");
+//		} else {
+//			res.setValue("[* TO " + max + "]");
+//		}
+//		return res;
+//	}
+	
+	/**
+	 * 
+	 * @param key nome del metadato
+	 * @param min limite inferiore, 0 se non si vuole considerare il limite inferiore
+	 * @param max limite superiore, 0 se non si vuole considerare il limite superiore
+	 * @return
+	 */
+	public static KeyValuePair createKey(String key, int min, int max) {
 		KeyValuePair res = new KeyValuePair();
 		res.setKey(key);
-		if (StringUtils.isNotBlank(min) && StringUtils.isNotBlank(max)) {
+		if (min < max) {
 			res.setValue("[" + min + " TO " + max + "]");
-//			res.setValue("" + min + " TO " + max + "");
-		} else if (StringUtils.isNotBlank(min)) {
+		} else if (min > 0) {
 			res.setValue("[" + min + " TO *]");
 		} else {
 			res.setValue("[* TO " + max + "]");
@@ -47,10 +67,17 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 		return res;
 	}
 	
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
 	public static KeyValuePair createKey(String key, Date value) {
 		KeyValuePair res = new KeyValuePair();
 		res.setKey(key);
-		res.setValue(new SimpleDateFormat("yyyy-MM-dd").format(value));
+		String isoPattern = new SimpleDateFormat("yyyy-MM-dd").format(value) + "T*";
+		res.setValue(isoPattern);
 		return res;
 	}
 	
@@ -93,7 +120,7 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 * @param max
 	 * @return
 	 */
-	public static <F extends MetadatoDocer> MetadatiHelper<F> build(F key, String min, String max) {
+	public static <F extends MetadatoDocer> MetadatiHelper<F> build(F key, int min, int max) {
 		MetadatiHelper<F> res = new MetadatiHelper<F>();
 		res.add(key, min, max);
 		return res;
@@ -146,7 +173,7 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 		return this;
 	}
 	
-	public MetadatiHelper add(T key, String min, String max) {
+	public MetadatiHelper add(T key, int min, int max) {
 		this.list.add(createKey(key.getValue(), min, max));
 		return this;
 	}
