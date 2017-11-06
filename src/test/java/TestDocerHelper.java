@@ -542,13 +542,13 @@ public class TestDocerHelper {
 	 */
 	@Test
 	public void test601() throws Exception {
-		String externalId = "test-171103190244"; // "protocollo_808737"; // protocollo_808775
+		String externalId = "protocollo_808737"; // "protocollo_808737"; // protocollo_808775
 		logger.info("test601 searchDocumentsByExternalIdAll and reduce {}", externalId);
 		init();
 		try {
-			List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll(externalId);
+			List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll(externalId, true);
 			logger.info("pre-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
-			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME);
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
 			logger.info("post-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
@@ -580,7 +580,7 @@ public class TestDocerHelper {
 		logger.info("test602 searchDocuments and reduce {}");
 		init();
 		try {
-			List<Map<String, String>> res = helper.searchDocuments(MetadatiDocumento.EXTERNAL_ID, true, "test-171103190437");
+			List<Map<String, String>> res = helper.searchDocuments(MetadatiDocumento.EXTERNAL_ID, true, "protocollo_808737");
 			logger.info("pre-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
@@ -658,12 +658,13 @@ public class TestDocerHelper {
 	@Test
 	public void test710() throws Exception {
 		String externalIdMin = "protocollo_808737";
-		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("07/06/2017");
+		String externalIdMax = "protocollo_808737";
+		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("22/06/2017");
 		logger.info("test710 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
 		init();
 		try {
-			Set<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, null, "protocollo_", data, true);
-			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
+			Set<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "protocollo_", data, true);
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
@@ -671,11 +672,28 @@ public class TestDocerHelper {
 		}
 	}
 	
+	@Test
+	public void test711() throws Exception {
+		String externalIdMin = "protocollo_808737";
+		String externalIdMax = "protocollo_808737";
+		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("07/06/2017");
+		logger.info("test710 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
+		init();
+		try {
+			Set<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "protocollo_", data, true);
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
+			Assert.assertNotNull(res);
+			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test710", ex);
+		}
+	}	
+	
 	
 	@Test
 	public void test720() throws Exception {
 		String externalIdMin = "protocollo_808737";
-		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("07/06/2017");
+		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("22/06/2017");
 		logger.info("test701 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
 		init();
 		try {
