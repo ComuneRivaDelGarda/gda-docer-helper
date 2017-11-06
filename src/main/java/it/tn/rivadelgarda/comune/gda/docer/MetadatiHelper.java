@@ -40,9 +40,9 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 			res.setValue("[" + min + " TO " + max + "]");
 //			res.setValue("" + min + " TO " + max + "");
 		} else if (StringUtils.isNotBlank(min)) {
-			res.setValue("[" + min + " TO ]");
+			res.setValue("[" + min + " TO *]");
 		} else {
-			res.setValue("[ TO " + max + "]");
+			res.setValue("[* TO " + max + "]");
 		}
 		return res;
 	}
