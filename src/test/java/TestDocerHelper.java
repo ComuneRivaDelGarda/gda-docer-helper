@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
@@ -333,14 +334,19 @@ public class TestDocerHelper {
 		// logger.info("{}", new Gson().toJson(res));
 //	}
 
-//	@Test
-//	public void test90() throws Exception {
-		// init();
-		// //token = helper.login();
-		// KeyValuePair[] res = helper.getProfileDocument("885159");
-		// Assert.assertNotNull(res);
-		// logger.info("{}", new Gson().toJson(res));
-//	}
+	@Test
+	public void test90() throws Exception {
+		try  {
+			String docNum = "885401";
+			logger.info("test90 - getProfileDocumentMap {}", docNum);
+			init();
+			Map<String, String> res = helper.getProfileDocumentMap(docNum);
+			Assert.assertNotNull(res);
+			logger.info("{}", new Gson().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test90", ex);
+		}
+	}
 
 //	@Test
 //	public void test100() throws Exception {
@@ -582,12 +588,28 @@ public class TestDocerHelper {
 		logger.info("test700 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, externalIdMax, data);
 		init();
 		try {
-			List<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, data);
+			List<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(data, null);
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
-			logger.error("test600", ex.getMessage());
+			logger.error("test700", ex.getMessage());
+		}
+	}
+	
+	@Test
+	public void test701() throws Exception {
+		String externalIdMin = "protocollo_808737";
+		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("07/06/2017");
+		logger.info("test701 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
+		init();
+		try {
+			List<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(data, externalIdMin);
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
+			Assert.assertNotNull(res);
+			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test701", ex.getMessage());
 		}
 	}
 	
@@ -601,12 +623,14 @@ public class TestDocerHelper {
 		logger.info("test710 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
 		init();
 		try {
-			List<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, null, data);
+			List<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(data, null);
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
-			logger.error("test600", ex.getMessage());
+			logger.error("test710", ex.getMessage());
 		}
-	}	
+	}
+	
+	
 }
