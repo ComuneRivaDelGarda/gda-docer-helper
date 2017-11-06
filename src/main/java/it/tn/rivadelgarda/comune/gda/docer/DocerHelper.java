@@ -9,9 +9,11 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.activation.DataHandler;
@@ -758,19 +760,49 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * effettua una ricera per EXTERNAL_ID ordinata per CREATION_DATE
 	 * 
-	 * @param externalId
+	 * @param metadato su cui effettuare la ricerca
+	 * @param fullProfile specifica se caricare tutti i metadati per ogni risultato
+	 * @param valori 
 	 * @return
 	 * @throws Exception
 	 */
+	public <F extends MetadatoDocer> List<Map<String, String>> searchDocuments(F metadato, boolean fullProfile, String... valori) throws Exception {
+//		List<Map<F, String>> searchCriteria = new ArrayList<>();
+//		Map<F, String> map = new HashMap<>();
+//		map.put(metadato, StringUtils.join(valori, ","));
+//		searchCriteria.add(map)
+		
+		List<Map<String, String>> res = new ArrayList<>();
+		for (String valore : valori) {
+			KeyValuePair[] searchCriteria = MetadatiHelper.build(metadato, valore).get();
+			KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC).get();
+			SearchItem[] result = searchDocumentsNative(searchCriteria, null, orderBy);
+			List<Map<String, String>> resultData = loadProfiles(result, fullProfile);
+			res.addAll(resultData);
+		}
+		return res;
+	}
+	
 	public List<Map<String, String>> searchDocumentsByExternalIdAll(String externalId) throws Exception {
+		return searchDocumentsByExternalIdAll(externalId, false);
+	}
+	
+	/**
+	 * effettua una ricera per EXTERNAL_ID ordinata per CREATION_DATE
+	 * 
+	 * @param externalId EXTERNAL_ID specificato
+	 * @param fullProfile specifica se caricare tutti i medatati per i risultati (richiede elaborazione aggiuntiva)
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, String>> searchDocumentsByExternalIdAll(String externalId, boolean fullProfile) throws Exception {
 		logger.debug("searchDocumentsByExternalIdAll {}", externalId);
 		KeyValuePair[] searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalId).get();
-		KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC)
-				.get();
+		KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC).get();
 		SearchItem[] result = searchDocumentsNative(searchCriteria, null, orderBy, -1);
-		return MetadatiHelper.asListMap(result);
+		List<Map<String, String>> res = loadProfiles(result, fullProfile);
+		return res;
 	}
 
 	/**
@@ -2181,11 +2213,91 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param externalIdMin da EXT_ID X ({@link MetadatiDocumento.EXTERNAL_ID})
 	 * @param externalIdMax a EXT_ID Y ({@link MetadatiDocumento.EXTERNAL_ID})
 	 * @param data sono quelli registrati nel giorno DATA, il giorno appena trascorso ({@link MetadatiDocumento.CREATION_DATE})
+	 * @param fullProfile specifica se caricare la lista di metadati completa per ogni docnum trovato (esegue un caricamento aggiuntivo per ogni ducumento)
 	 * @return
 	 */
-	public List<Map<String, String>> searchDocumentsByExternalIdRangeAndDate(Date data, String... externalIds) throws Exception {
-		// logger.debug("searchDocumentsRegistroProtocollo externalIdMin={}, externalIdMax={}, data={}", externalIdMin, externalIdMax, data);
-		logger.debug("searchDocumentsRegistroProtocollo data={}, externalIds={}", data, externalIds);
+	public Set<Map<String, String>> searchDocumentsByExternalIdRangeAndDate(String externalIdMin, String externalIdMax, String externaIdPrefix, Date data, boolean fullProfile) throws Exception {
+		logger.debug("searchDocumentsByExternalIdRangeAndDate externalIdMin={},externalIdMax={},data={}", externalIdMin, externalIdMax, data);
+		MetadatiHelper searchCriteria = null;
+		
+		List<String> listGeneratedExternalIdValues = new ArrayList<>();
+		if (StringUtils.isNotBlank(externalIdMin) && StringUtils.isNotBlank(externalIdMax)) {
+			/* elaboro le stringe per trovare i valori multipli per la ricerca */
+//			if (StringUtils.isNotBlank(externaIdPrefix)) {
+				/* elaboro min e max dalle stringhe paddando il prefisso */
+				externalIdMin = StringUtils.removeStartIgnoreCase(externalIdMin, externaIdPrefix);
+				externalIdMax = StringUtils.removeStartIgnoreCase(externalIdMax, externaIdPrefix);
+				long min = Long.parseLong(externalIdMin);
+				long max = Long.parseLong(externalIdMax);
+				
+				for (long i=min; i<=max; i++) {
+					listGeneratedExternalIdValues.add(externaIdPrefix + i);
+				}
+				/* 
+				String multipleValues = StringUtils.join(listGeneratedValues, ",");
+				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, multipleValues);
+				*/ 
+//			} else {
+//				/* se non e' specificato un prefisso si intende che externalIdMin e externalIdMax sono già numerici */
+//				long min = Long.parseLong(externalIdMin);
+//				long max = Long.parseLong(externalIdMax);
+//				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, min, max);
+//			}
+		}
+		
+		Set<Map<String, String>> res = new HashSet<>();
+		// TODO: usare i valori multipli per lanciare + ricerche su EXTERNAL_ID e poi concatenare risultati;
+		for (String externalIdValue : listGeneratedExternalIdValues) {
+			searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalIdValue);
+			if (data != null) {
+				searchCriteria.add(MetadatiDocumento.CREATION_DATE, data);
+			}
+			logger.debug("searchCriteria={}", new Gson().toJson(searchCriteria));
+			KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC).get();
+			logger.debug("orderBy={}", new Gson().toJson(orderBy));
+			SearchItem[] result = searchDocumentsNative(searchCriteria.get(), null, orderBy, -1);
+			res.addAll(MetadatiHelper.asListMap(result));
+		}
+		
+		return loadProfiles(res, fullProfile);
+	}
+
+	private List<Map<String, String>> loadProfiles(SearchItem[] result, boolean fullProfile) throws Exception {
+		List<Map<String, String>> res = null;
+		
+		if (fullProfile) {
+			res = new ArrayList<>();
+			/* carico la lista di metadati completa per tutti i DOCNUM */
+			Set<String> docNums = MetadatiHelper.setOfMetadataValues(result, MetadatiDocumento.DOCNUM);
+			for (String docNum : docNums) {
+				res.add(getProfileDocumentMap(docNum));
+			}
+		} else {
+			res = MetadatiHelper.asListMap(result);
+		}
+		
+		return res;
+	}
+	
+	private Set<Map<String, String>> loadProfiles(Set<Map<String, String>> result, boolean fullProfile) throws Exception {
+		Set<Map<String, String>> res = null;
+		
+		if (fullProfile) {
+			res = new HashSet<>();
+			/* carico la lista di metadati completa per tutti i DOCNUM */
+			Set<String> docNums = MetadatiHelper.setOfMetadataValues(result, MetadatiDocumento.DOCNUM);
+			for (String docNum : docNums) {
+				res.add(getProfileDocumentMap(docNum));
+			}
+		} else {
+			res = result;
+		}
+		
+		return res;
+	}
+
+	public List<Map<String, String>> searchDocumentsByExternalIdsAndDate(Date data, String... externalIds) throws Exception {
+		logger.debug("searchDocumentsByExternalIdsAndDate data={}, externalIds={}", data, externalIds);
 		MetadatiHelper searchCriteria = null;
 		
 //		if (StringUtils.isNotBlank(externalIdMin) && StringUtils.isNotBlank(externalIdMax)) {
@@ -2215,5 +2327,6 @@ public class DocerHelper extends AbstractDocerHelper {
 		
 		return MetadatiHelper.asListMap(result);
 	}
-
+	
+	
 }

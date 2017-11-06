@@ -2,11 +2,14 @@ package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,7 +57,7 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 * @param max limite superiore, 0 se non si vuole considerare il limite superiore
 	 * @return
 	 */
-	public static KeyValuePair createKey(String key, int min, int max) {
+	public static KeyValuePair createKey(String key, long min, long max) {
 		KeyValuePair res = new KeyValuePair();
 		res.setKey(key);
 		if (min < max) {
@@ -120,7 +123,7 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 * @param max
 	 * @return
 	 */
-	public static <F extends MetadatoDocer> MetadatiHelper<F> build(F key, int min, int max) {
+	public static <F extends MetadatoDocer> MetadatiHelper<F> build(F key, long min, long max) {
 		MetadatiHelper<F> res = new MetadatiHelper<F>();
 		res.add(key, min, max);
 		return res;
@@ -173,7 +176,7 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 		return this;
 	}
 	
-	public MetadatiHelper add(T key, int min, int max) {
+	public MetadatiHelper add(T key, long min, long max) {
 		this.list.add(createKey(key.getValue(), min, max));
 		return this;
 	}
@@ -278,6 +281,32 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 		return metadataValue;
 	}
 
+	public static <F extends MetadatoDocer> List<String> listMetadataValues(List<Map<String, String>> metadataList, F key) {
+		List<String> metadataValues = new ArrayList<>();
+		for (Map<String, String> metadata : metadataList) {
+			String metadataValue = getMetadata(metadata, key);
+			metadataValues.add(metadataValue);
+		}
+		return metadataValues;
+	}
+	
+	public static <F extends MetadatoDocer> List<String> listMetadataValues(SearchItem[] data, F key) {
+		return listMetadataValues(asListMap(data), key);
+	}
+	
+	public static <F extends MetadatoDocer> Set<String> setOfMetadataValues(Collection<Map<String, String>> metadataList, F key) {
+		Set<String> metadataValues = new HashSet<>();
+		for (Map<String, String> metadata : metadataList) {
+			String metadataValue = getMetadata(metadata, key);
+			metadataValues.add(metadataValue);
+		}
+		return metadataValues;
+	}
+	
+	public static <F extends MetadatoDocer> Set<String> setOfMetadataValues(SearchItem[] data, F key) {
+		return setOfMetadataValues(asListMap(data), key);
+	}
+	
 	/**
 	 * crea una lista di valori di metadati con chiave key dalla lista di metadati
 	 * @param metadataList lista di metadati documenti
@@ -285,14 +314,15 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 * @return array di valori del metadato 
 	 */
 	public static <F extends MetadatoDocer> String[] joinMetadata(List<Map<String, String>> metadataList, F key) {
-		List<String> metadataValues = new ArrayList<>();
-		for (Map<String, String> metadata : metadataList) {
-			String metadataValue = getMetadata(metadata, key);
-			metadataValues.add(metadataValue);
-		}
+		List<String> metadataValues = listMetadataValues(metadataList, key);
+		// return metadataValues.toArray(new String[metadataValues.size()]);
+		return asArray(metadataValues);
+	}	
+
+	public static String[] asArray(List<String> metadataValues) {
 		return metadataValues.toArray(new String[metadataValues.size()]);
 	}
-
+	
 	public static <T extends MetadatoDocer> KeyValuePair[] toArray(List<Map<T, String>> listMetadati) {
 		List<KeyValuePair> res = new ArrayList<>();
 		if (listMetadati != null && !listMetadati.isEmpty()) {
@@ -324,6 +354,16 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 */
 	public static List<Map<String, String>> mapReduce(List<Map<String, String>> listaDiMedatadi, MetadatiDocumento... keys) {
 		List<Map<String, String>> res = new ArrayList<>();
+		if (listaDiMedatadi != null && !listaDiMedatadi.isEmpty() && keys != null && keys.length > 0) {
+			for (Map<String, String> medatadi : listaDiMedatadi) {
+				res.add(mapReduce(medatadi, keys));
+			}
+		}
+		return res;
+	}
+	
+	public static Set<Map<String, String>> mapReduce(Set<Map<String, String>> listaDiMedatadi, MetadatiDocumento... keys) {
+		Set<Map<String, String>> res = new HashSet<>();
 		if (listaDiMedatadi != null && !listaDiMedatadi.isEmpty() && keys != null && keys.length > 0) {
 			for (Map<String, String> medatadi : listaDiMedatadi) {
 				res.add(mapReduce(medatadi, keys));
