@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -2209,40 +2210,27 @@ public class DocerHelper extends AbstractDocerHelper {
 	/**
 	 * Ricerca per
 	 * - REGISTRO GIORNALIERO (chiamato a mezzanotte, riferito al giorno appena concluso)
-	 * - REGISTRO GIORNALIERO MODIFICHE (chiamato a mezzanotte, riferito al giorno appena concluso)
 	 * @param externalIdMin da EXT_ID X ({@link MetadatiDocumento.EXTERNAL_ID})
 	 * @param externalIdMax a EXT_ID Y ({@link MetadatiDocumento.EXTERNAL_ID})
 	 * @param data sono quelli registrati nel giorno DATA, il giorno appena trascorso ({@link MetadatiDocumento.CREATION_DATE})
 	 * @param fullProfile specifica se caricare la lista di metadati completa per ogni docnum trovato (esegue un caricamento aggiuntivo per ogni ducumento)
 	 * @return
 	 */
-	public Set<Map<String, String>> searchDocumentsByExternalIdRangeAndDate(String externalIdMin, String externalIdMax, String externaIdPrefix, Date data, boolean fullProfile) throws Exception {
-		logger.debug("searchDocumentsByExternalIdRangeAndDate externalIdMin={},externalIdMax={},data={}", externalIdMin, externalIdMax, data);
+	public Collection<Map<String, String>> searchDocumentsByExternalIdRangeAndDate(String externalIdMin, String externalIdMax, String externaIdPrefix, Date data, boolean fullProfile) throws Exception {
+		logger.debug("searchDocumentsByExternalIdRangeAndDate externalIdMin={},externalIdMax={},externaIdPrefix={},data={},fullProfile={}", externalIdMin, externalIdMax, externaIdPrefix, data, fullProfile);
 		MetadatiHelper searchCriteria = null;
 		
 		List<String> listGeneratedExternalIdValues = new ArrayList<>();
 		if (StringUtils.isNotBlank(externalIdMin) && StringUtils.isNotBlank(externalIdMax)) {
-			/* elaboro le stringe per trovare i valori multipli per la ricerca */
-//			if (StringUtils.isNotBlank(externaIdPrefix)) {
-				/* elaboro min e max dalle stringhe paddando il prefisso */
-				externalIdMin = StringUtils.removeStartIgnoreCase(externalIdMin, externaIdPrefix);
-				externalIdMax = StringUtils.removeStartIgnoreCase(externalIdMax, externaIdPrefix);
-				long min = Long.parseLong(externalIdMin);
-				long max = Long.parseLong(externalIdMax);
-				
-				for (long i=min; i<=max; i++) {
-					listGeneratedExternalIdValues.add(externaIdPrefix + i);
-				}
-				/* 
-				String multipleValues = StringUtils.join(listGeneratedValues, ",");
-				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, multipleValues);
-				*/ 
-//			} else {
-//				/* se non e' specificato un prefisso si intende che externalIdMin e externalIdMax sono già numerici */
-//				long min = Long.parseLong(externalIdMin);
-//				long max = Long.parseLong(externalIdMax);
-//				searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, min, max);
-//			}
+			/* elaboro min e max dalle stringhe paddando il prefisso */
+			externalIdMin = StringUtils.removeStartIgnoreCase(externalIdMin, externaIdPrefix);
+			externalIdMax = StringUtils.removeStartIgnoreCase(externalIdMax, externaIdPrefix);
+			long min = Long.parseLong(externalIdMin);
+			long max = Long.parseLong(externalIdMax);
+			
+			for (long i=min; i<=max; i++) {
+				listGeneratedExternalIdValues.add(externaIdPrefix + i);
+			}
 		}
 		
 		Set<Map<String, String>> res = new HashSet<>();
@@ -2279,8 +2267,8 @@ public class DocerHelper extends AbstractDocerHelper {
 		return res;
 	}
 	
-	private Set<Map<String, String>> loadProfiles(Set<Map<String, String>> result, boolean fullProfile) throws Exception {
-		Set<Map<String, String>> res = null;
+	private Collection<Map<String, String>> loadProfiles(Collection<Map<String, String>> result, boolean fullProfile) throws Exception {
+		Collection<Map<String, String>> res = null;
 		
 		if (fullProfile) {
 			res = new HashSet<>();
@@ -2328,5 +2316,45 @@ public class DocerHelper extends AbstractDocerHelper {
 		return MetadatiHelper.asListMap(result);
 	}
 	
-	
+	/**
+	 * Ricerca per:
+	 * - REGISTRO GIORNALIERO MODIFICHE (chiamato a mezzanotte, riferito al giorno appena concluso)
+	 * Tutti i documenti inseriti/modificati in data DATA con external id precedente a PROTOCOLLO_X
+	 * @param externalIdMax
+	 * @param externaIdPrefix
+	 * @param data
+	 * @param fullProfile
+	 * @return
+	 * @throws Exception
+	 */
+	public Collection<Map<String, String>> searchDocumentsByDateAndExternalIdLimit(String externalIdMax, String externaIdPrefix, Date data, boolean fullProfile) throws Exception {
+		logger.debug("searchDocumentsByDateAndExternalIdLimit externalIdMax={},externaIdPrefix={},data={},fullProfile={}", externalIdMax, externaIdPrefix, data, fullProfile);
+		
+		// cerco per data
+		MetadatiHelper searchCriteria = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, data);
+		logger.debug("searchCriteria={}", new Gson().toJson(searchCriteria));
+		KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC).get();
+		logger.debug("orderBy={}", new Gson().toJson(orderBy));
+		SearchItem[] result = searchDocumentsNative(searchCriteria.get(), null, orderBy, -1);
+		
+		Collection<Map<String, String>> res = MetadatiHelper.asListMap(result);
+		// rimozione dei protocollo non desiderati
+		if (StringUtils.isNotBlank(externalIdMax)) {
+			externalIdMax = StringUtils.removeStartIgnoreCase(externalIdMax, externaIdPrefix);
+			long maxProtocollo = Long.parseLong(externalIdMax);
+			
+			Set<Map<String, String>> purged = new HashSet();
+			for (Map<String, String> metadatiDocumento : res) {
+				String currentExternalId = metadatiDocumento.get(MetadatiDocumento.EXTERNAL_ID_KEY);
+				if (StringUtils.isNotBlank(currentExternalId)) {
+					long currentProtocollo = Long.parseLong(StringUtils.removeStartIgnoreCase(currentExternalId, externaIdPrefix));
+					if (currentProtocollo <= maxProtocollo) {
+						purged.add(metadatiDocumento);
+					}
+				}
+			}
+			res = purged;
+		}
+		return loadProfiles(res, fullProfile);
+	}	
 }

@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -546,7 +547,7 @@ public class TestDocerHelper {
 		logger.info("test601 searchDocumentsByExternalIdAll and reduce {}", externalId);
 		init();
 		try {
-			List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll(externalId, true);
+			Collection<Map<String, String>> res = helper.searchDocumentsByExternalIdAll(externalId, true);
 			logger.info("pre-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
@@ -565,7 +566,7 @@ public class TestDocerHelper {
 		logger.info("test602 searchDocuments and reduce {}");
 		init();
 		try {
-			List<Map<String, String>> res = helper.searchDocuments(MetadatiDocumento.DOCNUM, true, "886466", "886468");
+			Collection<Map<String, String>> res = helper.searchDocuments(MetadatiDocumento.DOCNUM, true, "886466", "886468");
 			logger.info("pre-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
@@ -580,7 +581,7 @@ public class TestDocerHelper {
 		logger.info("test602 searchDocuments and reduce {}");
 		init();
 		try {
-			List<Map<String, String>> res = helper.searchDocuments(MetadatiDocumento.EXTERNAL_ID, true, "protocollo_808737");
+			Collection<Map<String, String>> res = helper.searchDocuments(MetadatiDocumento.EXTERNAL_ID, true, "protocollo_808737");
 			logger.info("pre-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
@@ -596,7 +597,7 @@ public class TestDocerHelper {
 		logger.info("test603 searchDocumentsByExternalIdAll and reduce {}", externalId);
 		init();
 		try {
-			List<Map<String, String>> res = helper.searchDocumentsByExternalIdAll(externalId, true);
+			Collection<Map<String, String>> res = helper.searchDocumentsByExternalIdAll(externalId, true);
 			logger.info("pre-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
@@ -622,7 +623,7 @@ public class TestDocerHelper {
 		logger.info("test700 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, externalIdMax, data);
 		init();
 		try {
-			Set<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "test-", data, true);
+			Collection<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "test-", data, true);
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
@@ -643,7 +644,7 @@ public class TestDocerHelper {
 		logger.info("test701 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, externalIdMax, data);
 		init();
 		try {
-			Set<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "test-171103190", data, true);
+			Collection<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "test-171103190", data, true);
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
@@ -663,7 +664,7 @@ public class TestDocerHelper {
 		logger.info("test710 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
 		init();
 		try {
-			Set<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "protocollo_", data, true);
+			Collection<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "protocollo_", data, true);
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
@@ -677,28 +678,44 @@ public class TestDocerHelper {
 		String externalIdMin = "protocollo_808737";
 		String externalIdMax = "protocollo_808737";
 		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("07/06/2017");
-		logger.info("test710 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
+		logger.info("test711 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
 		init();
 		try {
-			Set<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "protocollo_", data, true);
+			Collection<Map<String, String>> res = helper.searchDocumentsByExternalIdRangeAndDate(externalIdMin, externalIdMax, "protocollo_", data, true);
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
-			logger.error("test710", ex);
+			logger.error("test711", ex);
 		}
 	}	
 	
 	
 	@Test
-	public void test720() throws Exception {
+	public void test712() throws Exception {
 		String externalIdMin = "protocollo_808737";
 		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("22/06/2017");
+		logger.info("test712 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
+		init();
+		try {
+			Collection<Map<String, String>> res = helper.searchDocumentsByExternalIdsAndDate(data, externalIdMin);
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
+			Assert.assertNotNull(res);
+			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test712", ex);
+		}
+	}
+	
+	@Test
+	public void test720() throws Exception {
+		String externalIdMin = "protocollo_808735";
+		Date data = new SimpleDateFormat("dd/MM/yyyy").parse("07/06/2017");
 		logger.info("test701 searchDocumentsByExternalIdRangeAndDate {} {} {}", externalIdMin, data);
 		init();
 		try {
-			List<Map<String, String>> res = helper.searchDocumentsByExternalIdsAndDate(data, externalIdMin);
-			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.DOC_HASH);
+			Collection<Map<String, String>> res = helper.searchDocumentsByDateAndExternalIdLimit(externalIdMin, "protocollo_", data, false);
+			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.EXTERNAL_ID);
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {

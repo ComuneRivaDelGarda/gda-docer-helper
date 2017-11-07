@@ -352,8 +352,8 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 * @param keys le chiavi di metadati che si desidera conservare
 	 * @return
 	 */
-	public static List<Map<String, String>> mapReduce(List<Map<String, String>> listaDiMedatadi, MetadatiDocumento... keys) {
-		List<Map<String, String>> res = new ArrayList<>();
+	public static Collection<Map<String, String>> mapReduce(Collection<Map<String, String>> listaDiMedatadi, MetadatiDocumento... keys) {
+		Collection<Map<String, String>> res = new ArrayList<>();
 		if (listaDiMedatadi != null && !listaDiMedatadi.isEmpty() && keys != null && keys.length > 0) {
 			for (Map<String, String> medatadi : listaDiMedatadi) {
 				res.add(mapReduce(medatadi, keys));
