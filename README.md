@@ -35,7 +35,11 @@ Ripilogo API Helper:
   - [x] searchFolders
   - [x] getFolderDocuments
   - [x] searchDocuments (per ricerche custom da GDA)
-
+  - [x] searchDocuments per registro giornaliero
+  	- [x] ricerca intervalli EXTERNAL_ID come testo
+  	- [x] ricerca per data
+  	- [x] ricerca per limite superiore EXTERNAL_ID
+  	
 > *dalla versione 1.1 dell'Helper (numerazione virtuale usata solo per comunicarvi via email gli aggiornamenti, perché internamente il progetto è sempre 1.0.0 per non crearvi problemi con le dipendenze nei progetti) sono disponibili le aggiunte ed adeguamenti per EXTERNAL_ID
 > - createDocument
 > - updateProfileDocumentExternalId
