@@ -111,9 +111,9 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 *            valore da assegnare al metadato
 	 * @return
 	 */
-	public static <F extends MetadatoDocer> MetadatiHelper<F> build(F key, String value) {
+	public static <F extends MetadatoDocer> MetadatiHelper<F> build(F key, String... values) {
 		MetadatiHelper<F> res = new MetadatiHelper<F>();
-		res.add(key, value);
+		res.add(key, values);
 		return res;
 	}
 	
@@ -172,8 +172,10 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 *            valore da assegnare al metadato
 	 * @return
 	 */
-	public MetadatiHelper add(T key, String value) {
-		this.list.add(createKey(key.getValue(), value));
+	public MetadatiHelper add(T key, String... values) {
+		for (String value : values) {
+			this.list.add(createKey(key.getValue(), value));
+		}
 		return this;
 	}
 	

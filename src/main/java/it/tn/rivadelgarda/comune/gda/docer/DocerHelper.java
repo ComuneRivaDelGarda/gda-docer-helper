@@ -774,14 +774,14 @@ public class DocerHelper extends AbstractDocerHelper {
 //		map.put(metadato, StringUtils.join(valori, ","));
 //		searchCriteria.add(map)
 		
-		List<Map<String, String>> res = new ArrayList<>();
-		for (String valore : valori) {
-			KeyValuePair[] searchCriteria = MetadatiHelper.build(metadato, valore).get();
+//		List<Map<String, String>> res = new ArrayList<>();
+//		for (String valore : valori) {
+			KeyValuePair[] searchCriteria = MetadatiHelper.build(metadato, valori).get();
 			KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC).get();
 			SearchItem[] result = searchDocumentsNative(searchCriteria, null, orderBy);
-			List<Map<String, String>> resultData = loadProfiles(result, fullProfile);
-			res.addAll(resultData);
-		}
+			List<Map<String, String>> res = loadProfiles(result, fullProfile);
+//			res.addAll(resultData);
+//		}
 		return res;
 	}
 	

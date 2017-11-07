@@ -572,22 +572,22 @@ public class TestDocerHelper {
 			Assert.assertNotNull(res);
 			logger.info("post-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
-			logger.error("test602", ex.getMessage());
+			logger.error("test602", ex);
 		}
 	}
 	
 	@Test
 	public void test604() throws Exception {
-		logger.info("test602 searchDocuments and reduce {}");
+		logger.info("test604 searchDocuments and reduce {}");
 		init();
 		try {
-			Collection<Map<String, String>> res = helper.searchDocuments(MetadatiDocumento.EXTERNAL_ID, true, "protocollo_808737");
+			Collection<Map<String, String>> res = helper.searchDocuments(MetadatiDocumento.EXTERNAL_ID, false, "protocollo_808737", "protocollo_808738");
 			logger.info("pre-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 			res = MetadatiHelper.mapReduce(res, MetadatiDocumento.DOCNUM, MetadatiDocumento.DOCNAME, MetadatiDocumento.EXTERNAL_ID, MetadatiDocumento.CREATION_DATE);
 			Assert.assertNotNull(res);
 			logger.info("post-reduce {}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
 		} catch (Exception ex) {
-			logger.error("test604", ex.getMessage());
+			logger.error("test604", ex);
 		}
 	}
 	
