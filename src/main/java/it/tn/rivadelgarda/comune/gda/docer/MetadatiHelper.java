@@ -1,5 +1,6 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
+import java.security.KeyStore;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -352,7 +353,7 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 * @param keys le chiavi di metadati che si desidera conservare
 	 * @return
 	 */
-	public static Collection<Map<String, String>> mapReduce(Collection<Map<String, String>> listaDiMedatadi, MetadatiDocumento... keys) {
+	public static <T extends MetadatoDocer> Collection<Map<String, String>> mapReduce(Collection<Map<String, String>> listaDiMedatadi, T... keys) {
 		Collection<Map<String, String>> res = new ArrayList<>();
 		if (listaDiMedatadi != null && !listaDiMedatadi.isEmpty() && keys != null && keys.length > 0) {
 			for (Map<String, String> medatadi : listaDiMedatadi) {
@@ -362,15 +363,20 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 		return res;
 	}
 	
-	public static Set<Map<String, String>> mapReduce(Set<Map<String, String>> listaDiMedatadi, MetadatiDocumento... keys) {
-		Set<Map<String, String>> res = new HashSet<>();
-		if (listaDiMedatadi != null && !listaDiMedatadi.isEmpty() && keys != null && keys.length > 0) {
-			for (Map<String, String> medatadi : listaDiMedatadi) {
-				res.add(mapReduce(medatadi, keys));
-			}
-		}
-		return res;
+//	public static <T extends MetadatoDocer> Set<Map<String, String>> mapReduce(Set<Map<String, String>> listaDiMedatadi, T... keys) {
+//		Set<Map<String, String>> res = new HashSet<>();
+//		if (listaDiMedatadi != null && !listaDiMedatadi.isEmpty() && keys != null && keys.length > 0) {
+//			for (Map<String, String> medatadi : listaDiMedatadi) {
+//				res.add(mapReduce(medatadi, keys));
+//			}
+//		}
+//		return res;
+//	}
+	
+	public static <T extends MetadatoDocer> Collection<Map<String, String>> mapReduce(Collection<Map<String, String>> listaDiMedatadi, List<T> keys) {
+		return mapReduce(listaDiMedatadi, keys.toArray(new MetadatoDocer[keys.size()]));
 	}
+	
 	
 	/**
 	 * riduce la mappa di metadati ai soli metadati specificati
@@ -378,10 +384,10 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	 * @param keys le chiavi di metadati che si desidera conservare
 	 * @return
 	 */
-	public static Map<String, String> mapReduce(Map<String, String> metadati, MetadatiDocumento... keys) {
+	public static <T extends MetadatoDocer> Map<String, String> mapReduce(Map<String, String> metadati, T... keys) {
 		Map<String, String> res = new HashMap<>();
 		if (metadati != null && !metadati.isEmpty() && keys != null && keys.length > 0) {
-			for (MetadatiDocumento metadatoMatch : keys) {
+			for (MetadatoDocer metadatoMatch : keys) {
 				final String keyMatch = metadatoMatch.getValue();
 				if (metadati.containsKey(keyMatch)) {
 					res.put(keyMatch, metadati.get(keyMatch));
