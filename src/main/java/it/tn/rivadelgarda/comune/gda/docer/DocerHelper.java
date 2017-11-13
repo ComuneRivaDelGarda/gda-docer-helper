@@ -478,7 +478,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * 
+	 * Crea un Documento con il tipo fisso a DOCUMENTO.
+	 * Crea una relazione fra il documento creato e il primo documento creato per l'EXTERNAL_ID specificato
 	 * @param DOCNAME
 	 * @param bytes
 	 * @param TIPO_COMPONENTE
@@ -492,22 +493,26 @@ public class DocerHelper extends AbstractDocerHelper {
 		logger.debug("createDocumentTypeDocumentoAndRelateToExternalId {}", EXTERNAL_ID);
 		logger.debug("creting document DOCNAME={} TIPO_COMPONENTE={} ABSTRACT={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 		String DOCNUM = createDocumentTypeDocumento(DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
-		logger.debug("document created DOCNUM={}", DOCNUM);
+		logger.debug("documento creato con DOCNUM={}", DOCNUM);
 		// ricerco documenti per EXTERNAL_ID
-		logger.debug("searching document EXTERNAL_ID={}", EXTERNAL_ID);
+		logger.debug("ricerca documenti EXTERNAL_ID={}", EXTERNAL_ID);
 		Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
 		if (documentByExternalId != null) {
 			String documentToRelateTo = MetadatiHelper.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
 			if (StringUtils.isNotBlank(documentToRelateTo)) {
-				logger.debug("founded documentToRelateTo={}", documentToRelateTo);
-				// relaziono il documento appena creato al con altro con stesso
-				// EXTERNAL_ID
-				addRelated(documentToRelateTo, DOCNUM);
+				if (!documentToRelateTo.equals(DOCNUM)) {
+					logger.debug("trovato documentToRelateTo={}", documentToRelateTo);
+					// relaziono il documento appena creato al con altro con stesso
+					// EXTERNAL_ID
+					addRelated(documentToRelateTo, DOCNUM);
+				} else {
+					logger.warn("non creo relazione a se stesso");
+				}
 			} else {
 				logger.warn("no document DOCNUM on results");
 			}
 		} else {
-			logger.warn("no document founded");
+			logger.warn("nessun documento trovato nella ricerca per external_id={}", EXTERNAL_ID);
 		}
 		return DOCNUM;
 	}
