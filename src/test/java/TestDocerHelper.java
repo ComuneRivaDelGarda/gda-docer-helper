@@ -81,13 +81,14 @@ public class TestDocerHelper {
 	 logger.info(token);
 	}
 
-//	@Test
-//	public void test22() throws Exception {
-//		// test1();
-//		// String versione = helper.getVersion();
-//		// Assert.assertNotNull(versione);
-//		// logger.info(versione);
-//	}
+	@Test
+	public void test22() throws Exception {
+		logger.info("test versione");
+		init();
+		String versione = helper.getVersion();
+		Assert.assertNotNull(versione);
+		logger.info(versione);
+	}
 
 	/**
 	 * crea una foder
