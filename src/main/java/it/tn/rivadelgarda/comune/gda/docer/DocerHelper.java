@@ -1752,6 +1752,27 @@ public class DocerHelper extends AbstractDocerHelper {
 		return archiviaDocumentoNative(documentId, factory.get());
 	}
 
+	/**
+	 * Questo metodo permette l’archiviazione (in archivio di deposito) di un
+	 * Documento e di tutti i suoi related nel DMS.
+	 * @param externalId EXTERNAL_ID del Documento
+	 * @param metadati
+	 * @return
+	 */
+	public boolean archiviaDocumentoByExternalId(String externalId, List<Map<MetadatiDocumento, String>> metadati) throws DocerHelperException {
+		boolean res = false;
+		
+		Map<String, String> documentProfile = searchDocumentsByExternalIdFirst(externalId);
+		String docNum = MetadatiHelper.getMetadata(documentProfile, MetadatiDocumento.DOCNUM);
+		archiviaDocumento(docNum, metadati);
+		
+		return res;
+	}
+	
+	public boolean archiviaDocumentoByExternalId(String externalId) throws DocerHelperException {
+		return archiviaDocumentoByExternalId(externalId, null);
+	}
+	
 	/** HELPER */
 
 	/**

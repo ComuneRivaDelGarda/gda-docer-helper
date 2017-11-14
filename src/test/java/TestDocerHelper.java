@@ -728,4 +728,20 @@ public class TestDocerHelper {
 			logger.error("test701", ex);
 		}
 	}
+	
+	@Test
+	public void test800() throws Exception {
+		String externalId = "protocollo_808735";
+
+		logger.info("test800 archiviaDocumentoByExternalId {} {} {}", externalId);
+		init();
+		try {
+			boolean res = helper.archiviaDocumentoByExternalId(externalId);
+			
+			Assert.assertNotNull(res);
+			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test800", ex);
+		}
+	}	
 }
