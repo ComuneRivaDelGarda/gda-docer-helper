@@ -1,11 +1,11 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TimeZone;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -31,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
+import it.kdm.docer.webservices.DocerServicesDocerExceptionException0;
 import it.kdm.docer.webservices.DocerServicesStub;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersion;
 import it.kdm.docer.webservices.DocerServicesStub.AddNewVersionResponse;
@@ -99,6 +99,7 @@ import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocument;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateProfileDocumentResponse;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateUser;
 import it.kdm.docer.webservices.DocerServicesStub.UpdateUserResponse;
+import it.tn.rivadelgarda.comune.gda.docer.exceptions.DocerHelperException;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.ARCHIVE_TYPE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
@@ -123,7 +124,7 @@ public class DocerHelper extends AbstractDocerHelper {
         }
     }
 
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+//	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	/**
 	 * Crea l'istanza di helper (chiamata a {@link #login()} effettuata
@@ -152,9 +153,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param folderName nome della folder
 	 * @return id della cartella creata
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public String createFolder(String folderName) throws Exception {
+	public String createFolder(String folderName) throws DocerHelperException {
 		return createFolder(folderName, "", false);
 	}
 
@@ -162,9 +163,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * Crea una cartella privata
 	 * @param folderName
 	 * @return id della cartella creata
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public String createFolderOwner(String folderName) throws Exception {
+	public String createFolderOwner(String folderName) throws DocerHelperException {
 		return createFolder(folderName, "", true);
 	}
 
@@ -173,9 +174,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param folderName nome della cartella
 	 * @param parentFolderId id della cartella di livello superiore
 	 * @return id della cartella creata
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public String createFolderOwner(String folderName, String parentFolderId) throws Exception {
+	public String createFolderOwner(String folderName, String parentFolderId) throws DocerHelperException {
 		return createFolder(folderName, parentFolderId, true);
 	}
 
@@ -184,9 +185,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param folderName nome della cartella
 	 * @param parentFolderId id della cartella di livello superiore
 	 * @return id della cartella creata
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public String createFolder(String folderName, String parentFolderId) throws Exception {
+	public String createFolder(String folderName, String parentFolderId) throws DocerHelperException {
 		return createFolder(folderName, parentFolderId, false);
 	}
 
@@ -199,27 +200,32 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param parentFolderId
 	 *            attributo PARENT_FOLDER_ID
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public String createFolder(String folderName, String parentFolderId, boolean owner) throws Exception {
-		MetadatiHelper<MetadatiFolder> keyBuilder = MetadatiHelper
-				.build(MetadatiFolder.FOLDER_NAME, folderName).add(MetadatiFolder.COD_ENTE, docerCodiceENTE)
-				.add(MetadatiFolder.COD_AOO, docerCodiceAOO);
-		if (StringUtils.isNotBlank(parentFolderId)) {
-			keyBuilder.add(MetadatiFolder.PARENT_FOLDER_ID, parentFolderId);
-		}
-		if (owner) {
-			keyBuilder.add(MetadatiFolder.FOLDER_OWNER, docerUsername);
-		}
+	public String createFolder(String folderName, String parentFolderId, boolean owner) throws DocerHelperException {
+		String folderId = null;
+		try {
+			MetadatiHelper<MetadatiFolder> keyBuilder = MetadatiHelper
+					.build(MetadatiFolder.FOLDER_NAME, folderName).add(MetadatiFolder.COD_ENTE, docerCodiceENTE)
+					.add(MetadatiFolder.COD_AOO, docerCodiceAOO);
+			if (StringUtils.isNotBlank(parentFolderId)) {
+				keyBuilder.add(MetadatiFolder.PARENT_FOLDER_ID, parentFolderId);
+			}
+			if (owner) {
+				keyBuilder.add(MetadatiFolder.FOLDER_OWNER, docerUsername);
+			}
 
-		KeyValuePair[] folderinfo = keyBuilder.get();
+			KeyValuePair[] folderinfo = keyBuilder.get();
 
-		DocerServicesStub service = getDocerService();
-		CreateFolder request = new CreateFolder();
-		request.setToken(getLoginToken());
-		request.setFolderInfo(folderinfo);
-		CreateFolderResponse response = service.createFolder(request);
-		String folderId = response.get_return();
+			DocerServicesStub service = getDocerService();
+			CreateFolder request = new CreateFolder();
+			request.setToken(getLoginToken());
+			request.setFolderInfo(folderinfo);
+			CreateFolderResponse response = service.createFolder(request);
+			folderId = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return folderId;
 	}
 
@@ -231,38 +237,43 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param PARENT_FOLDER_ID
 	 *            specifica id cartella padre su cui cercare
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	private SearchItem[] searchFoldersNative(String folderName, String PARENT_FOLDER_ID) throws Exception {
-		List<KeyValuePair> builder = new ArrayList<>();
-		if (StringUtils.isNoneEmpty(folderName))
-			builder.add(MetadatiHelper.createKey(MetadatoDocer.FOLDER_NAME_KEY, folderName));
-		else
-			builder.add(MetadatiHelper.createKey(MetadatoDocer.FOLDER_NAME_KEY, "*"));
-		builder.add(MetadatiHelper.createKey(MetadatoDocer.COD_ENTE_KEY, docerCodiceENTE));
-		builder.add(MetadatiHelper.createKey(MetadatoDocer.COD_AOO_KEY, docerCodiceAOO));
-		if (StringUtils.isNoneEmpty(PARENT_FOLDER_ID)) {
-			builder.add(MetadatiHelper.createKey(MetadatoDocer.PARENT_FOLDER_ID_KEY, PARENT_FOLDER_ID));
+	private SearchItem[] searchFoldersNative(String folderName, String PARENT_FOLDER_ID) throws DocerHelperException {
+		SearchItem[] folders = null;
+		try {
+			List<KeyValuePair> builder = new ArrayList<>();
+			if (StringUtils.isNoneEmpty(folderName))
+				builder.add(MetadatiHelper.createKey(MetadatoDocer.FOLDER_NAME_KEY, folderName));
+			else
+				builder.add(MetadatiHelper.createKey(MetadatoDocer.FOLDER_NAME_KEY, "*"));
+			builder.add(MetadatiHelper.createKey(MetadatoDocer.COD_ENTE_KEY, docerCodiceENTE));
+			builder.add(MetadatiHelper.createKey(MetadatoDocer.COD_AOO_KEY, docerCodiceAOO));
+			if (StringUtils.isNoneEmpty(PARENT_FOLDER_ID)) {
+				builder.add(MetadatiHelper.createKey(MetadatoDocer.PARENT_FOLDER_ID_KEY, PARENT_FOLDER_ID));
+			}
+			KeyValuePair[] param = builder.toArray(new KeyValuePair[builder.size()]);
+
+			KeyValuePair[] search = new KeyValuePair[1];
+			search[0] = MetadatiHelper.createKeyOrderByAsc(MetadatoDocer.FOLDER_NAME_KEY);
+
+			DocerServicesStub service = getDocerService();
+			SearchFolders request = new SearchFolders();
+			request.setToken(getLoginToken());
+			request.setSearchCriteria(param);
+			request.setMaxRows(-1);
+			request.setOrderby(search);
+
+			SearchFoldersResponse response = service.searchFolders(request);
+			folders = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
 		}
-		KeyValuePair[] param = builder.toArray(new KeyValuePair[builder.size()]);
-
-		KeyValuePair[] search = new KeyValuePair[1];
-		search[0] = MetadatiHelper.createKeyOrderByAsc(MetadatoDocer.FOLDER_NAME_KEY);
-
-		DocerServicesStub service = getDocerService();
-		SearchFolders request = new SearchFolders();
-		request.setToken(getLoginToken());
-		request.setSearchCriteria(param);
-		request.setMaxRows(-1);
-		request.setOrderby(search);
-
-		SearchFoldersResponse response = service.searchFolders(request);
-		SearchItem[] folders = response.get_return();
 		return folders;
 	}
 
 	// private SearchItem[] searchFoldersByParent(String PARENT_FOLDER_ID)
-	// throws Exception {
+	// throws DocerHelperException {
 	// /*
 	// * KeyValuePair[] param = new KeyValuePair[4]; param[0] =
 	// * MetadatiHelper.createKey(DocerKey.FOLDER_NAME, "*"); param[1] =
@@ -295,9 +306,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param PARENT_FOLDER_ID
 	 *            specifica id cartella padre su cui cercare
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public List<Map<String, String>> searchFolders(String folderName, String PARENT_FOLDER_ID) throws Exception {
+	public List<Map<String, String>> searchFolders(String folderName, String PARENT_FOLDER_ID) throws DocerHelperException {
 		SearchItem[] data = searchFoldersNative(folderName, PARENT_FOLDER_ID);
 		return MetadatiHelper.asListMap(data);
 	}
@@ -309,7 +320,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            specifica il nome della folder da cercare
 	 * @return
 	 */
-	public List<Map<String, String>> searchFolders(String folderName) throws Exception {
+	public List<Map<String, String>> searchFolders(String folderName) throws DocerHelperException {
 		return searchFolders(folderName, null);
 	}
 
@@ -324,35 +335,40 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param ABSTRACT
 	 * @param EXTERNAL_ID
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource,
-			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
-		MetadatiHelper<MetadatiDocumento> params = MetadatiHelper.createDocumentKeys(TYPE_ID, DOCNAME,
-				docerCodiceENTE, docerCodiceAOO);
+			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+		String documentId = null;
+		try {
+			MetadatiHelper<MetadatiDocumento> params = MetadatiHelper.createDocumentKeys(TYPE_ID, DOCNAME,
+					docerCodiceENTE, docerCodiceAOO);
 
-		DataHandler dataHandler = new DataHandler(dataSource);
+			DataHandler dataHandler = new DataHandler(dataSource);
 
-		params.add(MetadatiDocumento.APP_VERSANTE_KEY, docerApplication);
-		String md5 = DigestUtils.md5Hex(dataSource.getInputStream());
-		params.add(MetadatiDocumento.DOC_HASH_KEY, md5);
-		params.add(MetadatiDocumento.TIPO_COMPONENTE_KEY, TIPO_COMPONENTE.getValue());
-		if (StringUtils.isNotBlank(ABSTRACT))
-			params.add(MetadatiDocumento.ABSTRACT_KEY, ABSTRACT);
-		params.add(MetadatiDocumento.ARCHIVE_TYPE_KEY, ARCHIVE_TYPE_VALUES.ARCHIVE_TYPE_ARCHIVE);
-		if (StringUtils.isNotBlank(EXTERNAL_ID))
-			params.add(MetadatiDocumento.EXTERNAL_ID_KEY, EXTERNAL_ID);
-		// Aggiunto data Creazione Documento
+			params.add(MetadatiDocumento.APP_VERSANTE_KEY, docerApplication);
+			String md5 = DigestUtils.md5Hex(dataSource.getInputStream());
+			params.add(MetadatiDocumento.DOC_HASH_KEY, md5);
+			params.add(MetadatiDocumento.TIPO_COMPONENTE_KEY, TIPO_COMPONENTE.getValue());
+			if (StringUtils.isNotBlank(ABSTRACT))
+				params.add(MetadatiDocumento.ABSTRACT_KEY, ABSTRACT);
+			params.add(MetadatiDocumento.ARCHIVE_TYPE_KEY, ARCHIVE_TYPE_VALUES.ARCHIVE_TYPE_ARCHIVE);
+			if (StringUtils.isNotBlank(EXTERNAL_ID))
+				params.add(MetadatiDocumento.EXTERNAL_ID_KEY, EXTERNAL_ID);
+			// Aggiunto data Creazione Documento
 //		String data = String.format("%tFT%<tRZ", Calendar.getInstance(TimeZone.getTimeZone("Z")));
 //		params.add(MetadatiDocumento.CREATION_DATE, data);
-		
-		DocerServicesStub service = getDocerService();
-		CreateDocument request = new CreateDocument();
-		request.setToken(getLoginToken());
-		request.setMetadata(params.get());
-		request.setFile(dataHandler);
-		CreateDocumentResponse response = service.createDocument(request);
-		String documentId = response.get_return();
+			
+			DocerServicesStub service = getDocerService();
+			CreateDocument request = new CreateDocument();
+			request.setToken(getLoginToken());
+			request.setMetadata(params.get());
+			request.setFile(dataHandler);
+			CreateDocumentResponse response = service.createDocument(request);
+			documentId = response.get_return();
+		} catch (IOException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return documentId;
 	}
 
@@ -361,16 +377,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param docId
 	 * @param metadata
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	private boolean updateProfileDocumentNative(String docId, KeyValuePair[] metadata) throws Exception {
-		DocerServicesStub service = getDocerService();
-		UpdateProfileDocument request = new UpdateProfileDocument();
-		request.setToken(getLoginToken());
-		request.setDocId(docId);
-		request.setMetadata(metadata);
-		UpdateProfileDocumentResponse response = service.updateProfileDocument(request);
-		boolean success = response.get_return();
+	private boolean updateProfileDocumentNative(String docId, KeyValuePair[] metadata) throws DocerHelperException {
+		boolean success = false;
+		try {
+			DocerServicesStub service = getDocerService();
+			UpdateProfileDocument request = new UpdateProfileDocument();
+			request.setToken(getLoginToken());
+			request.setDocId(docId);
+			request.setMetadata(metadata);
+			UpdateProfileDocumentResponse response = service.updateProfileDocument(request);
+			success = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return success;
 	}
 
@@ -382,10 +403,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param metadata
 	 *            metadati da aggiornare {@link MetadatiDocumento}
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public <F extends MetadatoDocer> boolean updateProfileDocument(String docId, MetadatiHelper<F> metadata)
-			throws Exception {
+			throws DocerHelperException {
 		return updateProfileDocumentNative(docId, metadata.get());
 	}
 
@@ -398,9 +419,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            nuovo valore del metadato EXTERNAL_ID
 	 *            {@link MetadatiDocumento}
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean updateProfileDocumentExternalId(String docId, String externalId) throws Exception {
+	public boolean updateProfileDocumentExternalId(String docId, String externalId) throws DocerHelperException {
 		MetadatiHelper<MetadatiDocumento> metadata = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID,
 				externalId);
 		return updateProfileDocument(docId, metadata);
@@ -417,10 +438,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param ABSTRACT
 	 * @param EXTERNAL_ID
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public String createDocument(String TYPE_ID, String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
-			String ABSTRACT, String EXTERNAL_ID) throws Exception {
+			String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		FileDataSource fileDataSource = new FileDataSource(file);
 		return createDocument(TYPE_ID, DOCNAME, fileDataSource, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
@@ -436,10 +457,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param ABSTRACT
 	 * @param EXTERNAL_ID
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public String createDocument(String TYPE_ID, String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
-			String ABSTRACT, String EXTERNAL_ID) throws Exception {
+			String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		ByteArrayDataSource rawData = new ByteArrayDataSource(bytes);
 		return createDocument(TYPE_ID, DOCNAME, rawData, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
@@ -453,10 +474,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param ABSTRACT
 	 * @param EXTERNAL_ID
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
-			String ABSTRACT, String EXTERNAL_ID) throws Exception {
+			String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, file, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
 
@@ -469,10 +490,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param ABSTRACT
 	 * @param EXTERNAL_ID
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
-			String ABSTRACT, String EXTERNAL_ID) throws Exception {
+			String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		logger.debug("createDocumentTypeDocumento DOCNAME={} TIPO_COMPONENTE={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, EXTERNAL_ID);
 		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 	}
@@ -486,10 +507,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param ABSTRACT
 	 * @param EXTERNAL_ID
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes,
-			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
+			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		logger.debug("createDocumentTypeDocumentoAndRelateToExternalId {}", EXTERNAL_ID);
 		logger.debug("creting document DOCNAME={} TIPO_COMPONENTE={} ABSTRACT={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
 		String DOCNUM = createDocumentTypeDocumento(DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
@@ -525,10 +546,10 @@ public class DocerHelper extends AbstractDocerHelper {
      * @param ABSTRACT
      * @param EXTERNAL_ID
      * @return
-     * @throws Exception
+     * @throws DocerHelperException
      */
     public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, File file,
-                                                                   TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws Exception {
+                                                                   TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
         String DOCNUM = createDocumentTypeDocumento(DOCNAME, file, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
         // ricerco documenti per EXTERNAL_ID
         Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
@@ -549,16 +570,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param folderId
 	 * @param documentsIds
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean addToFolderDocuments(String folderId, List<String> documentsIds) throws Exception {
-		DocerServicesStub service = getDocerService();
-		AddToFolderDocuments request = new AddToFolderDocuments();
-		request.setToken(getLoginToken());
-		request.setFolderId(folderId);
-		request.setDocument(documentsIds.toArray(new String[documentsIds.size()]));
-		AddToFolderDocumentsResponse response = service.addToFolderDocuments(request);
-		boolean esito = response.get_return();
+	public boolean addToFolderDocuments(String folderId, List<String> documentsIds) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			DocerServicesStub service = getDocerService();
+			AddToFolderDocuments request = new AddToFolderDocuments();
+			request.setToken(getLoginToken());
+			request.setFolderId(folderId);
+			request.setDocument(documentsIds.toArray(new String[documentsIds.size()]));
+			AddToFolderDocumentsResponse response = service.addToFolderDocuments(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -570,9 +596,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId
 	 *            id del documento da aggiungere
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean addToFolderDocument(String folderId, String documentId) throws Exception {
+	public boolean addToFolderDocument(String folderId, String documentId) throws DocerHelperException {
 		return addToFolderDocuments(folderId, Arrays.asList(documentId));
 	}
 
@@ -583,16 +609,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param folderId
 	 * @param documentsIds
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean removeFromFolderDocuments(String folderId, List<String> documentsIds) throws Exception {
-		DocerServicesStub service = getDocerService();
-		RemoveFromFolderDocuments request = new RemoveFromFolderDocuments();
-		request.setToken(getLoginToken());
-		request.setFolderId(folderId);
-		request.setDocument(documentsIds.toArray(new String[documentsIds.size()]));
-		RemoveFromFolderDocumentsResponse response = service.removeFromFolderDocuments(request);
-		boolean esito = response.get_return();
+	public boolean removeFromFolderDocuments(String folderId, List<String> documentsIds) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			DocerServicesStub service = getDocerService();
+			RemoveFromFolderDocuments request = new RemoveFromFolderDocuments();
+			request.setToken(getLoginToken());
+			request.setFolderId(folderId);
+			request.setDocument(documentsIds.toArray(new String[documentsIds.size()]));
+			RemoveFromFolderDocumentsResponse response = service.removeFromFolderDocuments(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -603,9 +634,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param folderId
 	 * @param documentsIds
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean removeFromFolderDocuments(String folderId, String documentsIds) throws Exception {
+	public boolean removeFromFolderDocuments(String folderId, String documentsIds) throws DocerHelperException {
 		return removeFromFolderDocuments(folderId, Arrays.asList(documentsIds));
 	}
 
@@ -617,20 +648,25 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId
 	 *            id del Documento
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean deleteDocument(String documentId) throws Exception {
-		DocerServicesStub service = getDocerService();
-		DeleteDocument request = new DeleteDocument();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		DeleteDocumentResponse response = service.deleteDocument(request);
-		boolean esito = response.get_return();
+	public boolean deleteDocument(String documentId) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			DocerServicesStub service = getDocerService();
+			DeleteDocument request = new DeleteDocument();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			DeleteDocumentResponse response = service.deleteDocument(request);
+			esito = response.get_return();
+		} catch (Exception ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
 	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, String[] keywords, KeyValuePair[] orderBy)
-			throws Exception {
+			throws DocerHelperException {
 		logger.debug("searchDocumentNative {} {}", searchCriteria, orderBy);
 		// cerco tutti
 		SearchItem[] result = searchDocumentsNative(searchCriteria, keywords, orderBy, -1);
@@ -638,17 +674,22 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	private SearchItem[] searchDocumentsNative(KeyValuePair[] searchCriteria, String[] keywords, KeyValuePair[] orderBy,
-			int maxRows) throws Exception {
-		logger.debug("searchDocumentNative {} {} {}", searchCriteria, orderBy, maxRows);
-		DocerServicesStub service = getDocerService();
-		SearchDocuments request = new SearchDocuments();
-		request.setToken(getLoginToken());
-		request.setSearchCriteria(searchCriteria);
-		request.setKeywords(keywords);
-		request.setMaxRows(maxRows);
-		request.setOrderby(orderBy);
-		SearchDocumentsResponse response = service.searchDocuments(request);
-		SearchItem[] result = response.get_return();
+			int maxRows) throws DocerHelperException {
+		SearchItem[] result = null;
+		try {
+			logger.debug("searchDocumentNative {} {} {}", searchCriteria, orderBy, maxRows);
+			DocerServicesStub service = getDocerService();
+			SearchDocuments request = new SearchDocuments();
+			request.setToken(getLoginToken());
+			request.setSearchCriteria(searchCriteria);
+			request.setKeywords(keywords);
+			request.setMaxRows(maxRows);
+			request.setOrderby(orderBy);
+			SearchDocumentsResponse response = service.searchDocuments(request);
+			result = response.get_return();
+		} catch (Exception  ex) {
+			manageDocerException(ex);
+		}
 		return result;
 	}
 
@@ -700,12 +741,12 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return Collezione di SearchItem. Ogni SearchItem è una collezione di
 	 *         coppie chiave-valore (KeyValuePair) contenente il profilo comune
 	 *         di ogni documento trovato dalla ricerca
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
 	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
-			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws Exception {
+			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws DocerHelperException {
 		logger.debug("searchDocuments {} {} {} {}", searchCriteria, keywords, orderBy, maxRows);
 		SearchItem[] result = searchDocumentsNative(MetadatiHelper.toArray(searchCriteria),
 				MetadatiHelper.toArrayString(keywords), MetadatiHelper.toArray(orderBy), maxRows);
@@ -723,10 +764,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            {@link MetadatiDocumento}
 	 * @param orderBy
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
-			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy) throws Exception {
+			List<String> keywords, List<Map<MetadatiDocumento, String>> orderBy) throws DocerHelperException {
 		return searchDocuments(searchCriteria, keywords, orderBy, -1);
 	}
 
@@ -741,10 +782,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            {@link MetadatiDocumento}
 	 * @param orderBy
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
-			List<Map<MetadatiDocumento, String>> orderBy) throws Exception {
+			List<Map<MetadatiDocumento, String>> orderBy) throws DocerHelperException {
 		return searchDocuments(searchCriteria, null, orderBy, -1);
 	}
 
@@ -758,10 +799,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            {@link MetadatiDocumento}
 	 * @param orderBy
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public List<Map<String, String>> searchDocuments(List<Map<MetadatiDocumento, String>> searchCriteria,
-			List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws Exception {
+			List<Map<MetadatiDocumento, String>> orderBy, int maxRows) throws DocerHelperException {
 		return searchDocuments(searchCriteria, null, orderBy, maxRows);
 	}
 
@@ -771,9 +812,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param fullProfile specifica se caricare tutti i metadati per ogni risultato
 	 * @param valori 
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public <F extends MetadatoDocer> List<Map<String, String>> searchDocuments(F metadato, boolean fullProfile, String... valori) throws Exception {
+	public <F extends MetadatoDocer> List<Map<String, String>> searchDocuments(F metadato, boolean fullProfile, String... valori) throws DocerHelperException {
 //		List<Map<F, String>> searchCriteria = new ArrayList<>();
 //		Map<F, String> map = new HashMap<>();
 //		map.put(metadato, StringUtils.join(valori, ","));
@@ -790,7 +831,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		return res;
 	}
 	
-	public List<Map<String, String>> searchDocumentsByExternalIdAll(String externalId) throws Exception {
+	public List<Map<String, String>> searchDocumentsByExternalIdAll(String externalId) throws DocerHelperException {
 		return searchDocumentsByExternalIdAll(externalId, false);
 	}
 	
@@ -800,9 +841,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param externalId EXTERNAL_ID specificato
 	 * @param fullProfile specifica se caricare tutti i medatati per i risultati (richiede elaborazione aggiuntiva)
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public List<Map<String, String>> searchDocumentsByExternalIdAll(String externalId, boolean fullProfile) throws Exception {
+	public List<Map<String, String>> searchDocumentsByExternalIdAll(String externalId, boolean fullProfile) throws DocerHelperException {
 		logger.debug("searchDocumentsByExternalIdAll {}", externalId);
 		KeyValuePair[] searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalId).get();
 		KeyValuePair[] orderBy = MetadatiHelper.build(MetadatiDocumento.CREATION_DATE, MetadatoDocer.SORT_ASC).get();
@@ -815,11 +856,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * Ricerca per EXTERNAL_ID, ritorna tutti i metadati dei documenti trovati
 	 * @param externalId valore di EXTERNAL_ID da cercare nei metadati
 	 * @return lista dei profili documento
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 * @deprecated use {@link #searchDocumentsByExternalIdAll()} instead.  
 	 */
 	@Deprecated
-	public List<Map<String, String>> searchDocumentsByExternalIdAllProfiles(String externalId) throws Exception {
+	public List<Map<String, String>> searchDocumentsByExternalIdAllProfiles(String externalId) throws DocerHelperException {
 		List<Map<String, String>> data =  searchDocumentsByExternalIdAll(externalId);
 		return data;
 	}
@@ -828,14 +869,14 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * Ricerca per EXTERNAL_ID, ritorna solo id DOCNUM trovati 
 	 * @param externalId valore di EXTERNAL_ID da cercare nei metadati
 	 * @return lista dei DOCNUM
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public List<String> searchDocumentsByExternalIdAllIds(String externalId) throws Exception {
+	public List<String> searchDocumentsByExternalIdAllIds(String externalId) throws DocerHelperException {
 		List<Map<String, String>> data =  searchDocumentsByExternalIdAll(externalId);
 		return Arrays.asList(MetadatiHelper.joinMetadata(data, MetadatiDocumento.DOCNUM));
 	}
 	
-	public Map<String, String> searchDocumentsByExternalIdFirst(String externalId) throws Exception {
+	public Map<String, String> searchDocumentsByExternalIdFirst(String externalId) throws DocerHelperException {
 		Map<String, String> profile = new HashMap<>();
 		logger.debug("searchDocumentsByExternalIdFirst {}", externalId);
 		KeyValuePair[] searchCriteria = MetadatiHelper.build(MetadatiDocumento.EXTERNAL_ID, externalId).get();
@@ -859,9 +900,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            valore del metadato EXTERNAL_ID da cercare
 	 * @return lista dei metadati del primo documento trovato e tutti i
 	 *         documenti related
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public List<Map<String, String>> searchDocumentsByExternalIdFirstAndRelated(String externalId) throws Exception {
+	public List<Map<String, String>> searchDocumentsByExternalIdFirstAndRelated(String externalId) throws DocerHelperException {
 		logger.debug("searchDocumentsByExternalIdFirstAndRelated {}", externalId);
 		// carico i metadati di tutti i documenti risultati ricerca + documenti
 		// related
@@ -891,7 +932,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	// * valore del metadato EXTERNAL_ID da cercare
 	// * @return lista dei metadati di tutti i documenti trovato e tutti i
 	// * documenti related a questi
-	// * @throws Exception
+	// * @throws DocerHelperException
 	// */
 	// @Deprecated
 	// public List<Map<String, String>>
@@ -929,16 +970,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param DOCNUM
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	private String[] getRelatedDocumentsNative(String DOCNUM) throws Exception {
-		logger.debug("getRelated {}", DOCNUM);
-		DocerServicesStub service = getDocerService();
-		GetRelatedDocuments request = new GetRelatedDocuments();
-		request.setToken(getLoginToken());
-		request.setDocId(DOCNUM);
-		GetRelatedDocumentsResponse response = service.getRelatedDocuments(request);
-		String[] result = response.get_return();
+	private String[] getRelatedDocumentsNative(String DOCNUM) throws DocerHelperException {
+		String[] result = null;
+		try {
+			logger.debug("getRelated {}", DOCNUM);
+			DocerServicesStub service = getDocerService();
+			GetRelatedDocuments request = new GetRelatedDocuments();
+			request.setToken(getLoginToken());
+			request.setDocId(DOCNUM);
+			GetRelatedDocumentsResponse response = service.getRelatedDocuments(request);
+			result = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return result;
 	}
 
@@ -946,9 +992,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param DOCNUM
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	private List<String> getRelatedDocuments(String DOCNUM) throws Exception {
+	private List<String> getRelatedDocuments(String DOCNUM) throws DocerHelperException {
 		List<String> res = new ArrayList<>();
 		String[] documents = getRelatedDocumentsNative(DOCNUM);
 		if (documents != null) {
@@ -964,18 +1010,23 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param folderId
 	 *            id della
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public List<String> getFolderDocuments(String folderId) throws Exception {
-		logger.debug("getFolderDocuments {}", folderId);
+	public List<String> getFolderDocuments(String folderId) throws DocerHelperException {
 		List<String> res = new ArrayList<>();
-		DocerServicesStub service = getDocerService();
-		GetFolderDocuments request = new GetFolderDocuments();
-		request.setToken(getLoginToken());
-		request.setFolderId(folderId);
-		GetFolderDocumentsResponse response = service.getFolderDocuments(request);
-		if (response.get_return() != null) {
-			res = Arrays.asList(response.get_return());
+		try {
+			logger.debug("getFolderDocuments {}", folderId);
+			res = new ArrayList<>();
+			DocerServicesStub service = getDocerService();
+			GetFolderDocuments request = new GetFolderDocuments();
+			request.setToken(getLoginToken());
+			request.setFolderId(folderId);
+			GetFolderDocumentsResponse response = service.getFolderDocuments(request);
+			if (response.get_return() != null) {
+				res = Arrays.asList(response.get_return());
+			}
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
 		}
 		return res;
 	}
@@ -987,14 +1038,19 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            id del Documento
 	 * @return Profilo del Documento
 	 */
-	private KeyValuePair[] getProfileDocumentNative(String documentId) throws Exception {
-		logger.debug("getProfileDocument {}", documentId);
-		DocerServicesStub service = getDocerService();
-		GetProfileDocument request = new GetProfileDocument();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		GetProfileDocumentResponse response = service.getProfileDocument(request);
-		KeyValuePair[] res = response.get_return();
+	private KeyValuePair[] getProfileDocumentNative(String documentId) throws DocerHelperException {
+		KeyValuePair[] res = null;
+		try {
+			logger.debug("getProfileDocument {}", documentId);
+			DocerServicesStub service = getDocerService();
+			GetProfileDocument request = new GetProfileDocument();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			GetProfileDocumentResponse response = service.getProfileDocument(request);
+			res = response.get_return();
+		} catch (Exception ex) {
+			manageDocerException(ex);
+		}
 		return res;
 	}
 
@@ -1004,28 +1060,33 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 * @return mappa dei metadati
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public Map<String, String> getProfileDocumentMap(String documentId) throws Exception {
-		logger.debug("getProfileDocumentMap {}", documentId);
-		KeyValuePair[] data = getProfileDocumentNative(documentId);
+	public Map<String, String> getProfileDocumentMap(String documentId) throws DocerHelperException {
 		Map<String, String> res = new HashMap<>();
-		for (KeyValuePair kv : data) {
-			// verifico se è un chiave fra quelle del profilo base
-			// if
-			// (DocumentoMetadatiGenericiEnum.getKeyList().contains(kv.getKey()))
-			// {
-			res.put(kv.getKey(), kv.getValue());
+		try {
+			logger.debug("getProfileDocumentMap {}", documentId);
+			KeyValuePair[] data = getProfileDocumentNative(documentId);
+			
+			for (KeyValuePair kv : data) {
+				// verifico se è un chiave fra quelle del profilo base
+				// if
+				// (DocumentoMetadatiGenericiEnum.getKeyList().contains(kv.getKey()))
+				// {
+				res.put(kv.getKey(), kv.getValue());
+				// }
+			}
+			// Map<String, String> test =
+			// HashMultimap.create(FluentIterable.from(data).transform(new
+			// Function<KeyValuePair, Map<String, String>>() {
+			// @Override
+			// public Map<String, String> apply(KeyValuePair input) {
+			// return
 			// }
+			// }));
+		} catch (Exception ex) {
+			manageDocerException(ex);
 		}
-		// Map<String, String> test =
-		// HashMultimap.create(FluentIterable.from(data).transform(new
-		// Function<KeyValuePair, Map<String, String>>() {
-		// @Override
-		// public Map<String, String> apply(KeyValuePair input) {
-		// return
-		// }
-		// }));
 		return res;
 	}
 
@@ -1035,16 +1096,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId
 	 *            id del Documento
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public KeyValuePair[] getACLDocument(String documentId) throws Exception {
-		logger.debug("getACLDocument {}", documentId);
-		DocerServicesStub service = getDocerService();
-		GetACLDocument request = new GetACLDocument();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		GetACLDocumentResponse response = service.getACLDocument(request);
-		KeyValuePair[] res = response.get_return();
+	public KeyValuePair[] getACLDocument(String documentId) throws DocerHelperException {
+		KeyValuePair[] res = null;
+		try {
+			logger.debug("getACLDocument {}", documentId);
+			DocerServicesStub service = getDocerService();
+			GetACLDocument request = new GetACLDocument();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			GetACLDocumentResponse response = service.getACLDocument(request);
+			res = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return res;
 	}
 	
@@ -1053,9 +1119,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param documentId
 	 * @return ACL sottoforma di Map<String, String> 
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public Map<String, String> getACLDocumentMap(String documentId) throws Exception {
+	public Map<String, String> getACLDocumentMap(String documentId) throws DocerHelperException {
 		return MetadatiHelper.asMap(getACLDocument(documentId));
 	}
 
@@ -1078,17 +1144,22 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            <li>1 se si vuole assegnare “Normal Access”
 	 *            <li>0 se si vuole assegnare “Full Access”
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	private boolean setACLDocumentNative(String documentId, KeyValuePair[] acl) throws Exception {
-		logger.debug("setACLDocument {} {}", documentId, acl);
-		DocerServicesStub service = getDocerService();
-		SetACLDocument request = new SetACLDocument();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		request.setAcls(acl);
-		SetACLDocumentResponse response = service.setACLDocument(request);
-		boolean esito = response.get_return();
+	private boolean setACLDocumentNative(String documentId, KeyValuePair[] acl) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			logger.debug("setACLDocument {} {}", documentId, acl);
+			DocerServicesStub service = getDocerService();
+			SetACLDocument request = new SetACLDocument();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			request.setAcls(acl);
+			SetACLDocumentResponse response = service.setACLDocument(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -1101,9 +1172,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            groupId or userId
 	 * @param acl
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACL_VALUES acl) throws Exception {
+	public boolean setACLDocument(String documentId, String GROUP_USER_ID, ACL_VALUES acl) throws DocerHelperException {
 		return setACLDocumentNative(documentId, MetadatiHelper.build(GROUP_USER_ID, acl.getValue()).get());
 	}
 
@@ -1116,9 +1187,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            mapps di groupId or userId come chiavi e valori ACL_VALUES
 	 *            come valore acl
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean setACLDocument(String documentId, Map<String, ACL_VALUES> acl) throws Exception {
+	public boolean setACLDocument(String documentId, Map<String, ACL_VALUES> acl) throws DocerHelperException {
 		// MetadatiHelper.build(GROUP_USER_ID, acl.getValue()).get();
 		MetadatiHelper<ACL_VALUES> keyBuilder = new MetadatiHelper<>();
 		for (Entry<String, ACL_VALUES> entry : acl.entrySet()) {
@@ -1127,7 +1198,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		return setACLDocumentNative(documentId, keyBuilder.get());
 	}
 
-	public boolean setACLDocument(String documentId, ACLFactory aclFactory) throws Exception {
+	public boolean setACLDocument(String documentId, ACLFactory aclFactory) throws DocerHelperException {
 		return setACLDocument(documentId, aclFactory.get());
 	}
 
@@ -1140,9 +1211,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            mappa di groupId or userId come chiavi e valori interi come
 	 *            valore acl
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acl) throws Exception {
+	public boolean setACLDocumentConvert(String documentId, Map<String, Integer> acl) throws DocerHelperException {
 		MetadatiHelper<ACL_VALUES> keyBuilder = new MetadatiHelper<>();
 		for (Entry<String, Integer> entry : acl.entrySet()) {
 			keyBuilder.add(entry.getKey(), ACL_VALUES.values()[entry.getValue()]);
@@ -1159,9 +1230,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            di groupId or userId come chiavi e valori interi come valore
 	 *            acl
 	 * @return lista dei documentId a cui è stata sovrascritta la ACL 
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public List<String> setACLDocumentsByExternalId(String externalId, Map<String, Integer> acl) throws Exception {
+	public List<String> setACLDocumentsByExternalId(String externalId, Map<String, Integer> acl) throws DocerHelperException {
 		List<Map<String, String>> metadatiDocumentiDaExternalId = searchDocumentsByExternalIdAll(externalId);
 		String[] listaDocumentId = MetadatiHelper.joinMetadata(metadatiDocumentiDaExternalId,
 				MetadatiDocumento.DOCNUM);
@@ -1186,21 +1257,26 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            “correlazione” si veda il paragrafo 4.6 Gestione della
 	 *            correlazione tra documenti.
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean addRelated(String documentId, String[] related) throws Exception {
-		logger.debug("addRelated documentId={} related={}", documentId, related);
-		DocerServicesStub service = getDocerService();
-		AddRelated request = new AddRelated();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		request.setRelated(related);
-		AddRelatedResponse response = service.addRelated(request);
-		boolean esito = response.get_return();
+	public boolean addRelated(String documentId, String[] related) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			logger.debug("addRelated documentId={} related={}", documentId, related);
+			DocerServicesStub service = getDocerService();
+			AddRelated request = new AddRelated();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			request.setRelated(related);
+			AddRelatedResponse response = service.addRelated(request);
+			esito = response.get_return();
+		} catch (Exception ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
-	public boolean addRelated(String documentId, String related) throws Exception {
+	public boolean addRelated(String documentId, String related) throws DocerHelperException {
 		logger.debug("addRelated documentId={} related={}", documentId, related);
 		return addRelated(documentId, new String[] { related });
 	}
@@ -1217,19 +1293,24 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param dataSource
 	 *            La nuova versione del file o documento elettronico
 	 * @return Il version number della versione creata
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public String addNewVersion(String documentId, DataSource dataSource) throws Exception {
-		// FileDataSource fileDataSource = new FileDataSource(file);
-		DataHandler dataHandler = new DataHandler(dataSource);
+	public String addNewVersion(String documentId, DataSource dataSource) throws DocerHelperException {
+		String version = null;
+		try {
+			// FileDataSource fileDataSource = new FileDataSource(file);
+			DataHandler dataHandler = new DataHandler(dataSource);
 
-		DocerServicesStub service = getDocerService();
-		AddNewVersion request = new AddNewVersion();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		request.setFile(dataHandler);
-		AddNewVersionResponse response = service.addNewVersion(request);
-		String version = response.get_return();
+			DocerServicesStub service = getDocerService();
+			AddNewVersion request = new AddNewVersion();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			request.setFile(dataHandler);
+			AddNewVersionResponse response = service.addNewVersion(request);
+			version = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return version;
 	}
 
@@ -1242,19 +1323,24 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            id del Documento di riferimento
 	 * @return collezione dei version number (ordine decrescente dal maggiore al
 	 *         minore)
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public List<String> getVersions(String documentId) throws Exception {
-		List<String> versions = new ArrayList<>();
-		DocerServicesStub service = getDocerService();
-		GetVersions request = new GetVersions();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		GetVersionsResponse response = service.getVersions(request);
-		if (response.get_return() != null)
-			versions = Arrays.asList(response.get_return());
-		Collections.sort(versions);
-		Collections.reverse(versions);
+	public List<String> getVersions(String documentId) throws DocerHelperException {
+		List<String> versions = null;
+		try {
+			versions = new ArrayList<>();
+			DocerServicesStub service = getDocerService();
+			GetVersions request = new GetVersions();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			GetVersionsResponse response = service.getVersions(request);
+			if (response.get_return() != null)
+				versions = Arrays.asList(response.get_return());
+			Collections.sort(versions);
+			Collections.reverse(versions);
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return versions;
 	}
 
@@ -1270,16 +1356,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *         tipo Long che rappresenta la dimensione del file e una variabile
 	 *         “handler” che rappresenta il file o documento elettronico
 	 *         relativo alla versione richiesta
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public StreamDescriptor downloadVersion(String documentId, String versionNumber) throws Exception {
-		DocerServicesStub service = getDocerService();
-		DownloadVersion request = new DownloadVersion();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		request.setVersionNumber(versionNumber);
-		DownloadVersionResponse response = service.downloadVersion(request);
-		StreamDescriptor res = response.get_return();
+	public StreamDescriptor downloadVersion(String documentId, String versionNumber) throws DocerHelperException {
+		StreamDescriptor res = null;
+		try {
+			DocerServicesStub service = getDocerService();
+			DownloadVersion request = new DownloadVersion();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			request.setVersionNumber(versionNumber);
+			DownloadVersionResponse response = service.downloadVersion(request);
+			res = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return res;
 	}
 
@@ -1291,13 +1382,17 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            Version number del file
 	 * @param file
 	 *            file di destinazione
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public void downloadVersionTo(String documentId, String versionNumber, File file) throws Exception {
-		StreamDescriptor data = downloadVersion(documentId, versionNumber);
-		long size = data.getByteSize();
-		DataHandler dh = data.getHandler();
-		FileUtils.copyInputStreamToFile(dh.getInputStream(), file);
+	public void downloadVersionTo(String documentId, String versionNumber, File file) throws DocerHelperException {
+		try {
+			StreamDescriptor data = downloadVersion(documentId, versionNumber);
+			long size = data.getByteSize();
+			DataHandler dh = data.getHandler();
+			FileUtils.copyInputStreamToFile(dh.getInputStream(), file);
+		} catch (IOException ex) {
+			manageDocerException(ex);
+		}
 	}
 
 	/** PROTOCOLLAZIONE */
@@ -1316,16 +1411,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            protocollazione di un documento(si veda paragrafo 4.4. Profilo
 	 *            di un documento).
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	private boolean protocollaDocumentoNative(String documentId, KeyValuePair[] metadata) throws Exception {
-		DocerServicesStub service = getDocerService();
-		ProtocollaDocumento request = new ProtocollaDocumento();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		request.setMetadata(metadata);
-		ProtocollaDocumentoResponse response = service.protocollaDocumento(request);
-		boolean esito = response.get_return();
+	private boolean protocollaDocumentoNative(String documentId, KeyValuePair[] metadata) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			DocerServicesStub service = getDocerService();
+			ProtocollaDocumento request = new ProtocollaDocumento();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			request.setMetadata(metadata);
+			ProtocollaDocumentoResponse response = service.protocollaDocumento(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -1384,12 +1484,12 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param metadati
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
 	public boolean protocollaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati)
-			throws Exception {
+			throws DocerHelperException {
 		return protocollaDocumentoNative(documentId, MetadatiHelper.toArray(metadati));
 	}
 
@@ -1448,12 +1548,12 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param factory
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
 	public boolean protocollaDocumento(String documentId, MetadatiHelper<MetadatiDocumento> factory)
-			throws Exception {
+			throws DocerHelperException {
 		return protocollaDocumentoNative(documentId, factory.get());
 	}
 
@@ -1471,16 +1571,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            classificazione (si veda paragrafo 4.4. Profilo di un
 	 *            documento).
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	private boolean classificaDocumentoNative(String documentId, KeyValuePair[] metadata) throws Exception {
-		DocerServicesStub service = getDocerService();
-		ClassificaDocumento request = new ClassificaDocumento();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		request.setMetadata(metadata);
-		ClassificaDocumentoResponse response = service.classificaDocumento(request);
-		boolean esito = response.get_return();
+	private boolean classificaDocumentoNative(String documentId, KeyValuePair[] metadata) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			DocerServicesStub service = getDocerService();
+			ClassificaDocumento request = new ClassificaDocumento();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			request.setMetadata(metadata);
+			ClassificaDocumentoResponse response = service.classificaDocumento(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -1514,12 +1619,12 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param metadati
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
 	public boolean classificaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati)
-			throws Exception {
+			throws DocerHelperException {
 		return classificaDocumentoNative(documentId, MetadatiHelper.toArray(metadati));
 	}
 
@@ -1553,12 +1658,12 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param factory
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
 	public boolean classificaDocumento(String documentId, MetadatiHelper<MetadatiDocumento> factory)
-			throws Exception {
+			throws DocerHelperException {
 		return classificaDocumentoNative(documentId, factory.get());
 	}
 
@@ -1575,16 +1680,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            sono i nomi dei metadati del profilo relativi all’archivio di
 	 *            deposito (si veda paragrafo 4.4. Profilo di un documento).
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	private boolean archiviaDocumentoNative(String documentId, KeyValuePair[] metadata) throws Exception {
-		DocerServicesStub service = getDocerService();
-		ArchiviaDocumento request = new ArchiviaDocumento();
-		request.setToken(getLoginToken());
-		request.setDocId(documentId);
-		request.setMetadata(metadata);
-		ArchiviaDocumentoResponse response = service.archiviaDocumento(request);
-		boolean esito = response.get_return();
+	private boolean archiviaDocumentoNative(String documentId, KeyValuePair[] metadata) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			DocerServicesStub service = getDocerService();
+			ArchiviaDocumento request = new ArchiviaDocumento();
+			request.setToken(getLoginToken());
+			request.setDocId(documentId);
+			request.setMetadata(metadata);
+			ArchiviaDocumentoResponse response = service.archiviaDocumento(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -1608,10 +1718,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param metadati
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public boolean archiviaDocumento(String documentId, List<Map<MetadatiDocumento, String>> metadati)
-			throws Exception {
+			throws DocerHelperException {
 		return archiviaDocumentoNative(documentId, MetadatiHelper.toArray(metadati));
 	}
 
@@ -1635,10 +1745,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param factory
 	 *            Collezione dei metadati del profilo da modificare
 	 * @return true se l’operazione è andata a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
 	public boolean archiviaDocumento(String documentId, MetadatiHelper<MetadatiDocumento> factory)
-			throws Exception {
+			throws DocerHelperException {
 		return archiviaDocumentoNative(documentId, factory.get());
 	}
 
@@ -1651,9 +1761,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param folderId
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	private List<KeyValuePair> chilren(String folderId) throws Exception {
+	private List<KeyValuePair> chilren(String folderId) throws DocerHelperException {
 		List<KeyValuePair> res = new ArrayList<>();
 		List<String> folderDocuments = getFolderDocuments(folderId);
 		for (String documentId : folderDocuments) {
@@ -1670,7 +1780,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param folderId
 	 * @return
 	 */
-	public int numberOfDocument(String folderId) throws Exception {
+	public int numberOfDocument(String folderId) throws DocerHelperException {
 		List<String> folderDocuments = getFolderDocuments(folderId);
 		return folderDocuments.size();
 	}
@@ -1681,7 +1791,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param externalId
 	 * @return
 	 */
-	public int numberOfDocumentByExternalId(String externalId) throws Exception {
+	public int numberOfDocumentByExternalId(String externalId) throws DocerHelperException {
 		List<Map<String, String>> documents = searchDocumentsByExternalIdAll(externalId);
 		return documents.size();
 	}
@@ -1709,9 +1819,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId
 	 * @param content
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public String createVersion(String documentId, byte[] content) throws Exception {
+	public String createVersion(String documentId, byte[] content) throws DocerHelperException {
 		logger.debug("createVersion documentId={} content.length={}", documentId, content.length);
 		ByteArrayDataSource rawData = new ByteArrayDataSource(content);
 		return addNewVersion(documentId, rawData);
@@ -1723,24 +1833,30 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId id del documento
 	 * @param versionNumber versione del documento, se vuoto prende ultima versione in automatico
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public InputStream getDocumentStream(String documentId, String versionNumber) throws Exception {
-		logger.debug("getDocumentStream {} {}", documentId, versionNumber);
-		
-		if (StringUtils.isBlank(versionNumber)) {
-			List<String> versioni = getVersions(documentId);
-			for (String v : versioni) {
-				versionNumber = v;
-				logger.debug("getDocumentStream on last version {}", versionNumber);
-				break;
+	public InputStream getDocumentStream(String documentId, String versionNumber) throws DocerHelperException {
+		InputStream in = null;
+		try {
+			logger.debug("getDocumentStream {} {}", documentId, versionNumber);
+			
+			if (StringUtils.isBlank(versionNumber)) {
+				List<String> versioni = getVersions(documentId);
+				for (String v : versioni) {
+					versionNumber = v;
+					logger.debug("getDocumentStream on last version {}", versionNumber);
+					break;
+				}
 			}
+			
+			StreamDescriptor data = downloadVersion(documentId, versionNumber);
+			long size = data.getByteSize();
+			DataHandler dh = data.getHandler();
+			in = dh.getInputStream();
+		} catch (IOException ex) {
+			manageDocerException(ex);
 		}
-		
-		StreamDescriptor data = downloadVersion(documentId, versionNumber);
-		long size = data.getByteSize();
-		DataHandler dh = data.getHandler();
-		return dh.getInputStream();
+		return in;
 	}
 
     /**
@@ -1749,24 +1865,29 @@ public class DocerHelper extends AbstractDocerHelper {
      * @param documentId id del documento
      * @param versionNumber versione del documento, se vuoto prende ultima versione in automatico
      * @return
-     * @throws Exception
+     * @throws DocerHelperException
      */
-    public InputStreamAndSize getDocumentStreamAndSize(String documentId, String versionNumber) throws Exception {
-        logger.debug("getDocumentStreamAndSize {} {}", documentId, versionNumber);
+    public InputStreamAndSize getDocumentStreamAndSize(String documentId, String versionNumber) throws DocerHelperException {
+        InputStreamAndSize document = null;
+		try {
+			logger.debug("getDocumentStreamAndSize {} {}", documentId, versionNumber);
 
-        if (StringUtils.isBlank(versionNumber)) {
-            List<String> versioni = getVersions(documentId);
-            for (String v : versioni) {
-                versionNumber = v;
-                logger.debug("getDocumentStream on last version {}", versionNumber);
-                break;
-            }
-        }
+			if (StringUtils.isBlank(versionNumber)) {
+			    List<String> versioni = getVersions(documentId);
+			    for (String v : versioni) {
+			        versionNumber = v;
+			        logger.debug("getDocumentStream on last version {}", versionNumber);
+			        break;
+			    }
+			}
 
-        StreamDescriptor data = downloadVersion(documentId, versionNumber);
-        InputStreamAndSize document=new InputStreamAndSize();
-        document.size = data.getByteSize();
-        document.stream = data.getHandler().getInputStream();
+			StreamDescriptor data = downloadVersion(documentId, versionNumber);
+			document = new InputStreamAndSize();
+			document.size = data.getByteSize();
+			document.stream = data.getHandler().getInputStream();
+		} catch (IOException ex) {
+			manageDocerException(ex);
+		}
         return document;
     }
 
@@ -1776,20 +1897,26 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param documentId id del documento
 	 * @param versionNumber versione del documento, se vuoto prende ultima versione in automatico
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public byte[] getDocument(String documentId, String versionNumber) throws Exception {
-		logger.debug("getDocument {} {}", documentId, versionNumber);
-		return IOUtils.toByteArray(getDocumentStream(documentId, versionNumber));
+	public byte[] getDocument(String documentId, String versionNumber) throws DocerHelperException {
+		byte[] res = null;
+		try {
+			logger.debug("getDocument {} {}", documentId, versionNumber);
+			res = IOUtils.toByteArray(getDocumentStream(documentId, versionNumber));
+		} catch (IOException ex) {
+			manageDocerException(ex);
+		}
+		 return res;
 	}
 
 	/**
 	 * 
 	 * @param PARENT_FOLDER_ID
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public List<Map<String, String>> getProfileDocumentMapByParentFolder(String PARENT_FOLDER_ID) throws Exception {
+	public List<Map<String, String>> getProfileDocumentMapByParentFolder(String PARENT_FOLDER_ID) throws DocerHelperException {
 		logger.debug("getProfileDocumentMapByParentFolder {}", PARENT_FOLDER_ID);
 		List<Map<String, String>> data = new ArrayList<>();
 		List<String> documents = getFolderDocuments(PARENT_FOLDER_ID);
@@ -1834,36 +1961,41 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param email
 	 *            email dell’utente
 	 * @return true se il metodo è andato a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
 	public boolean createUser(String USER_ID, String password, String nome, String cognome, String fullName,
-			String email) throws Exception {
-		logger.debug("createUser {} {} {} {} {} {}", USER_ID, password, nome, cognome, fullName, email);
-		MetadatiHelper<MetadatiUtente> keyBuilder = new MetadatiHelper<>();
-		keyBuilder.add(MetadatiUtente.USER_ID, USER_ID).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
-				.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
-		if (StringUtils.isNotEmpty(fullName))
-			keyBuilder.add(MetadatiUtente.FULL_NAME, fullName);
+			String email) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			logger.debug("createUser {} {} {} {} {} {}", USER_ID, password, nome, cognome, fullName, email);
+			MetadatiHelper<MetadatiUtente> keyBuilder = new MetadatiHelper<>();
+			keyBuilder.add(MetadatiUtente.USER_ID, USER_ID).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
+					.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
+			if (StringUtils.isNotEmpty(fullName))
+				keyBuilder.add(MetadatiUtente.FULL_NAME, fullName);
 
-		if (StringUtils.isNotEmpty(password))
-			keyBuilder.add(MetadatiUtente.USER_PASSWORD, password);
-		if (StringUtils.isNotEmpty(nome))
-			keyBuilder.add(MetadatiUtente.FIRST_NAME, nome);
-		if (StringUtils.isNotEmpty(cognome))
-			keyBuilder.add(MetadatiUtente.LAST_NAME, cognome);
-		if (StringUtils.isNotEmpty(email))
-			keyBuilder.add(MetadatiUtente.EMAIL_ADDRESS, email);
+			if (StringUtils.isNotEmpty(password))
+				keyBuilder.add(MetadatiUtente.USER_PASSWORD, password);
+			if (StringUtils.isNotEmpty(nome))
+				keyBuilder.add(MetadatiUtente.FIRST_NAME, nome);
+			if (StringUtils.isNotEmpty(cognome))
+				keyBuilder.add(MetadatiUtente.LAST_NAME, cognome);
+			if (StringUtils.isNotEmpty(email))
+				keyBuilder.add(MetadatiUtente.EMAIL_ADDRESS, email);
 
-		KeyValuePair[] userInfo = keyBuilder.get();
+			KeyValuePair[] userInfo = keyBuilder.get();
 
-		DocerServicesStub service = getDocerService();
-		CreateUser request = new CreateUser();
-		request.setToken(getLoginToken());
-		request.setUserInfo(userInfo);
-		CreateUserResponse response = service.createUser(request);
-		boolean esito = response.get_return();
+			DocerServicesStub service = getDocerService();
+			CreateUser request = new CreateUser();
+			request.setToken(getLoginToken());
+			request.setUserInfo(userInfo);
+			CreateUserResponse response = service.createUser(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -1877,31 +2009,36 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param metadati
 	 *            lista di metadati Utente da modificare
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean updateUser(String userId, Map<MetadatiUtente, String> metadati) throws Exception {
-		logger.debug("updateUser {} {}", userId, metadati);
-		MetadatiHelper<MetadatiUtente> keyBuilder = new MetadatiHelper<>();
-		keyBuilder.add(MetadatiFolder.USER_ID_KEY, userId).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
-				.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
+	public boolean updateUser(String userId, Map<MetadatiUtente, String> metadati) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			logger.debug("updateUser {} {}", userId, metadati);
+			MetadatiHelper<MetadatiUtente> keyBuilder = new MetadatiHelper<>();
+			keyBuilder.add(MetadatiFolder.USER_ID_KEY, userId).add(MetadatiUtente.COD_ENTE, docerCodiceENTE)
+					.add(MetadatiUtente.COD_AOO, docerCodiceAOO);
 
-		if (metadati != null && !metadati.isEmpty()) {
-			for (Entry<MetadatiUtente, String> metadato : metadati.entrySet()) {
-				keyBuilder.add(metadato.getKey(), metadato.getValue());
+			if (metadati != null && !metadati.isEmpty()) {
+				for (Entry<MetadatiUtente, String> metadato : metadati.entrySet()) {
+					keyBuilder.add(metadato.getKey(), metadato.getValue());
+				}
 			}
+
+			KeyValuePair[] userInfo = keyBuilder.get();
+
+			DocerServicesStub service = getDocerService();
+			UpdateUser request = new UpdateUser();
+			request.setToken(getLoginToken());
+			request.setUserId(userId);
+			request.setUserInfo(userInfo);
+			UpdateUserResponse response = service.updateUser(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
 		}
-
-		KeyValuePair[] userInfo = keyBuilder.get();
-
-		DocerServicesStub service = getDocerService();
-		UpdateUser request = new UpdateUser();
-		request.setToken(getLoginToken());
-		request.setUserId(userId);
-		request.setUserInfo(userInfo);
-		UpdateUserResponse response = service.updateUser(request);
-		boolean esito = response.get_return();
 		return esito;
 	}
 
@@ -1911,18 +2048,23 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param userId
 	 *            id dell’utente di riferimento
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public Map<String, String> getUser(String userId) throws Exception {
-		logger.debug("getUser {}", userId);
-		Map<MetadatiUtente, String> res = new HashMap<>();
+	public Map<String, String> getUser(String userId) throws DocerHelperException {
+		KeyValuePair[] metadati = null;
+		try {
+			logger.debug("getUser {}", userId);
+			Map<MetadatiUtente, String> res = new HashMap<>();
 
-		DocerServicesStub service = getDocerService();
-		GetUser request = new GetUser();
-		request.setToken(getLoginToken());
-		request.setUserId(userId);
-		GetUserResponse response = service.getUser(request);
-		KeyValuePair[] metadati = response.get_return();
+			DocerServicesStub service = getDocerService();
+			GetUser request = new GetUser();
+			request.setToken(getLoginToken());
+			request.setUserId(userId);
+			GetUserResponse response = service.getUser(request);
+			metadati = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return MetadatiHelper.asMap(metadati);
 	}
 
@@ -1932,20 +2074,25 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * 
 	 * @param userId
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public List<Map<String, String>> searchUsers(String userId) throws Exception {
-		logger.debug("searchUsers {}", userId);
-		MetadatiHelper<MetadatiUtente> searchCriteria = new MetadatiHelper<>();
-		if (StringUtils.isNotEmpty(userId)) {
-			searchCriteria.add(MetadatiUtente.USER_ID_KEY, userId);
+	public List<Map<String, String>> searchUsers(String userId) throws DocerHelperException {
+		SearchItem[] data = null;
+		try {
+			logger.debug("searchUsers {}", userId);
+			MetadatiHelper<MetadatiUtente> searchCriteria = new MetadatiHelper<>();
+			if (StringUtils.isNotEmpty(userId)) {
+				searchCriteria.add(MetadatiUtente.USER_ID_KEY, userId);
+			}
+			DocerServicesStub service = getDocerService();
+			SearchUsers request = new SearchUsers();
+			request.setToken(getLoginToken());
+			request.setSearchCriteria(searchCriteria.get());
+			SearchUsersResponse response = service.searchUsers(request);
+			data = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
 		}
-		DocerServicesStub service = getDocerService();
-		SearchUsers request = new SearchUsers();
-		request.setToken(getLoginToken());
-		request.setSearchCriteria(searchCriteria.get());
-		SearchUsersResponse response = service.searchUsers(request);
-		SearchItem[] data = response.get_return();
 		return MetadatiHelper.asListMap(data);
 	}
 
@@ -1968,24 +2115,29 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param GROUP_NAME
 	 * @param PARENT_GROUP_ID
 	 * @return true se il metodo è andato a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean createGroup(String GROUP_ID, String GROUP_NAME, String PARENT_GROUP_ID) throws Exception {
-		logger.debug("createGroup {} {} {}", GROUP_ID, GROUP_NAME, PARENT_GROUP_ID);
-		MetadatiHelper<MetadatiGruppi> keyBuilder = new MetadatiHelper<>();
-		keyBuilder.add(MetadatiGruppi.GROUP_ID, GROUP_ID).add(MetadatiGruppi.GROUP_NAME, GROUP_NAME)
-				.add(MetadatiGruppi.PARENT_GROUP_ID, PARENT_GROUP_ID);
+	public boolean createGroup(String GROUP_ID, String GROUP_NAME, String PARENT_GROUP_ID) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			logger.debug("createGroup {} {} {}", GROUP_ID, GROUP_NAME, PARENT_GROUP_ID);
+			MetadatiHelper<MetadatiGruppi> keyBuilder = new MetadatiHelper<>();
+			keyBuilder.add(MetadatiGruppi.GROUP_ID, GROUP_ID).add(MetadatiGruppi.GROUP_NAME, GROUP_NAME)
+					.add(MetadatiGruppi.PARENT_GROUP_ID, PARENT_GROUP_ID);
 
-		KeyValuePair[] userInfo = keyBuilder.get();
+			KeyValuePair[] userInfo = keyBuilder.get();
 
-		DocerServicesStub service = getDocerService();
-		CreateGroup request = new CreateGroup();
-		request.setToken(getLoginToken());
-		request.setGroupInfo(userInfo);
-		CreateGroupResponse response = service.createGroup(request);
-		boolean esito = response.get_return();
+			DocerServicesStub service = getDocerService();
+			CreateGroup request = new CreateGroup();
+			request.setToken(getLoginToken());
+			request.setGroupInfo(userInfo);
+			CreateGroupResponse response = service.createGroup(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -1997,26 +2149,31 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param metadati
 	 *            Collezione dei metadati da aggiornare nel profilo del gruppo
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public boolean updateGroup(String groupId, Map<MetadatiGruppi, String> metadati) throws Exception {
-		logger.debug("updateGroup {} {}", groupId, metadati);
-		MetadatiHelper<MetadatiGruppi> keyBuilder = new MetadatiHelper<>();
-		if (metadati != null && !metadati.isEmpty()) {
-			for (Entry<MetadatiGruppi, String> metadato : metadati.entrySet()) {
-				keyBuilder.add(metadato.getKey(), metadato.getValue());
+	public boolean updateGroup(String groupId, Map<MetadatiGruppi, String> metadati) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			logger.debug("updateGroup {} {}", groupId, metadati);
+			MetadatiHelper<MetadatiGruppi> keyBuilder = new MetadatiHelper<>();
+			if (metadati != null && !metadati.isEmpty()) {
+				for (Entry<MetadatiGruppi, String> metadato : metadati.entrySet()) {
+					keyBuilder.add(metadato.getKey(), metadato.getValue());
+				}
 			}
+
+			KeyValuePair[] groupInfo = keyBuilder.get();
+
+			DocerServicesStub service = getDocerService();
+			UpdateGroup request = new UpdateGroup();
+			request.setToken(getLoginToken());
+			request.setGroupId(groupId);
+			request.setGroupInfo(groupInfo);
+			UpdateGroupResponse response = service.updateGroup(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
 		}
-
-		KeyValuePair[] groupInfo = keyBuilder.get();
-
-		DocerServicesStub service = getDocerService();
-		UpdateGroup request = new UpdateGroup();
-		request.setToken(getLoginToken());
-		request.setGroupId(groupId);
-		request.setGroupInfo(groupInfo);
-		UpdateGroupResponse response = service.updateGroup(request);
-		boolean esito = response.get_return();
 		return esito;
 	}
 
@@ -2035,20 +2192,25 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param groupId
 	 *            id del gruppo di riferimento
 	 * @return Profilo del gruppo di riferimento
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public Map<String, String> getGroup(String groupId) throws Exception {
-		logger.debug("getUser {}", groupId);
-		Map<MetadatiUtente, String> res = new HashMap<>();
+	public Map<String, String> getGroup(String groupId) throws DocerHelperException {
+		KeyValuePair[] metadati = null;
+		try {
+			logger.debug("getUser {}", groupId);
+			Map<MetadatiUtente, String> res = new HashMap<>();
 
-		DocerServicesStub service = getDocerService();
-		GetGroup request = new GetGroup();
-		request.setToken(getLoginToken());
-		request.setGroupId(groupId);
-		GetGroupResponse response = service.getGroup(request);
-		KeyValuePair[] metadati = response.get_return();
+			DocerServicesStub service = getDocerService();
+			GetGroup request = new GetGroup();
+			request.setToken(getLoginToken());
+			request.setGroupId(groupId);
+			GetGroupResponse response = service.getGroup(request);
+			metadati = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return MetadatiHelper.asMap(metadati);
 	}
 
@@ -2064,20 +2226,25 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param groups
 	 *            Collezione degli id dei gruppi da assegnare all’utente
 	 * @return true se il metodo è andato a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public boolean setGroupsOfUser(String userId, List<String> groups) throws Exception {
-		logger.debug("setGroupsOfUser {} {}", userId, groups);
-		DocerServicesStub service = getDocerService();
-		SetGroupsOfUser request = new SetGroupsOfUser();
-		request.setToken(getLoginToken());
-		request.setUserId(userId);
-		if (groups != null)
-			request.setGroups(groups.toArray(new String[groups.size()]));
-		SetGroupsOfUserResponse response = service.setGroupsOfUser(request);
-		boolean esito = response.get_return();
+	public boolean setGroupsOfUser(String userId, List<String> groups) throws DocerHelperException {
+		boolean esito = false;
+		try {
+			logger.debug("setGroupsOfUser {} {}", userId, groups);
+			DocerServicesStub service = getDocerService();
+			SetGroupsOfUser request = new SetGroupsOfUser();
+			request.setToken(getLoginToken());
+			request.setUserId(userId);
+			if (groups != null)
+				request.setGroups(groups.toArray(new String[groups.size()]));
+			SetGroupsOfUserResponse response = service.setGroupsOfUser(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -2097,23 +2264,28 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param groupsToRemove
 	 *            Collezione degli id dei gruppi da rimuovere dall’utente
 	 * @return true se il metodo è andato a buon fine
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
 	public boolean updateGroupsOfUser(String userId, List<String> groupsToAdd, List<String> groupsToRemove)
-			throws Exception {
-		logger.debug("updateGroupsOfUser {} {} {}", userId, groupsToAdd, groupsToRemove);
-		DocerServicesStub service = getDocerService();
-		UpdateGroupsOfUser request = new UpdateGroupsOfUser();
-		request.setToken(getLoginToken());
-		request.setUserId(userId);
-		if (groupsToAdd != null)
-			request.setGroupsToAdd(groupsToAdd.toArray(new String[groupsToAdd.size()]));
-		if (groupsToRemove != null)
-			request.setGroupsToRemove(groupsToRemove.toArray(new String[groupsToRemove.size()]));
-		UpdateGroupsOfUserResponse response = service.updateGroupsOfUser(request);
-		boolean esito = response.get_return();
+			throws DocerHelperException {
+		boolean esito = false;
+		try {
+			logger.debug("updateGroupsOfUser {} {} {}", userId, groupsToAdd, groupsToRemove);
+			DocerServicesStub service = getDocerService();
+			UpdateGroupsOfUser request = new UpdateGroupsOfUser();
+			request.setToken(getLoginToken());
+			request.setUserId(userId);
+			if (groupsToAdd != null)
+				request.setGroupsToAdd(groupsToAdd.toArray(new String[groupsToAdd.size()]));
+			if (groupsToRemove != null)
+				request.setGroupsToRemove(groupsToRemove.toArray(new String[groupsToRemove.size()]));
+			UpdateGroupsOfUserResponse response = service.updateGroupsOfUser(request);
+			esito = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return esito;
 	}
 
@@ -2147,18 +2319,23 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param searchCriteria
 	 *            Collezione dei criteri di ricerca
 	 * @return Risultato della ricerca
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public List<Map<String, String>> searchGroups(MetadatiHelper<MetadatiGruppi> searchCriteria) throws Exception {
-		logger.debug("searchGroups {}", searchCriteria);
-		DocerServicesStub service = getDocerService();
-		SearchGroups request = new SearchGroups();
-		request.setToken(getLoginToken());
-		request.setSearchCriteria(searchCriteria.get());
-		SearchGroupsResponse response = service.searchGroups(request);
-		SearchItem[] data = response.get_return();
+	public List<Map<String, String>> searchGroups(MetadatiHelper<MetadatiGruppi> searchCriteria) throws DocerHelperException {
+		SearchItem[] data = null;
+		try {
+			logger.debug("searchGroups {}", searchCriteria);
+			DocerServicesStub service = getDocerService();
+			SearchGroups request = new SearchGroups();
+			request.setToken(getLoginToken());
+			request.setSearchCriteria(searchCriteria.get());
+			SearchGroupsResponse response = service.searchGroups(request);
+			data = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return MetadatiHelper.asListMap(data);
 	}
 
@@ -2172,18 +2349,23 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param userId
 	 *            id dell’utente di riferimento
 	 * @return collezione dei GROUP_ID dei gruppi assegnati all’utente
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public List<String> getGroupsOfUser(String userId) throws Exception {
-		logger.debug("getGroupsOfUser {}", userId);
-		DocerServicesStub service = getDocerService();
-		GetGroupsOfUser request = new GetGroupsOfUser();
-		request.setToken(getLoginToken());
-		request.setUserId(userId);
-		GetGroupsOfUserResponse response = service.getGroupsOfUser(request);
-		String[] data = response.get_return();
+	public List<String> getGroupsOfUser(String userId) throws DocerHelperException {
+		String[] data = null;
+		try {
+			logger.debug("getGroupsOfUser {}", userId);
+			DocerServicesStub service = getDocerService();
+			GetGroupsOfUser request = new GetGroupsOfUser();
+			request.setToken(getLoginToken());
+			request.setUserId(userId);
+			GetGroupsOfUserResponse response = service.getGroupsOfUser(request);
+			data = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return Arrays.asList(data);
 	}
 
@@ -2197,18 +2379,23 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param groupId
 	 *            id del gruppo di riferimento
 	 * @return collezione delle USER_ID degli utenti appartenenti al gruppo
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 *             In tutti i casi di errore il metodo solleva una SOAPException
 	 *             contenente il messaggio di errore.
 	 */
-	public List<String> getUsersOfGroup(String groupId) throws Exception {
-		logger.debug("getUsersOfGroup {}", groupId);
-		DocerServicesStub service = getDocerService();
-		GetUsersOfGroup request = new GetUsersOfGroup();
-		request.setToken(getLoginToken());
-		request.setGroupId(groupId);
-		GetUsersOfGroupResponse response = service.getUsersOfGroup(request);
-		String[] data = response.get_return();
+	public List<String> getUsersOfGroup(String groupId) throws DocerHelperException {
+		String[] data = null;
+		try {
+			logger.debug("getUsersOfGroup {}", groupId);
+			DocerServicesStub service = getDocerService();
+			GetUsersOfGroup request = new GetUsersOfGroup();
+			request.setToken(getLoginToken());
+			request.setGroupId(groupId);
+			GetUsersOfGroupResponse response = service.getUsersOfGroup(request);
+			data = response.get_return();
+		} catch (RemoteException | DocerServicesDocerExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return Arrays.asList(data);
 	}
 
@@ -2221,7 +2408,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param fullProfile specifica se caricare la lista di metadati completa per ogni docnum trovato (esegue un caricamento aggiuntivo per ogni ducumento)
 	 * @return
 	 */
-	public Collection<Map<String, String>> searchDocumentsByExternalIdRangeAndDate(String externalIdMin, String externalIdMax, String externaIdPrefix, Date data, boolean fullProfile) throws Exception {
+	public Collection<Map<String, String>> searchDocumentsByExternalIdRangeAndDate(String externalIdMin, String externalIdMax, String externaIdPrefix, Date data, boolean fullProfile) throws DocerHelperException {
 		logger.debug("searchDocumentsByExternalIdRangeAndDate externalIdMin={},externalIdMax={},externaIdPrefix={},data={},fullProfile={}", externalIdMin, externalIdMax, externaIdPrefix, data, fullProfile);
 		MetadatiHelper searchCriteria = null;
 		
@@ -2255,7 +2442,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		return loadProfiles(res, fullProfile);
 	}
 
-	private List<Map<String, String>> loadProfiles(SearchItem[] result, boolean fullProfile) throws Exception {
+	private List<Map<String, String>> loadProfiles(SearchItem[] result, boolean fullProfile) throws DocerHelperException {
 		List<Map<String, String>> res = null;
 		
 		if (fullProfile) {
@@ -2272,7 +2459,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		return res;
 	}
 	
-	private Collection<Map<String, String>> loadProfiles(Collection<Map<String, String>> result, boolean fullProfile) throws Exception {
+	private Collection<Map<String, String>> loadProfiles(Collection<Map<String, String>> result, boolean fullProfile) throws DocerHelperException {
 		Collection<Map<String, String>> res = null;
 		
 		if (fullProfile) {
@@ -2289,7 +2476,7 @@ public class DocerHelper extends AbstractDocerHelper {
 		return res;
 	}
 
-	public List<Map<String, String>> searchDocumentsByExternalIdsAndDate(Date data, String... externalIds) throws Exception {
+	public List<Map<String, String>> searchDocumentsByExternalIdsAndDate(Date data, String... externalIds) throws DocerHelperException {
 		logger.debug("searchDocumentsByExternalIdsAndDate data={}, externalIds={}", data, externalIds);
 		MetadatiHelper searchCriteria = null;
 		
@@ -2330,9 +2517,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param data
 	 * @param fullProfile
 	 * @return
-	 * @throws Exception
+	 * @throws DocerHelperException
 	 */
-	public Collection<Map<String, String>> searchDocumentsByDateAndExternalIdLimit(String externalIdMax, String externaIdPrefix, Date data, boolean fullProfile) throws Exception {
+	public Collection<Map<String, String>> searchDocumentsByDateAndExternalIdLimit(String externalIdMax, String externaIdPrefix, Date data, boolean fullProfile) throws DocerHelperException {
 		logger.debug("searchDocumentsByDateAndExternalIdLimit externalIdMax={},externaIdPrefix={},data={},fullProfile={}", externalIdMax, externaIdPrefix, data, fullProfile);
 		
 		// cerco per data

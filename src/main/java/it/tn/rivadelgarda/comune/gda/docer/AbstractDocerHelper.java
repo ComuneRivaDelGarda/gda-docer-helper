@@ -2,23 +2,34 @@ package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.description.TwoChannelAxisOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import it.kdm.docer.core.authentication.AuthenticationServiceExceptionException0;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.Login;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.LoginResponse;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.Logout;
 import it.kdm.docer.core.authentication.AuthenticationServiceStub.LogoutResponse;
+import it.kdm.docer.webservices.DocerServicesDocerExceptionException0;
 import it.kdm.docer.webservices.DocerServicesStub;
+import it.tn.rivadelgarda.comune.gda.docer.exceptions.DocerHelperException;
+import sample.axisversion.VersionExceptionException0;
 import sample.axisversion.VersionStub;
 import sample.axisversion.VersionStub.GetVersion;
 import sample.axisversion.VersionStub.GetVersionResponse;
 
 public abstract class AbstractDocerHelper implements Closeable {
 
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	/**
 	 * Indirizzo predefinito WS di Autenticazione
 	 */
@@ -111,45 +122,90 @@ public abstract class AbstractDocerHelper implements Closeable {
 	 * @return token di sessione
 	 * @throws Exception
 	 */
-	public String login() throws Exception {
-		AuthenticationServiceStub service = new AuthenticationServiceStub(docerSerivcesUrl + AuthenticationService);
-		Login login = new Login();
-		login.setUsername(docerUsername);
-		login.setPassword(docerPassword);
-		login.setCodiceEnte(docerCodiceENTE);
-		login.setApplication(docerApplication);
-		LoginResponse response = service.login(login);
-		loginResponse = response.get_return();
-		tokenSessione = loginResponse; // parse(loginResponse).get("ticketDocerServices");
+	public String login() throws DocerHelperException {
+		try {
+			AuthenticationServiceStub service;
+			service = new AuthenticationServiceStub(docerSerivcesUrl + AuthenticationService);
+			Login login = new Login();
+			login.setUsername(docerUsername);
+			login.setPassword(docerPassword);
+			login.setCodiceEnte(docerCodiceENTE);
+			login.setApplication(docerApplication);
+			LoginResponse response;
+			response = service.login(login);
+			loginResponse = response.get_return();
+			tokenSessione = loginResponse; // parse(loginResponse).get("ticketDocerServices");
+		} catch (AuthenticationServiceExceptionException0 | RemoteException e) {
+			manageDocerException(e);
+		}			
 		return tokenSessione;
 	}
 
+	protected void manageDocerException(Exception ex) throws DocerHelperException {
+		if (ex instanceof DocerHelperException) {
+			DocerHelperException e = (DocerHelperException) ex;
+			logger.error("errore docer helper", e);
+			throw e;
+		} else if (ex instanceof AxisFault) {
+			AxisFault e = (AxisFault) ex;
+			logger.error("errore axis", e);
+			throw new DocerHelperException(e.getMessage(), e);
+		} else if (ex instanceof VersionExceptionException0) {
+			VersionExceptionException0 e = (VersionExceptionException0) ex;
+			logger.error("errore versione docer", e);
+			throw new DocerHelperException(e.getFaultMessage().getVersionException().getMessage(), e);
+		} else if (ex instanceof AuthenticationServiceExceptionException0) {
+			AuthenticationServiceExceptionException0 e = (AuthenticationServiceExceptionException0) ex;
+			logger.error("errore autenticazione su docer", e);
+			throw new DocerHelperException(e.getFaultMessage().getAuthenticationServiceException().getMessage(), e);
+		} else if (ex instanceof DocerServicesDocerExceptionException0) {
+			DocerServicesDocerExceptionException0 e = (DocerServicesDocerExceptionException0) ex;
+			logger.error("errore metodo docer", e);
+			throw new DocerHelperException(e.getFaultMessage().getDocerException().getErrDescription(), e);
+		} else {
+			logger.error("errore generico", ex);
+			throw new DocerHelperException(ex.getMessage(), ex);
+		}
+	}
+
+
+	
 	/**
 	 * Effettua il logout da Docer
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean logout() throws Exception {
-		AuthenticationServiceStub service = new AuthenticationServiceStub(docerSerivcesUrl + AuthenticationService);
-		Logout request = new Logout();
-		request.setToken(getLoginToken());
-		LogoutResponse response = service.logout(request);
-		boolean res = response.get_return();
+	public boolean logout() throws DocerHelperException {
+		boolean res = false;
+		try {
+			AuthenticationServiceStub service = new AuthenticationServiceStub(docerSerivcesUrl + AuthenticationService);
+			Logout request = new Logout();
+			request.setToken(getLoginToken());
+			LogoutResponse response = service.logout(request);
+			res = response.get_return();
+		} catch (RemoteException | AuthenticationServiceExceptionException0 ex) {
+			manageDocerException(ex);
+		}
 		return res;
 	}
 
-	public String getVersion() throws Exception {
-		VersionStub service = new VersionStub(docerSerivcesUrl + VersionService);
-		GetVersion getversion = new GetVersion();
-		GetVersionResponse response = service.getVersion(getversion);
-		return response.get_return();
-
+	public String getVersion() throws DocerHelperException {
+		String res = null;
+		try {
+			VersionStub service = new VersionStub(docerSerivcesUrl + VersionService);
+			GetVersion getversion = new GetVersion();
+			GetVersionResponse response = service.getVersion(getversion);
+			res = response.get_return();
+		} catch (RemoteException | VersionExceptionException0 ex) {
+			manageDocerException(ex);
+		}
+		return res;
 	}
 
 	/**
 	 * ritorna il token di sessione corrente, oppure effettua login se non presente
 	 */
-	public String getLoginToken() throws Exception {
+	public String getLoginToken() throws DocerHelperException {
 		if (!isLoggedIn()) {
 			login();
 		}
@@ -165,9 +221,14 @@ public abstract class AbstractDocerHelper implements Closeable {
 		return StringUtils.isNotBlank(tokenSessione);
 	}
 
-	protected DocerServicesStub getDocerService() throws Exception {
-		if (docerService == null)
-			docerService = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+	protected DocerServicesStub getDocerService() throws DocerHelperException {
+		try {
+			if (docerService == null) {
+				docerService = new DocerServicesStub(docerSerivcesUrl + DocerServices);
+			}
+		} catch (AxisFault ex) {
+			manageDocerException(ex);
+		}
 		return docerService;
 	}
 

@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import it.kdm.docer.webservices.DocerServicesDocerExceptionException0;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 import it.tn.rivadelgarda.comune.gda.docer.MetadatiHelper;
@@ -63,21 +64,21 @@ public class TestDocerHelper {
 
 	@Test
 	public void test10Login() throws Exception {
-		 // AuthenticationServiceStub service = new
-		 // AuthenticationServiceStub(url);
-		 // Login login = new Login();
-		 // login.setUsername("admin");
-		 // login.setPassword("admin");
-		 // login.setCodiceEnte("");
-		 // login.setApplication("GDA");
-		 // LoginResponse response = service.login(login);
-		 // Assert.assertNotNull(response);
-		 // Assert.assertNotNull(response.get_return());
-		 // logger.info(response.get_return());
-		 init();
-		 token = helper.login();
-		 Assert.assertNotNull(token);
-		 logger.info(token);
+	 // AuthenticationServiceStub service = new
+	 // AuthenticationServiceStub(url);
+	 // Login login = new Login();
+	 // login.setUsername("admin");
+	 // login.setPassword("admin");
+	 // login.setCodiceEnte("");
+	 // login.setApplication("GDA");
+	 // LoginResponse response = service.login(login);
+	 // Assert.assertNotNull(response);
+	 // Assert.assertNotNull(response.get_return());
+	 // logger.info(response.get_return());
+	 init();
+	 token = helper.login();
+	 Assert.assertNotNull(token);
+	 logger.info(token);
 	}
 
 //	@Test
@@ -196,20 +197,19 @@ public class TestDocerHelper {
 		}
 	}
 
-//	@Test
-//	public void test60() throws Exception {
-//		// String typeId = "DOCUMENTO";
-//		String timestamp = String.valueOf(new Date().getTime());
-//		String fileName = "test" + timestamp + ".pdf";
-//		String file = "stuff/Integrazione DOCER 1.1.pdf";
-//
-//		String criteria = "test*";
-//		init();
-//		String res = helper.createDocumentTypeDocumento(fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
-//				"descrizione con spazi", "TEST");
-//		Assert.assertNotNull(res);
-//		logger.info("{}", res);
-//	}
+	@Test
+	public void test60() throws Exception {
+		// String typeId = "DOCUMENTO";
+		String timestamp = getTimeStamp();
+		String fileName = "test" + timestamp + ".pdf";
+		String file = "stuff/Integrazione DOCER 1.1.pdf";
+
+		init();
+		String res = helper.createDocumentTypeDocumento(fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
+				"descrizione " + timestamp, "TEST-" + timestamp);
+		Assert.assertNotNull(res);
+		logger.info("{}", res);		
+	}
 	
 //	@Test
 //	public void test61() throws Exception {
@@ -284,10 +284,15 @@ public class TestDocerHelper {
 			boolean acl = helper.setACLDocument(documentId, userID, ACL_VALUES.FULL_ACCESS);
 			logger.info("acl {} con {} = {}", userID, ACL_VALUES.FULL_ACCESS, acl);
 			
-//			helper.deleteDocument(documentId);
-//			logger.info("documento cancellato {}", documentId);
-		} catch (it.kdm.docer.webservices.DocerServicesDocerExceptionException0 ex) {
-			// helper.deleteDocument(documentId);
+			helper.deleteDocument(documentId);
+			logger.info("documento cancellato {}", documentId);
+//		} catch (it.kdm.docer.webservices.DocerServicesDocerExceptionException0 ex) {
+//			logger.error("test {}", ex.getFaultMessage().getDocerException().getErrDescription());
+//			logger.error("test {}", ex.getFaultMessage().getDocerException().getErrNumber());
+//			// helper.deleteDocument(documentId);
+//			throw ex;
+		} catch (Exception ex) {
+			logger.error("test {}", ex.getMessage());
 			throw ex;
 		}
 	}
