@@ -138,6 +138,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.10.4</version>
 				<configuration>
+					<excludePackageNames>it.kdm.*:sample.*</excludePackageNames>
 				</configuration>
 			</plugin>
     			
