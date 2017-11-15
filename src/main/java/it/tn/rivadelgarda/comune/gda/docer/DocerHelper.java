@@ -337,8 +337,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource,
-			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+	public String createDocument(String TYPE_ID, String DOCNAME, DataSource dataSource, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		String documentId = null;
 		try {
 			MetadatiHelper<MetadatiDocumento> params = MetadatiHelper.createDocumentKeys(TYPE_ID, DOCNAME,
@@ -352,7 +351,8 @@ public class DocerHelper extends AbstractDocerHelper {
 			params.add(MetadatiDocumento.TIPO_COMPONENTE_KEY, TIPO_COMPONENTE.getValue());
 			if (StringUtils.isNotBlank(ABSTRACT))
 				params.add(MetadatiDocumento.ABSTRACT_KEY, ABSTRACT);
-			params.add(MetadatiDocumento.ARCHIVE_TYPE_KEY, ARCHIVE_TYPE_VALUES.ARCHIVE_TYPE_ARCHIVE);
+			// params.add(MetadatiDocumento.ARCHIVE_TYPE_KEY, ARCHIVE_TYPE_VALUES.ARCHIVE_TYPE_ARCHIVE);
+			params.add(MetadatiDocumento.ARCHIVE_TYPE_KEY, ARCHIVE_TYPE.getValue());
 			if (StringUtils.isNotBlank(EXTERNAL_ID))
 				params.add(MetadatiDocumento.EXTERNAL_ID_KEY, EXTERNAL_ID);
 			// Aggiunto data Creazione Documento
@@ -435,15 +435,31 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @param DOCNAME
 	 * @param file
 	 * @param TIPO_COMPONENTE
+	 * @param ARCHIVE_TYPE
 	 * @param ABSTRACT
 	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public String createDocument(String TYPE_ID, String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
-			String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+	public String createDocument(String TYPE_ID, String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		FileDataSource fileDataSource = new FileDataSource(file);
-		return createDocument(TYPE_ID, DOCNAME, fileDataSource, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+		return createDocument(TYPE_ID, DOCNAME, fileDataSource, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
+	}
+	
+	/**
+	 * 
+	 * @param TYPE_ID
+	 * @param DOCNAME
+	 * @param file
+	 * @param TIPO_COMPONENTE
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws DocerHelperException
+	 */
+	public String createDocument(String TYPE_ID, String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+		FileDataSource fileDataSource = new FileDataSource(file);
+		return createDocument(TYPE_ID, DOCNAME, fileDataSource, TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES.ARCHIVE, ABSTRACT, EXTERNAL_ID);
 	}
 
 	/**
@@ -459,14 +475,28 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public String createDocument(String TYPE_ID, String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
-			String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+	public String createDocument(String TYPE_ID, String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		ByteArrayDataSource rawData = new ByteArrayDataSource(bytes);
-		return createDocument(TYPE_ID, DOCNAME, rawData, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+		return createDocument(TYPE_ID, DOCNAME, rawData, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
 	}
 
 	/**
 	 * Crea un Documento con il tipo fisso a DOCUMENTO
+	 * 
+	 * @param DOCNAME
+	 * @param file
+	 * @param TIPO_COMPONENTE
+	 * @param ARCHIVE_TYPE {@link ARCHIVE_TYPE_VALUES}
+	 * @param ABSTRACT
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws DocerHelperException
+	 */
+	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, file, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
+	}
+	
+	/**
 	 * 
 	 * @param DOCNAME
 	 * @param file
@@ -476,9 +506,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
-			String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
-		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, file, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+	public String createDocumentTypeDocumento(String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, file, TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES.ARCHIVE, ABSTRACT, EXTERNAL_ID);
 	}
 
 	/**
@@ -492,10 +521,9 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE,
-			String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
-		logger.debug("createDocumentTypeDocumento DOCNAME={} TIPO_COMPONENTE={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, EXTERNAL_ID);
-		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+		logger.debug("createDocumentTypeDocumento DOCNAME={} TIPO_COMPONENTE={} ARCHIVE_TYPE={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, ARCHIVE_TYPE, EXTERNAL_ID);
+		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, bytes, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
 	}
 
 	/**
@@ -509,11 +537,10 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes,
-			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		logger.debug("createDocumentTypeDocumentoAndRelateToExternalId {}", EXTERNAL_ID);
-		logger.debug("creting document DOCNAME={} TIPO_COMPONENTE={} ABSTRACT={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
-		String DOCNUM = createDocumentTypeDocumento(DOCNAME, bytes, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+		// logger.debug("creting document DOCNAME={} TIPO_COMPONENTE={} ABSTRACT={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+		String DOCNUM = createDocumentTypeDocumento(DOCNAME, bytes, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
 		logger.debug("documento creato con DOCNUM={}", DOCNUM);
 		// ricerco documenti per EXTERNAL_ID
 		logger.debug("ricerca documenti EXTERNAL_ID={}", EXTERNAL_ID);
@@ -538,19 +565,24 @@ public class DocerHelper extends AbstractDocerHelper {
 		return DOCNUM;
 	}
 
+	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes,
+			TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+		return createDocumentTypeDocumentoAndRelateToExternalId(DOCNAME, bytes, TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES.ARCHIVE, ABSTRACT, EXTERNAL_ID);
+	}
+	
     /**
      *
      * @param DOCNAME
      * @param file
      * @param TIPO_COMPONENTE
+     * @param ARCHIVE_TYPE
      * @param ABSTRACT
      * @param EXTERNAL_ID
      * @return
      * @throws DocerHelperException
      */
-    public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, File file,
-                                                                   TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
-        String DOCNUM = createDocumentTypeDocumento(DOCNAME, file, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
+    public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, File file, TIPO_COMPONENTE_VALUES TIPO_COMPONENTE, ARCHIVE_TYPE_VALUES ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+        String DOCNUM = createDocumentTypeDocumento(DOCNAME, file, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
         // ricerco documenti per EXTERNAL_ID
         Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
         if (documentByExternalId != null) {
