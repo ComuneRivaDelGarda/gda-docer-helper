@@ -7,6 +7,9 @@ package it.tn.rivadelgarda.comune.gda.docer.keys;
  */
 public interface MetadatoDocer {
 
+	/**
+	 * è il tipo di documento, individua l’insieme delle proprietà del profilo
+	 */
 	public final static String TYPE_ID_KEY = "TYPE_ID";
 	public final static String DOCNAME_KEY = "DOCNAME";
 	public final static String ABSTRACT_KEY = "ABSTRACT";

@@ -422,6 +422,9 @@ public enum MetadatiDocumento implements MetadatoDocer {
 		return res;
 	}
 
+	/**
+	 * <li>DOCUMENTO
+	 */
 	public enum TYPE_ID_VALUES implements MetadatoDocer {
 		DOCUMENTO(TYPE_ID_DOCUMENTO);
 		private String value;
@@ -436,9 +439,10 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	}
 
 	/**
-	 * 
-	 * @author mirco
-	 *
+	 * <li>PRINCIPALE = Documento che deve essere obbligatoriamente presente nell’Unità Documentaria
+	 * <li>ALLEGATO = Documento facoltativamente unito al documento principale per integrarne le informazioni registrato contestualmente o precedentemente al documento principale.
+	 * <li>ANNESSO = Documento facoltativamente unito al documento principale per integrarne le informazioni. E’ registrato in un momento successivo a quello di redazione del documento principale.
+	 * <li>ANNOTAZIONE = File detached riferiti all’intera unità documentaria (un tipico esempio di annotazione è rappresentato dalla segnatura di protocollo)
 	 */
 	public enum TIPO_COMPONENTE_VALUES implements MetadatoDocer {
 		/**
@@ -475,9 +479,9 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	}
 
 	/**
-	 * 
-	 * @author mirco
-	 *
+	 * <li>Archive = Documento Digitale
+	 * <li>Url = Documento di tipo link ad una Url Esterna)
+	 * <li>Paper = Documento copia elettronica dell'originale cartaceo quale ad esempio una scansione di un documento cartaceo;
 	 */
 	public enum ARCHIVE_TYPE_VALUES implements MetadatoDocer {
 		ARCHIVE(ARCHIVE_TYPE_ARCHIVE), URL(ARCHIVE_TYPE_URL), PAPER(ARCHIVE_TYPE_PAPER);
