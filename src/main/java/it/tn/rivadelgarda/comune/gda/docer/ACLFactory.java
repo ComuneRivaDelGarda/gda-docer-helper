@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
+import it.tn.rivadelgarda.comune.gda.docer.values.ACL;
 
 public class ACLFactory {
 
@@ -27,7 +27,7 @@ public class ACLFactory {
 	// }
 	// }
 
-	private Map<String, ACL_VALUES> acls = new HashMap<>();
+	private Map<String, ACL> acls = new HashMap<>();
 
 	// public static ACLsFactory create(String subject, ACL_VALUES access) {
 	// ACLsFactory factory = new ACLsFactory();
@@ -36,18 +36,18 @@ public class ACLFactory {
 	// return factory;
 	// }
 
-	public static ACLFactory create(String subject, ACL_VALUES access) {
+	public static ACLFactory create(String subject, ACL access) {
 		ACLFactory factory = new ACLFactory();
 		factory.acls.put(subject, access);
 		return factory;
 	}
 
-	public ACLFactory add(String subject, ACL_VALUES access) {
+	public ACLFactory add(String subject, ACL access) {
 		this.acls.put(subject, access);
 		return this;
 	}
 
-	public Map<String, ACL_VALUES> get() {
+	public Map<String, ACL> get() {
 		return acls;
 	}
 }

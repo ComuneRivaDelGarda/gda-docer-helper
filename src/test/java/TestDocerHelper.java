@@ -21,9 +21,9 @@ import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 import it.tn.rivadelgarda.comune.gda.docer.MetadatiHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
-import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento.TIPO_COMPONENTE_VALUES;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
-import it.tn.rivadelgarda.comune.gda.docer.values.ACL_VALUES;
+import it.tn.rivadelgarda.comune.gda.docer.values.ACL;
+import it.tn.rivadelgarda.comune.gda.docer.values.TIPO_COMPONENTE;
 
 public class TestDocerHelper {
 
@@ -206,7 +206,7 @@ public class TestDocerHelper {
 		String file = "stuff/Integrazione DOCER 1.1.pdf";
 
 		init();
-		String res = helper.createDocumentTypeDocumento(fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
+		String res = helper.createDocumentTypeDocumento(fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE,
 				"descrizione " + timestamp, "TEST-" + timestamp);
 		Assert.assertNotNull(res);
 		logger.info("{}", res);		
@@ -272,7 +272,7 @@ public class TestDocerHelper {
 
 		init();
 		// token = helper.login();
-		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE_VALUES.PRINCIPALE,
+		String documentId = helper.createDocument(typeId, fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE,
 				"file su folder " + folderName, externalId);
 		logger.info("creato {}", documentId);
 				
@@ -282,8 +282,8 @@ public class TestDocerHelper {
 			
 			// SET ACL to USER
 			String userID = username;
-			boolean acl = helper.setACLDocument(documentId, userID, ACL_VALUES.FULL_ACCESS);
-			logger.info("acl {} con {} = {}", userID, ACL_VALUES.FULL_ACCESS, acl);
+			boolean acl = helper.setACLDocument(documentId, userID, ACL.FULL_ACCESS);
+			logger.info("acl {} con {} = {}", userID, ACL.FULL_ACCESS, acl);
 			
 			helper.deleteDocument(documentId);
 			logger.info("documento cancellato {}", documentId);

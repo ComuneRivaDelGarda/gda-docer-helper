@@ -30,7 +30,7 @@ import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatoDocer;
  * @author mirco
  *
  */
-public enum ACL_VALUES implements MetadatoDocer {
+public enum ACL implements MetadatoDocer {
 
 	/**
 	 * Full Access: è il permesso di livello massimo ovvero diritti di scrittura
@@ -57,7 +57,7 @@ public enum ACL_VALUES implements MetadatoDocer {
 
 	private String value;
 
-	private ACL_VALUES(String value) {
+	private ACL(String value) {
 		this.value = value;
 	}
 
