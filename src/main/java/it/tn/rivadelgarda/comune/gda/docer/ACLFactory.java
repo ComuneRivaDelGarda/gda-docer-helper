@@ -2,6 +2,7 @@ package it.tn.rivadelgarda.comune.gda.docer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import it.tn.rivadelgarda.comune.gda.docer.values.ACL;
 
@@ -40,6 +41,15 @@ public class ACLFactory {
 	public static ACLFactory create(String GROUP_USER_ID, ACL acl) {
 		ACLFactory factory = new ACLFactory();
 		factory.acls.put(GROUP_USER_ID, acl);
+		return factory;
+	}
+	
+	public static ACLFactory create(Map<String, Integer> acl) {
+		ACLFactory factory = new ACLFactory();
+		MetadatiHelper<ACL> keyBuilder = new MetadatiHelper<>();
+		for (Entry<String, Integer> entry : acl.entrySet()) {
+			factory.acls.put(entry.getKey(), ACL.values()[entry.getValue()]);
+		}		
 		return factory;
 	}
 

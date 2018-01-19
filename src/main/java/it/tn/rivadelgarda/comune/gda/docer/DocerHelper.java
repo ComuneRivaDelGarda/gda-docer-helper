@@ -1244,7 +1244,6 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws DocerHelperException
 	 */
 	public boolean setACLDocument(String documentId, Map<String, ACL> acl) throws DocerHelperException {
-		// MetadatiHelper.build(GROUP_USER_ID, acl.getValue()).get();
 		MetadatiHelper<ACL> keyBuilder = new MetadatiHelper<>();
 		for (Entry<String, ACL> entry : acl.entrySet()) {
 			keyBuilder.add(entry.getKey(), entry.getValue());
@@ -1289,17 +1288,26 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws DocerHelperException
 	 */
 	public List<String> setACLDocumentsByExternalId(String externalId, Map<String, Integer> acl) throws DocerHelperException {
-		List<Map<String, String>> metadatiDocumentiDaExternalId = searchDocumentsByExternalIdAll(externalId);
-		String[] listaDocumentId = MetadatiHelper.joinMetadata(metadatiDocumentiDaExternalId,
-				MetadatiDocumento.DOCNUM);
-		logger.debug("trovati {} documenti da externalId={}", listaDocumentId.length, externalId);
-		for (String documentId : listaDocumentId) {
-			logger.debug("imposto ACL {} per documento {}", acl, documentId);
-			setACLDocumentConvert(documentId, acl);
-		}
-		return Arrays.asList(listaDocumentId);
+		return setACLDocumentsByExternalId(externalId, ACLFactory.create(acl));
 	}
 
+	/**
+	 * 
+	 * @param documentId
+	 * @param aclFactory
+	 * @return
+	 * @throws DocerHelperException
+	 */
+	public List<String> setACLDocumentsByExternalId(String externalId, ACLFactory aclFactory) throws DocerHelperException {
+		List<String> listaDocumentId = searchDocumentsByExternalIdAllIds(externalId);
+		logger.debug("trovati {} documenti da externalId={}", listaDocumentId.size(), externalId);
+		for (String documentId : listaDocumentId) {
+			logger.debug("imposto ACL {} per documento {}", aclFactory, documentId);
+			setACLDocument(documentId, aclFactory);
+		}
+		return listaDocumentId;
+	}
+	
 	/**
 	 * Questo metodo permette di correlare un Documento ad uno o più Documenti
 	 * nel DMS.
