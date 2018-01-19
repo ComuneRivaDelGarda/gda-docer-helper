@@ -1,12 +1,7 @@
 package it.tn.rivadelgarda.comune.gda.docer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import it.tn.rivadelgarda.comune.gda.docer.values.ACL;
 
@@ -36,14 +31,26 @@ public class ACLFactory {
 	// return factory;
 	// }
 
-	public static ACLFactory create(String subject, ACL access) {
+	/**
+	 * crea ACLFactory
+	 * @param GROUP_USER_ID groupId or userId
+	 * @param acl {@link ACL}
+	 * @return
+	 */
+	public static ACLFactory create(String GROUP_USER_ID, ACL acl) {
 		ACLFactory factory = new ACLFactory();
-		factory.acls.put(subject, access);
+		factory.acls.put(GROUP_USER_ID, acl);
 		return factory;
 	}
 
-	public ACLFactory add(String subject, ACL access) {
-		this.acls.put(subject, access);
+	/**
+	 * aggiungi ACL 
+	 * @param GROUP_USER_ID groupId or userId
+	 * @param access {@link ACL}
+	 * @return
+	 */
+	public ACLFactory add(String GROUP_USER_ID, ACL access) {
+		this.acls.put(GROUP_USER_ID, access);
 		return this;
 	}
 
