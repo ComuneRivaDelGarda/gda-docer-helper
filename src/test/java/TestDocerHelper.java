@@ -799,7 +799,33 @@ public class TestDocerHelper {
 			Assert.assertEquals(json1, json2);
 			
 		} catch (Exception ex) {
-			logger.error("test800", ex);
+			logger.error("test900", ex);
 		}
-	}	
+	}
+	
+	/**
+	 * NOTA: prima eseguire il test900 per avere un principale e allegato per EXTERNAL_ID come riferimento
+	 * Setta le ACL per EXTERNAL_ID e verifica che poi siano uguali
+	 * @throws Exception
+	 */
+	@Test
+	public void test901() throws Exception {
+		init();
+		try {
+			String externalId = "P180119160842";
+			String user1 = username;
+			String user2 = "pivamichela";
+			helper.setACLDocumentsByExternalId(externalId, ACLFactory.create(user1, ACL.FULL_ACCESS).add(user2, ACL.READ_ONLY_ACCESS));
+			
+			List<String> related = helper.searchDocumentsByExternalIdAllIds(externalId);
+			for (String id : related) {
+				Map<String, String> acl = helper.getACLDocumentMap(id);
+				String json = new GsonBuilder().setPrettyPrinting().create().toJson(acl);
+				logger.info("{}", json);
+			}			
+						
+		} catch (Exception ex) {
+			logger.error("test901", ex);
+		}
+	}
 }
