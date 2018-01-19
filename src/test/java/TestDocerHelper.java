@@ -17,12 +17,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import it.kdm.docer.webservices.DocerServicesDocerExceptionException0;
+import it.tn.rivadelgarda.comune.gda.docer.ACLFactory;
 import it.tn.rivadelgarda.comune.gda.docer.DocerHelper;
 import it.tn.rivadelgarda.comune.gda.docer.KeyValuePairFactory;
 import it.tn.rivadelgarda.comune.gda.docer.MetadatiHelper;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiDocumento;
 import it.tn.rivadelgarda.comune.gda.docer.keys.MetadatiFolder;
 import it.tn.rivadelgarda.comune.gda.docer.values.ACL;
+import it.tn.rivadelgarda.comune.gda.docer.values.ARCHIVE_TYPE;
 import it.tn.rivadelgarda.comune.gda.docer.values.TIPO_COMPONENTE;
 
 public class TestDocerHelper {
@@ -740,6 +742,62 @@ public class TestDocerHelper {
 			
 			Assert.assertNotNull(res);
 			logger.info("{}", new GsonBuilder().setPrettyPrinting().create().toJson(res));
+		} catch (Exception ex) {
+			logger.error("test800", ex);
+		}
+	}
+	
+	/**
+	 * 1) crea una cartella
+	 * 2) carica un documento principale
+	 * 3) aggiunge principale a cartella
+	 * 4) setta ACL al principale
+	 * 5) carica un allegato al principale
+	 * 6) verifica se ACL dell'allegato sono uguali al PRINCIPALE
+	 * @throws Exception
+	 */
+	@Test
+	public void test900() throws Exception {
+		String folderName = "cartella_" + getTimeStamp();
+		
+		init();
+		try {
+			String folderId = helper.createFolder(folderName, "885221");
+			logger.info("test900 creato cartella {} {}", folderId);
+			
+			String externalId = "P" + getTimeStamp();
+			String fileName = "principale_" + externalId + ".odt";
+			String file = "stuff/principale.odt";
+			String abstractP = "file principale su folder " + folderName;
+			String principaleId = helper.createDocumentTypeDocumento(fileName, new File(file), TIPO_COMPONENTE.PRINCIPALE, abstractP, externalId);
+			logger.info("test900 creato documento principale {} {}", principaleId, externalId);
+			
+			boolean res = helper.addToFolderDocument(folderId, principaleId);
+			logger.info("aggiunto {} a folder {}", principaleId, folderId);
+			
+			// SET ACL to USER
+			String user1 = username;
+			String user2 = "pivamichela";
+			boolean acl = helper.setACLDocument(principaleId, ACLFactory.create(user1, ACL.FULL_ACCESS).add(user2, ACL.READ_ONLY_ACCESS));
+			logger.info("impostato acl su principale con {} = {}", user1, ACL.FULL_ACCESS);
+			logger.info("impostato acl su principale con {} = {}", user2, ACL.READ_ONLY_ACCESS);
+			
+			fileName = "allegato_" + externalId + ".odt";
+			file = "stuff/principale.odt";
+			String abstractA = "file allegato su folder " + folderName;
+			String allegatoId = helper.createDocumentTypeDocumentoAndRelateToExternalId(fileName, new File(file), TIPO_COMPONENTE.ALLEGATO, ARCHIVE_TYPE.ARCHIVE, abstractA, externalId); 
+			logger.info("test900 creato documento allegato {} {}", allegatoId, externalId);
+			
+			Map<String, String> aclPrincipale = helper.getACLDocumentMap(principaleId);
+			Map<String, String> aclAllegato = helper.getACLDocumentMap(allegatoId);
+			
+			String json1 = new GsonBuilder().setPrettyPrinting().create().toJson(aclPrincipale);
+			String json2 = new GsonBuilder().setPrettyPrinting().create().toJson(aclAllegato);
+			logger.info("{}", json1);
+			logger.info("{}", json2);
+			
+			Assert.assertEquals(json1, json2);
+			
 		} catch (Exception ex) {
 			logger.error("test800", ex);
 		}
