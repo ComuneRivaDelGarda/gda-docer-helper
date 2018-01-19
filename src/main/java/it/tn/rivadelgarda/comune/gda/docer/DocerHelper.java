@@ -1214,13 +1214,15 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Imposta ACL
+	 * Questo metodo permette di assegnare le ACL di un Documento del DMS, nel
+	 * caso di documenti con ACL già definite i diritti assegnati sovrascrivono
+	 * quelli precedenti.
 	 * 
 	 * @param documentId
 	 *            id del Documento
 	 * @param GROUP_USER_ID
 	 *            groupId or userId
-	 * @param acl
+	 * @param acl {@link ACL}
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws DocerHelperException
 	 */
@@ -1229,13 +1231,15 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Sovrascrive le ACL attuali
+	 * Questo metodo permette di assegnare le ACL di un Documento del DMS, nel
+	 * caso di documenti con ACL già definite i diritti assegnati sovrascrivono
+	 * quelli precedenti.
 	 * 
 	 * @param documentId
 	 *            su cui applicare le acl
 	 * @param acl
 	 *            mapps di groupId or userId come chiavi e valori ACL_VALUES
-	 *            come valore acl
+	 *            come valore acl {@link ACL}
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws DocerHelperException
 	 */
@@ -1253,13 +1257,15 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Sovrascrive le ACL attuali
+	 * Questo metodo permette di assegnare le ACL di un Documento del DMS, nel
+	 * caso di documenti con ACL già definite i diritti assegnati sovrascrivono
+	 * quelli precedenti.
 	 * 
 	 * @param documentId
 	 *            su cui applicare le acl
 	 * @param acl
 	 *            mappa di groupId or userId come chiavi e valori interi come
-	 *            valore acl
+	 *            valore acl {@link ACL}
 	 * @return true se l’operazione è andata a buon fine
 	 * @throws DocerHelperException
 	 */
@@ -1278,7 +1284,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 *            su cui applicare le acl
 	 * @param acl
 	 *            di groupId or userId come chiavi e valori interi come valore
-	 *            acl
+	 *            acl {@link ACL}
 	 * @return lista dei documentId a cui è stata sovrascritta la ACL 
 	 * @throws DocerHelperException
 	 */
