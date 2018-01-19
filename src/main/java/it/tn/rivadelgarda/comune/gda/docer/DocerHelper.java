@@ -25,8 +25,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
@@ -474,8 +472,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws DocerHelperException
 	 */
 	public String createDocument(String TYPE_ID, String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE, ARCHIVE_TYPE ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
-		ByteArrayDataSource rawData = new ByteArrayDataSource(bytes);
-		return createDocument(TYPE_ID, DOCNAME, rawData, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
+		ByteArrayDataSource dataSource = new ByteArrayDataSource(bytes);
+		return createDocument(TYPE_ID, DOCNAME, dataSource, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
 	}
 
 	/**
@@ -521,7 +519,6 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws DocerHelperException
 	 */
 	public String createDocumentTypeDocumento(String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE, ARCHIVE_TYPE ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
-		logger.debug("createDocumentTypeDocumento DOCNAME={} TIPO_COMPONENTE={} ARCHIVE_TYPE={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, ARCHIVE_TYPE, EXTERNAL_ID);
 		return createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, bytes, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
 	}
 
@@ -537,21 +534,21 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE, ARCHIVE_TYPE ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, DataSource dataSource, TIPO_COMPONENTE TIPO_COMPONENTE, ARCHIVE_TYPE ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+		String DOCNUM = null;
 		logger.debug("createDocumentTypeDocumentoAndRelateToExternalId {}", EXTERNAL_ID);
-		// logger.debug("creting document DOCNAME={} TIPO_COMPONENTE={} ABSTRACT={} EXTERNAL_ID={}", DOCNAME, TIPO_COMPONENTE, ABSTRACT, EXTERNAL_ID);
-		String DOCNUM = createDocumentTypeDocumento(DOCNAME, bytes, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
-		logger.debug("documento creato con DOCNUM={}", DOCNUM);
-		// ricerco documenti per EXTERNAL_ID
+
 		logger.debug("ricerca documenti EXTERNAL_ID={}", EXTERNAL_ID);
 		Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
 		if (documentByExternalId != null) {
+			DOCNUM = createDocument(MetadatoDocer.TYPE_ID_DOCUMENTO, DOCNAME, dataSource, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
+			logger.debug("documento creato con DOCNUM={}", DOCNUM);
+			
 			String documentToRelateTo = MetadatiHelper.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
 			if (StringUtils.isNotBlank(documentToRelateTo)) {
 				if (!documentToRelateTo.equals(DOCNUM)) {
 					logger.debug("trovato documentToRelateTo={}", documentToRelateTo);
 					// relaziono il documento appena creato al con altro con stesso
-					// EXTERNAL_ID
 					addRelated(documentToRelateTo, DOCNUM);
 				} else {
 					logger.warn("non creo relazione a se stesso");
@@ -563,6 +560,11 @@ public class DocerHelper extends AbstractDocerHelper {
 			logger.warn("nessun documento trovato nella ricerca per external_id={}", EXTERNAL_ID);
 		}
 		return DOCNUM;
+	}
+	
+	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE, ARCHIVE_TYPE ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+		ByteArrayDataSource dataSource = new ByteArrayDataSource(bytes);
+		return createDocumentTypeDocumentoAndRelateToExternalId(DOCNAME, dataSource, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
 	}
 
 	/**
@@ -577,8 +579,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes,
-			TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
+	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes, TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		return createDocumentTypeDocumentoAndRelateToExternalId(DOCNAME, bytes, TIPO_COMPONENTE, ARCHIVE_TYPE.ARCHIVE, ABSTRACT, EXTERNAL_ID);
 	}
 	
@@ -596,18 +597,21 @@ public class DocerHelper extends AbstractDocerHelper {
      * @throws DocerHelperException
      */
     public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, File file, TIPO_COMPONENTE TIPO_COMPONENTE, ARCHIVE_TYPE ARCHIVE_TYPE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
-        String DOCNUM = createDocumentTypeDocumento(DOCNAME, file, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
-        // ricerco documenti per EXTERNAL_ID
-        Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
-        if (documentByExternalId != null) {
-            String documentToRelateTo = MetadatiHelper.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
-            if (StringUtils.isNotBlank(documentToRelateTo)) {
-                // relaziono il documento appena creato al con altro con stesso
-                // EXTERNAL_ID
-                addRelated(documentToRelateTo, DOCNUM);
-            }
-        }
-        return DOCNUM;
+//        // ricerco documenti per EXTERNAL_ID
+//        Map<String, String> documentByExternalId = searchDocumentsByExternalIdFirst(EXTERNAL_ID);
+//        if (documentByExternalId != null) {
+//        	String DOCNUM = createDocumentTypeDocumento(DOCNAME, file, TIPO_COMPONENTE, ARCHIVE_TYPE, ABSTRACT, EXTERNAL_ID);
+//        	
+//            String documentToRelateTo = MetadatiHelper.getMetadata(documentByExternalId, MetadatiDocumento.DOCNUM);
+//            if (StringUtils.isNotBlank(documentToRelateTo)) {
+//                // relaziono il documento appena creato al con altro con stesso
+//                // EXTERNAL_ID
+//                addRelated(documentToRelateTo, DOCNUM);
+//            }
+//        }
+//        return DOCNUM;
+    	FileDataSource dataSource = new FileDataSource(file);
+        return createDocumentTypeDocumentoAndRelateToExternalId(DOCNAME, dataSource, TIPO_COMPONENTE, ARCHIVE_TYPE.ARCHIVE, ABSTRACT, EXTERNAL_ID);
     }
 
     /**
@@ -1890,8 +1894,8 @@ public class DocerHelper extends AbstractDocerHelper {
 	 */
 	public String createVersion(String documentId, byte[] content) throws DocerHelperException {
 		logger.debug("createVersion documentId={} content.length={}", documentId, content.length);
-		ByteArrayDataSource rawData = new ByteArrayDataSource(content);
-		return addNewVersion(documentId, rawData);
+		ByteArrayDataSource dataSource = new ByteArrayDataSource(content);
+		return addNewVersion(documentId, dataSource);
 	}
 
 	/**
