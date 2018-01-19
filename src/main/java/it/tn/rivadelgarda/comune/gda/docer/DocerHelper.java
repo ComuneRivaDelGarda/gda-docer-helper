@@ -1309,7 +1309,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public boolean addRelated(String documentId, String[] related) throws DocerHelperException {
+	private boolean addRelatedNative(String documentId, String[] related) throws DocerHelperException {
 		boolean esito = false;
 		try {
 			logger.debug("addRelated documentId={} related={}", documentId, related);
@@ -1326,9 +1326,42 @@ public class DocerHelper extends AbstractDocerHelper {
 		return esito;
 	}
 
+	/**
+	 * Questo metodo permette di correlare un Documento ad uno o più Documenti
+	 * nel DMS.
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @param related
+	 *            La variabile related è una collezione di nodi related. Ogni
+	 *            nodo related contiene un id di un Documento del DMS da
+	 *            correlare al documento di riferimento. Per il concetto di
+	 *            “correlazione” si veda il paragrafo 4.6 Gestione della
+	 *            correlazione tra documenti.
+	 * @return
+	 * @throws DocerHelperException
+	 */
+	public boolean addRelated(String documentId, Collection<String> related) throws DocerHelperException {
+		return addRelatedNative(documentId, related.toArray(new String[related.size()]));
+	}
+	
+	/**
+	 * Questo metodo permette di correlare un Documento ad un Documento
+	 * nel DMS.
+	 * 
+	 * @param documentId
+	 *            id del Documento
+	 * @param related
+	 *            La variabile related[] è una collezione di nodi related. Ogni
+	 *            nodo related contiene un id di un Documento del DMS da
+	 *            correlare al documento di riferimento. Per il concetto di
+	 *            “correlazione” si veda il paragrafo 4.6 Gestione della
+	 *            correlazione tra documenti.
+	 * @return
+	 * @throws DocerHelperException
+	 */	
 	public boolean addRelated(String documentId, String related) throws DocerHelperException {
-		logger.debug("addRelated documentId={} related={}", documentId, related);
-		return addRelated(documentId, new String[] { related });
+		return addRelatedNative(documentId, new String[] { related });
 	}
 
 	/** VERSIONAMENTO */
