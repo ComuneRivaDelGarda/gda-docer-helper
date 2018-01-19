@@ -327,12 +327,11 @@ public class DocerHelper extends AbstractDocerHelper {
 	/**
 	 * Questo metodo permette la creazione di un Documento nel DMS.
 	 * 
-	 * @param TYPE_ID
-	 * @param DOCNAME
+	 * @param TYPE_ID obbligatorio, il document-type del documento. è il tipo di documento individua l’insieme delle proprietà del profilo
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
 	 * @param dataSource
-	 * @param TIPO_COMPONENTE
-	 *            uno dei TIPO_COMPONENTE validi
-	 * @param ABSTRACT
+	 * @param TIPO_COMPONENTE {@link TIPO_COMPONENTE}
+	 * @param ABSTRACT non obblicatorio, descrizione del documento
 	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws DocerHelperException
@@ -428,15 +427,14 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Create un Document con Tipo personalizzabile
+	 * Create un Document con set di metadati (TYPE_ID) personalizzabile
 	 * 
-	 * @param TYPE_ID
-	 *            set di metadati da utilizzare
-	 * @param DOCNAME
+	 * @param TYPE_ID obbligatorio, il document-type del documento. è il tipo di documento individua l’insieme delle proprietà del profilo
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
 	 * @param file
 	 * @param TIPO_COMPONENTE
 	 * @param ARCHIVE_TYPE
-	 * @param ABSTRACT
+	 * @param ABSTRACT non obblicatorio, descrizione del documento
 	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws DocerHelperException
@@ -447,12 +445,13 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 	
 	/**
+	 * Create un Document con set di metadati (TYPE_ID) personalizzabile
 	 * 
-	 * @param TYPE_ID
-	 * @param DOCNAME
+	 * @param TYPE_ID obbligatorio, il document-type del documento. è il tipo di documento individua l’insieme delle proprietà del profilo
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
 	 * @param file
 	 * @param TIPO_COMPONENTE
-	 * @param ABSTRACT
+	 * @param ABSTRACT non obblicatorio, descrizione del documento
 	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws DocerHelperException
@@ -463,14 +462,13 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Create un Document con Tipo personalizzabile
+	 * Create un Document con set di metadati (TYPE_ID) personalizzabile
 	 * 
-	 * @param TYPE_ID
-	 *            set di metadati da utilizzare
-	 * @param DOCNAME
+	 * @param TYPE_ID obbligatorio, il document-type del documento. è il tipo di documento individua l’insieme delle proprietà del profilo
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
 	 * @param bytes
 	 * @param TIPO_COMPONENTE
-	 * @param ABSTRACT
+	 * @param ABSTRACT non obblicatorio, descrizione del documento
 	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws DocerHelperException
@@ -481,13 +479,13 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Crea un Documento con il tipo fisso a DOCUMENTO
+	 * Crea un Documento con il tipo fisso a DOCUMENTO {@link MetadatoDocer#TYPE_ID_DOCUMENTO}
 	 * 
-	 * @param DOCNAME
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
 	 * @param file
-	 * @param TIPO_COMPONENTE
+	 * @param TIPO_COMPONENTE {@link TIPO_COMPONENTE}
 	 * @param ARCHIVE_TYPE {@link ARCHIVE_TYPE}
-	 * @param ABSTRACT
+	 * @param ABSTRACT non obblicatorio, descrizione del documento
 	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws DocerHelperException
@@ -497,11 +495,12 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 	
 	/**
+	 * Crea un Documento con il tipo fisso a DOCUMENTO {@link MetadatoDocer#TYPE_ID_DOCUMENTO} e ARCHIVE_TYPE.ARCHIVE {@link ARCHIVE_TYPE#ARCHIVE}
 	 * 
-	 * @param DOCNAME
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
 	 * @param file
-	 * @param TIPO_COMPONENTE
-	 * @param ABSTRACT
+	 * @param TIPO_COMPONENTE {@link TIPO_COMPONENTE}
+	 * @param ABSTRACT non obblicatorio, descrizione del documento
 	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws DocerHelperException
@@ -511,12 +510,12 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Crea un Documento con il tipo fisso a DOCUMENTO
+	 * Crea un Documento con il tipo fisso a DOCUMENTO {@link MetadatoDocer#TYPE_ID_DOCUMENTO}
 	 * 
-	 * @param DOCNAME
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
 	 * @param bytes
-	 * @param TIPO_COMPONENTE
-	 * @param ABSTRACT
+	 * @param TIPO_COMPONENTE {@link TIPO_COMPONENTE}
+	 * @param ABSTRACT non obblicatorio, descrizione del documento
 	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws DocerHelperException
@@ -527,12 +526,13 @@ public class DocerHelper extends AbstractDocerHelper {
 	}
 
 	/**
-	 * Crea un Documento con il tipo fisso a DOCUMENTO.
+	 * Crea un Documento con il tipo fisso a DOCUMENTO {@link MetadatoDocer#TYPE_ID_DOCUMENTO}.
 	 * Crea una relazione fra il documento creato e il primo documento creato per l'EXTERNAL_ID specificato
-	 * @param DOCNAME
+	 * 
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
 	 * @param bytes
-	 * @param TIPO_COMPONENTE
-	 * @param ABSTRACT
+	 * @param TIPO_COMPONENTE {@link TIPO_COMPONENTE}
+	 * @param ABSTRACT non obblicatorio, descrizione del documento
 	 * @param EXTERNAL_ID
 	 * @return
 	 * @throws DocerHelperException
@@ -565,18 +565,32 @@ public class DocerHelper extends AbstractDocerHelper {
 		return DOCNUM;
 	}
 
+	/**
+	 * Crea un Documento con il tipo fisso a DOCUMENTO {@link MetadatoDocer#TYPE_ID_DOCUMENTO} e ARCHIVE_TYPE.ARCHIVE {@see ARCHIVE_TYPE}
+	 * Crea una relazione fra il documento creato e il primo documento creato per l'EXTERNAL_ID specificato
+	 * 
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
+	 * @param bytes
+	 * @param TIPO_COMPONENTE {@link TIPO_COMPONENTE}
+	 * @param ABSTRACT non obblicatorio, descrizione del documento
+	 * @param EXTERNAL_ID
+	 * @return
+	 * @throws DocerHelperException
+	 */
 	public String createDocumentTypeDocumentoAndRelateToExternalId(String DOCNAME, byte[] bytes,
 			TIPO_COMPONENTE TIPO_COMPONENTE, String ABSTRACT, String EXTERNAL_ID) throws DocerHelperException {
 		return createDocumentTypeDocumentoAndRelateToExternalId(DOCNAME, bytes, TIPO_COMPONENTE, ARCHIVE_TYPE.ARCHIVE, ABSTRACT, EXTERNAL_ID);
 	}
 	
     /**
-     *
-     * @param DOCNAME
+	 * Crea un Documento con il tipo fisso a DOCUMENTO.
+	 * Crea una relazione fra il documento creato e il primo documento creato per l'EXTERNAL_ID specificato
+	 * 
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
      * @param file
-     * @param TIPO_COMPONENTE
-     * @param ARCHIVE_TYPE
-     * @param ABSTRACT
+	 * @param TIPO_COMPONENTE {@link TIPO_COMPONENTE}
+     * @param ARCHIVE_TYPE {@link ARCHIVE_TYPE}
+     * @param ABSTRACT non obblicatorio, descrizione del documento
      * @param EXTERNAL_ID
      * @return
      * @throws DocerHelperException

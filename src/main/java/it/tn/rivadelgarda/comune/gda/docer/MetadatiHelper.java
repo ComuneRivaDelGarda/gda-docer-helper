@@ -204,10 +204,10 @@ public class MetadatiHelper<T extends MetadatoDocer> {
 	
 	/**
 	 * 
-	 * @param TYPE_ID
-	 * @param DOCNAME
-	 * @param COD_ENTE
-	 * @param COD_AOO
+	 * @param TYPE_ID obbligatorio, il document-type del documento. è il tipo di documento individua l’insieme delle proprietà del profilo
+	 * @param DOCNAME obbligatorio, il nome del documento comprensivo di estensione del file allegato
+	 * @param COD_ENTE codice dell’Ente assegnato al documento
+	 * @param COD_AOO codice della AOO assegnata al documento
 	 * @return
 	 */
 	public static MetadatiHelper createDocumentKeys(String TYPE_ID, String DOCNAME, String COD_ENTE,

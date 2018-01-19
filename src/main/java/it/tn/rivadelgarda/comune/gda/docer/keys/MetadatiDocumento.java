@@ -97,7 +97,7 @@ public enum MetadatiDocumento implements MetadatoDocer {
 	 */
 	DOCNAME(DOCNAME_KEY),
 	/**
-	 * non obblicatorio, descrizione del documetno
+	 * non obblicatorio, descrizione del documento
 	 */
 	ABSTRACT(ABSTRACT_KEY),
 	/**
