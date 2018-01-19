@@ -1148,7 +1148,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	public KeyValuePair[] getACLDocument(String documentId) throws DocerHelperException {
+	private KeyValuePair[] getACLDocumentNative(String documentId) throws DocerHelperException {
 		KeyValuePair[] res = null;
 		try {
 			logger.debug("getACLDocument {}", documentId);
@@ -1172,7 +1172,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @throws DocerHelperException
 	 */
 	public Map<String, String> getACLDocumentMap(String documentId) throws DocerHelperException {
-		return MetadatiHelper.asMap(getACLDocument(documentId));
+		return MetadatiHelper.asMap(getACLDocumentNative(documentId));
 	}
 
 	/**
@@ -1873,7 +1873,7 @@ public class DocerHelper extends AbstractDocerHelper {
 	 * @return
 	 * @throws DocerHelperException
 	 */
-	private List<KeyValuePair> chilren(String folderId) throws DocerHelperException {
+	private List<KeyValuePair> children(String folderId) throws DocerHelperException {
 		List<KeyValuePair> res = new ArrayList<>();
 		List<String> folderDocuments = getFolderDocuments(folderId);
 		for (String documentId : folderDocuments) {
